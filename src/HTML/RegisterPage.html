@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Register</title>
+    <script src="../JS/RegistrationValidator.js" async></script>
+</head>
+<body>
+    <div>
+        <div>
+            <form id="registerForm"> 
+                <label for="username">Username</label>
+                <input type="text" id="username"/>
+                <br>
+                <label for="phoneNumber">Mobile Number:</label>
+                <input type="tel" id="phoneNumber"/>
+                <br>
+                <label for="password">Password</label>
+                <input type="password" id="password"/>
+                <br>
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword"/>
+                <br>
+                <input type="submit" onclick="validate('username','phoneNumber','password','confirmPassword')"/>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

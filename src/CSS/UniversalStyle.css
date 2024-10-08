@@ -1,0 +1,10 @@
+*{
+    font-family: 'Outfit';
+    src: url(https://fonts.gstatic.com/s/outfit/v11/QGYvz_MVcBeNP4NJuktqQ4E.woff2) format('woff2');
+
+}
+
+.primaryButton{
+    border-radius: 6px;
+    background: var(--Primary, #FE724C);
+}
