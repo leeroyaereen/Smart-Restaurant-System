@@ -1,65 +1,210 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+* {
+	font-family: "Inter", sans-serif;
+}
+
 body {
-    display: flex;
-    flex-direction: column;
+	color: #545f71;
+	display: flex;
+	flex-direction: column;
 	padding: 0px;
 	margin: 0px;
 	width: 100%;
-    height: 100vh;
-    background-color: #f3f3f3;
-    font-style: arial;
+	height: 100vh;
+	background-color: #f3f3f3;
 }
 
 #MenuHeader {
-    flex: 0.25;
-	background-color: orangered;
+	flex: 0.25;
+	background-color: #fe724c;
+	color: white;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	padding: 15px 10px;
+}
+
+#MenuHeader > #MenuHeaderTitle {
+	font-size: 1.5rem;
+	font-weight: 500;
+	letter-spacing: 1px;
+}
+
+#searchBoxContainer {
+	width: 100%;
+}
+
+#searchBoxContainer > form {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 0 2rem;
+
+	padding: 5px 15px;
+	border-radius: 10px;
+	background-color: rgb(255, 255, 255);
+}
+
+#searchBoxContainer > form > input {
+	width: 100%;
+	padding: 5px 10px;
+    font-size: 1rem;
+	border: none;
+}
+
+#searchBoxContainer > form > input:focus {
+	border: none;
+	outline: none;
+}
+
+#foodCategoryList {
+	display: flex;
+	gap: 1rem;
+	overflow-x: auto;
+	max-width: 100%;
+}
+
+#foodCategoryList > #foodCategory {
+	white-space: nowrap;
+	font-size: 0.9rem;
+	padding: 5px 13px;
+	border: none;
+	border-radius: 12px;
+	background-color: #ffffff;
+	color: #545f71;
+	font-weight: 600;
+	cursor: pointer;
 }
 
 #MenuItemList {
-    flex: 1;
+	margin: 10px 0;
+	flex: 1;
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
-    overflow: scroll;
+	overflow: scroll;
 }
 
 #MenuItem {
-    margin: 0 1rem;
+	margin: 0 1rem;
+    padding: 20px 0;
 	min-height: 8rem;
-    border-radius: 5px;
+	border-radius: 5px;
 	background-color: #ffffff;
+
+	display: flex;
+	gap: 10px;
+}
+
+#MenuItem > #MenuItemImage {
+	padding: 0 10px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+}
+
+#MenuItem > #MenuItemImage > img {
+	object-fit: cover;
+	border-radius: 5px;
+}
+
+#MenuItem > #MenuItemImage > div {
+	font-size: 0.9rem;
+	display: flex;
+	align-items: center;
+	gap: 2px;
+    color: #FE724C;
+}
+
+#MenuItem > #MenuItemDetails {
+	width: 100%;
+	padding: 0 10px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+#MenuItem > #MenuItemDetails > #MenuItemTitle {
+	display: flex;
+	justify-content: space-between;
+}
+
+#MenuItemDetails > #MenuItemTitle > #MenuItemName {
+	font-size: 1.2rem;
+	font-weight: 600;
+}
+
+#MenuItemDetails > #MenuItemTitle > #MenuItemRating {
+	font-size: 0.9rem;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+
+#MenuItemDetails > #MenuItemCategory {
+	font-size: 0.9rem;
+}
+
+#MenuItemDetails > #MenuItemPrice {
+	font-size: 1.2rem;
+	font-weight: 600;
+}
+
+#MenuItemDetails > #MenuItemFooter {
+	display: flex;
+	justify-content: space-between;
+    align-items: flex-end;
+}
+
+#MenuItemDetails > #MenuItemFooter > #MenuItemDuration {
+	display: flex;
+	align-items: center;
+	gap: 3px;
+	font-size: 0.9rem;
+}
+
+#MenuItemDetails > #MenuItemFooter > #MenuItemQuantity {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	font-size: 0.9rem;
+    font-weight: 600;
 }
 
 #OrderOverview {
-    flex: 0.15;
+	flex: 0.15;
 	background-color: #ffffff;
-    border-top: 1px solid #d4d4d4;
+	border-top: 1px solid #d4d4d4;
 
-    display: flex;
-    justify-content: center;
+	display: flex;
+	justify-content: center;
 }
 
 #OrderDetails {
-    display: flex;
-    align-items: center;
-    margin: auto;
-    gap: 0.5rem;
+	display: flex;
+	align-items: center;
+	margin: auto;
+	gap: 0.5rem;
 }
 
-#OrderButton{
-    margin: auto;
+#OrderButton {
+	margin: auto;
 }
 
-#OrderButton button{
-    display: flex;
-    gap: 5px;
-    align-items: center;
-    background-color: orangered;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 1rem 1.5rem;
-    font-size: 1rem;
-    letter-spacing: 0.5px;
-    font-weight: 500;
-    cursor: pointer;
+#OrderButton button {
+	display: flex;
+	gap: 5px;
+	align-items: center;
+	background-color: #fe724c;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	padding: 1rem 1.5rem;
+	font-size: 1rem;
+	letter-spacing: 0.5px;
+	font-weight: 500;
+	cursor: pointer;
 }
