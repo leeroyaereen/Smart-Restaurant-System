@@ -29,7 +29,7 @@
   
   h2 {
     font-size: 28px;
-    color: #333;
+    color: #545F71;
     margin-bottom: 20px;
   }
   
@@ -41,7 +41,7 @@
   label {
     font-size: 14px;
     font-weight: 500;
-    color: #333;
+    color: #545F71;
     margin-bottom: 5px;
     display: block;
   }
@@ -86,7 +86,7 @@
     font-size: 16px;
     border-radius: 8px;
     cursor: pointer;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
   }
   
   .login-button:hover {
@@ -97,7 +97,7 @@
     margin: 20px 0;
     text-align: center;
     font-size: 14px;
-    color: #181818;
+    color: #545F71;
     position: relative;
   }
   
@@ -124,11 +124,12 @@
   
   .sign-up, .skip {
     background-color: white;
-    color: #333;
-    border: 1px solid #ccc;
+    color: #545F71;
+    border: 1px solid #545F71;
     width: 48%;
     padding: 14px;
     font-size: 16px;
+    font-weight: 550;
     border-radius: 8px;
     cursor: pointer;
   }
@@ -147,7 +148,7 @@
       font-size: 24px;
     }
   
-    input[type="phone"], input[type="password"], .login-button, .sign-up, .skip {
+    input[type="tel"], input[type="password"], .login-button, .sign-up, .skip {
       font-size: 14px;
       padding: 12px;
     }

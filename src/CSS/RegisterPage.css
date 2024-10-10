@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    color: #545F71;
   }
   
   body {
@@ -30,7 +31,6 @@
   
   h2 {
     font-size: 28px;
-    color: #333;
     margin-bottom: 20px;
   }
   
@@ -42,7 +42,6 @@
   label {
     font-size: 14px;
     font-weight: 500;
-    color: #333;
     margin-bottom: 5px;
     display: block;
   }
@@ -88,6 +87,7 @@
     border-radius: 8px;
     cursor: pointer;
     margin-bottom: 20px;
+    margin-top: 16px;
   }
   
   .login-button:hover {
