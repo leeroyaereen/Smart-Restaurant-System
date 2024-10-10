@@ -1,40 +1,32 @@
-var username = document.getElementById(usn).value;
-var phoneNumber = document.getElementById(pn).value;
-var password = document.getElementById(pwd).value;
-var confirmPassword = document.getElementById(cpwd).value;
+//Imports function from Utilities module
+import { isValidPhoneNumber,isValidPassword,isValidEmail,isValidWithConfirmPassowrd } from './Utilities.js';
 
-    //CheckEmail();
-    checkPasswordLength();
-    //CheckPasswordConfirm();
-    
+//invokes the function when the document gets loaded.
+document.addEventListener('DOMContentLoaded',function(){
+    var form = document.getElementById("registerForm");
 
-    function CheckPasswordConfirm() {
-        
-        var regexPassword = new RegExp(password);
+    form.addEventListener('submit',function(event){
 
-       
-        var passCorrect = regexPassword.test(confirmPassword);
+        //gettig all values from the form
+        var firstName = document.getElementById("firstName").value;
+        var lastName = document.getElementById("lastName").value;
+        var email = document.getElementById("email").value;
+        var phoneNumber = document.getElementById("phoneNumber").value;
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirmPassword").value;
 
-        if (!passCorrect) {
-            alert("Both passwords align");
+        event.preventDefault();//prevent Submission
+
+        //bool value to track if the form inpust is valid
+        let isValidForm = false;
+
+        isValidForm =isValidEmail(email) && isValidPhoneNumber(phoneNumber) && isValidPassword(password) && isValidWithConfirmPassowrd(password,confirmPassword); 
+
+        console.log(isValidForm);
+        if(isValidForm){
+            window.location.href = '/src/HTML/LoginPage.html';
+            alert("Your Registration is being verified");
         }
-    }
+    });
+});
 
-    function CheckEmail(){
-        var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-        var emailRegex = new RegExp(emailPattern);
-
-        if(!emailRegex.test(username)){
-            alert("Incorrect");
-        }
-    }
-
-    function checkPasswordLength(){
-        var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{6,}$/;
-
-        if(!regex.test(password)){
-            alert("Error in password" + password);
-        }else{
-            alert("Successful");
-        }
-    }
