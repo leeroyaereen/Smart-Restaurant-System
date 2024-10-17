@@ -1,0 +1,133 @@
+#OrderStatusHeader #CustomerIdContainer{
+    margin: 5px 0;
+    background-color: #FE8E70;
+    border-radius: 46px;
+    width: 100%;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+#OrderStatusBody{
+    margin: 1rem;
+}
+
+#OrderStatusBody #OrderProgress{
+    background-color: white;
+    padding: 1rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    box-sizing: border-box;
+}
+
+#OrderProgress .EstimatedTimeContainer{
+    font-weight: 600;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#OrderProgress .EstimatedTime{
+    font-size: 1.2rem;
+}
+
+#OrderProgress #ProgressBarContainer{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#ProgressBarContainer #InProgress{
+    color: #fe724c;
+    background-color: #F5DAD4;
+    font-weight: 700;
+}
+
+#ProgressBarContainer #ProgressBar{
+    width: 100%;
+    height: 10px;
+    background-color: #e9e6e6;
+    border-radius: 5px;
+    position: relative;
+}
+
+#ProgressBar #Progress{
+    position: absolute;
+    left: 0;
+    right: 30%;
+    height: 100%;
+    
+    background-color: #fe724c;
+    border-radius: 5px;
+}
+
+#OrderStatusBody > #OrderStatusList{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+#OrderStatusList > #OrderStatusListTitle{
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+#OrderStatusList > #OrderStatusItem{
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+#OrderStatusItem > #StatusItemInformation{
+    display: flex;
+	gap: 1rem;
+}
+
+#StatusItemInformation > #StatusItemImage {
+    display: flex;
+    align-items: center;
+}
+
+#StatusItemInformation > #StatusItemDetails {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#StatusItemDetails > #StatusItemTitle {
+    display: flex;
+    justify-content: space-between;
+}
+
+#StatusItemTitle > #StatusItemName {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+#StatusItemDetails > #StatusItemFooter > #StatusItemQuantity{
+    font-weight: 600;
+}
+
+#StatusItemFooter > #StatusItemDuration{
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+#OrderStatusItem > #StatusItemNote{
+    opacity: 0.75;
+    padding-left: 5px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    font-style: italic;
+}

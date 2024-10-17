@@ -58,12 +58,21 @@ body {
 
 .HeaderSubTitle {
 	font-size: 0.9rem;
-	letter-spacing: 0.5px;
 }
 
 .ItemImage{
 	object-fit: cover;
 	border-radius: 5px;
+}
+
+.OrderStatusDesign{
+	font-size: 0.85rem;
+    font-weight: 600;
+    color: #EAB344;
+    background-color: #FEF9C3;
+    width: max-content;
+    padding: 5px 10px;
+    border-radius: 10px;
 }
 
 .ItemFooter {
@@ -84,6 +93,15 @@ body {
 	font-size: 1.2rem;
 	font-weight: 600;
 	color: #fe724c;
+}
+
+.EstimatedTimeContainer{
+	font-weight: 500;
+}
+
+.EstimatedTimeContainer .EstimatedTime{
+    color: #fe724c;
+    font-weight: 700;
 }
 
 .DefaultOrderButton button{
