@@ -10,10 +10,6 @@
     gap: 10px;
 }
 
-#OrderStatusBody{
-    margin: 1rem;
-}
-
 #OrderStatusBody #OrderProgress{
     background-color: white;
     padding: 1rem;
