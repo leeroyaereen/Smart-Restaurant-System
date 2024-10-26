@@ -1,0 +1,19 @@
+{
+  "name": "smart-restaurant-system",
+  "version": "1.0.0",
+  "description": "SmartServe is a smart web based restaurant system for convenient customer service.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node",
+    "restful",
+    "api"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}
