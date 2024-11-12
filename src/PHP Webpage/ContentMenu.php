@@ -1,3 +1,108 @@
+<?php
+require '../PHP/DatabaseUtilities.php';
+//initializing as an array
+$foodItems = [];
+$foodCategories = [];
+
+function FetchMenuContent(){
+	//importing the variable from the global scope
+	global $foodItems,$foodCategories;
+
+	$conn = DatabaseUtility::GetRestaurantConnectionWithName('ACHS Canteen');
+	if(!$conn){
+		echo "<script>alert('Error connecting to the database')</script>";
+		return false;
+	}
+
+	// $sql = "SELECT
+	// 		FoodItem.FoodItem_ID,
+	// 		FoodItem.FoodName, 
+	// 		FoodItem.FoodType, 
+	// 		FoodItem.FoodRating, 
+	// 		FoodItem.FoodPreparationTime,
+	// 		FoodItem.FoodReview, 
+	// 		FoodItem.FoodDescription, 
+	// 		FoodItem.FoodImage, 
+	// 		FoodItem.FoodPrice, 
+	// 		FoodItem.FoodAvailability, 
+	// 		FoodItem.TotalOrders,
+	// 		FoodCategory.Category_ID, 
+	// 		FoodCategory.CategoryName
+	// 	FROM
+	// 		FoodItems
+	// 	JOIN
+	// 		FoodCategory ON FoodItems.Category_ID = FoodCategory.Category_ID;
+	// ";
+
+	$sqlFoodItems = "SELECT * FROM FoodItems";
+	$sqlFoodCategories = "SELECT * FROM FoodCategory";
+	$resFoodItems = $conn->query($sqlFoodItems);
+	$resFoodCategories = $conn->query($sqlFoodCategories);
+
+	//incase the query doesnt work
+	if(!$resFoodItems){
+		echo "<script>alert('Error Fetching the food item data')</script>";
+		return false;
+	}
+	if(!$resFoodCategories){
+		echo "<script>alert('Error Fetching the food category data')</script>";
+		return false;
+	}
+	//incase there are no datas available
+	if(!$resFoodItems->num_rows>0){
+		echo "<script>alert('No Food item data in the database')</script>";
+		return false;
+	}
+	if(!$resFoodCategories->num_rows>0){
+		echo "<script>alert('No Food Category data in the database')</script>";
+		return false;
+	}
+
+
+	// Fetching all food items
+	while ($item = mysqli_fetch_assoc($resFoodItems)) {
+		$foodItem = new FoodItem();
+		$foodItem->FoodItem_ID = $item['FoodItem_ID'];
+		$foodItem->FoodName = $item['FoodName'];
+		$foodItem->FoodType = $item['FoodType'];
+		$foodItem->FoodCategory = $item['Category_ID'];
+		$foodItem->FoodRating = $item['FoodRating'];
+		$foodItem->FoodPreparationTime = $item['FoodPreparationTime'];
+		$foodItem->FoodReview = $item['FoodReview'];
+		$foodItem->FoodDescription = $item['FoodDescription'];
+		$foodItem->FoodImage = $item['FoodImage'];
+		$foodItem->FoodPrice = $item['FoodPrice'];
+		$foodItem->FoodAvailability = $item['FoodAvailability'];
+		$foodItem->TotalOrders = $item['TotalOrders'];
+
+		$foodItems[] = $foodItem;
+	}
+
+	// Fetching all food categories
+	while ($category = mysqli_fetch_assoc($resFoodCategories)) {
+		$foodCategories[$category['Category_ID']] = $category['CategoryName'];
+	}
+
+	return true;
+}
+
+function DeployFoodCategory(){
+    global $foodCategories;
+	echo "<div id='foodCategoryList'>";
+    foreach ($foodCategories as $categoryId => $categoryName) {
+        echo "<div class='foodCategory' id='$categoryId'>$categoryName</div>";
+    }
+	echo "</div>";
+}
+
+
+$res = FetchMenuContent();
+if(!$res){
+	echo "<script>alert('Error Fetching menu data')</script>";
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -10,7 +115,7 @@
 	<body>
 		<div id="MenuHeader" class="section Header">
 			<div id="MenuHeaderTitle" class="HeaderTitle">Menu</div>
-			<div id="MenuHeaderTable" class="HeaderSubTitle">Table Number: 12</div>
+			<div id="MenuHeaderTable" class="HeaderSubTitle">Customer Name: Ram Nepali</div>
 			<div id="searchBoxContainer">
 				<form action="">
 					<svg
@@ -33,13 +138,18 @@
 				</form>
 				<i class="fa fa-search"></i>
 			</div>
-			<div id="foodCategoryList">
+			<!-- <div id="foodCategoryList">
 				<div id="foodCategory">Momo</div>
 				<div id="foodCategory">Snacks</div>
 				<div id="foodCategory">Lunch</div>
 				<div id="foodCategory">Cold drink</div>
 				<div id="foodCategory">Combo 1</div>
-			</div>
+			</div> -->
+			
+			<?php
+			DeployFoodCategory();
+			?>
+			
 		</div>
 		<div id="MenuItemList" class="section Body">
 			<div id="MenuItem">
