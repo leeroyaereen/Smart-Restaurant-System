@@ -15,6 +15,7 @@
     function AddFoodItem(){
         //check if the form submission has required data or not
         if(isset($_POST['foodName'],$_POST['foodType'],$_POST['foodCategory'],$_POST['foodPreparationTime'],$_POST['foodPrice'],$_POST['foodImage'],$_POST['foodDescription'])){
+            //check if the data from the form fulfills the requirement
             if($_POST['foodName'] && $_POST['foodCategory'] && $_POST['foodPreparationTime'] && $_POST['foodPrice'] /*&& $_POST['foodImage']*/&& $_POST['foodDescription']){
                 $newFood = new FoodItem();
                 $newFood->FoodName = $_POST['foodName'];
