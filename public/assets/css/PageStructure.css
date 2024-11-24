@@ -83,10 +83,16 @@ body {
 
 .ItemQuantity {
 	display: flex;
+	justify-content: flex-end;
 	align-items: center;
 	gap: 5px;
 	font-size: 0.9rem;
 	font-weight: 600;
+}
+
+.ItemQuantity span{
+	width: 2ch;
+    text-align: center;
 }
 
 .ItemPrice {

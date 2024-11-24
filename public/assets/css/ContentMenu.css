@@ -44,6 +44,17 @@
 	display: none;
 }
 
+#foodCategoryList > .foodCategory {
+	white-space: nowrap;
+	font-size: 0.9rem;
+	padding: 5px 13px;
+	border: none;
+	border-radius: 12px;
+	background-color: #ffffff;
+	color: #545f71;
+	font-weight: 600;
+	cursor: pointer;
+}
 #foodCategoryList > #foodCategory {
 	white-space: nowrap;
 	font-size: 0.9rem;
@@ -55,7 +66,6 @@
 	font-weight: 600;
 	cursor: pointer;
 }
-
 #MenuItemList{
 	display: flex;
 	flex-direction: column;

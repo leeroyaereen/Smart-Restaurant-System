@@ -6,6 +6,8 @@
 		<title>Document</title>
 		<link rel="stylesheet" href="../CSS/PageStructure.css" />
 		<link rel="stylesheet" href="../CSS/TrayItem.css" />
+        <script src="../JS/Universal.js" defer></script>
+        <script src="../JS/MyTrayItems.js" defer></script>
 	</head>
 	<body>
 		<div id="TrayItemsHeader" class="section Header">
@@ -17,7 +19,7 @@
 			<div id="TrayCategory">
 				<div id="TrayCategoryTitle">Momo</div>
 				<div id="TrayCategoryItems">
-					<div id="TrayItem">
+					<div id="TrayItem" class="ItemContainer">
                         <div id="TrayItemInformation">
                             <div id="TrayItemImage">
                                 <label id="TrayItemCheckBox">
@@ -62,7 +64,7 @@
                                 </div>
                                 <div id="TrayItemSubCategory" class="HeaderSubTitle">Chicken</div>
                                 <div id="TrayItemFooter" class="ItemFooter">
-                                    <div id="TrayItemPrice" class="ItemPrice">Rs 256</div>
+                                    <div id="TrayItemPrice" class="ItemPrice">Rs <span>256</span></div>
                                     <div id="TrayItemQuantity" class="ItemQuantity">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -111,7 +113,7 @@
                             <textarea name="" id="TrayItemNoteInput" rows="1" placeholder="Add Note..."></textarea>
                         </div>
 					</div>
-                    <div id="TrayItem">
+                    <div id="TrayItem" class="ItemContainer">
                         <div id="TrayItemInformation">
                             <div id="TrayItemImage">
                                 <label id="TrayItemCheckBox">
@@ -156,7 +158,7 @@
                                 </div>
                                 <div id="TrayItemSubCategory" class="HeaderSubTitle">Chicken</div>
                                 <div id="TrayItemFooter" class="ItemFooter">
-                                    <div id="TrayItemPrice" class="ItemPrice">Rs 256</div>
+                                    <div id="TrayItemPrice" class="ItemPrice">Rs <span>256</span></div>
                                     <div id="TrayItemQuantity" class="ItemQuantity">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -212,7 +214,7 @@
             <div id="TrayCategory">
 				<div id="TrayCategoryTitle">Burger</div>
 				<div id="TrayCategoryItems">
-					<div id="TrayItem">
+					<div id="TrayItem" class="ItemContainer">
                         <div id="TrayItemInformation">
                             <div id="TrayItemImage">
                                 <label id="TrayItemCheckBox">
@@ -257,7 +259,7 @@
                                 </div>
                                 <div id="TrayItemSubCategory" class="HeaderSubTitle">Chicken</div>
                                 <div id="TrayItemFooter" class="ItemFooter">
-                                    <div id="TrayItemPrice" class="ItemPrice">Rs 256</div>
+                                    <div id="TrayItemPrice" class="ItemPrice">Rs <span>256</span></div>
                                     <div id="TrayItemQuantity" class="ItemQuantity">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -306,7 +308,7 @@
                             <textarea name="" id="TrayItemNoteInput" rows="1" placeholder="Add Note..."></textarea>
                         </div>
 					</div>
-                    <div id="TrayItem">
+                    <div id="TrayItem" class="ItemContainer">
                         <div id="TrayItemInformation">
                             <div id="TrayItemImage">
                                 <label id="TrayItemCheckBox">
@@ -351,7 +353,7 @@
                                 </div>
                                 <div id="TrayItemSubCategory" class="HeaderSubTitle">Chicken</div>
                                 <div id="TrayItemFooter" class="ItemFooter">
-                                    <div id="TrayItemPrice" class="ItemPrice">Rs 256</div>
+                                    <div id="TrayItemPrice" class="ItemPrice">Rs <span>256</span></div>
                                     <div id="TrayItemQuantity" class="ItemQuantity">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -409,15 +411,15 @@
             <div id="OrderPricingDetails">
                 <div id="SubTotal" class="PricingDetailBlock">
                     <span>Sub Total:</span>
-                    <span>Rs 1232</span>
+                    <span>Rs <span id="subTotalValue">9999</span></span>
                 </div>
                 <div id="Discount" class="PricingDetailBlock">
                     <span>Discount:</span>
-                    <span>Rs 132</span>
+                    <span>Rs <span id="discountValue">9999</span></span>
                 </div>
                 <div id="Total" class="PricingDetailBlock">
                     <span>Total:</span>
-                    <span>Rs 1100</span>
+                    <span>Rs <span id="totalValue">9999</span></span>
                 </div>
             </div>
             <div id="OrderConfirmation" class="section Footer">

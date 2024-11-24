@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../CSS/LoginPage.css">
-  <script type="module" src="../JS/LoginValidator.js"></script>
+  <link rel="stylesheet" href="../../public/assets/css/LoginPage.css">
+  <script type="module" src="../../public/assets/js/LoginValidator.js"></script>
 </head>
 <body>
 
