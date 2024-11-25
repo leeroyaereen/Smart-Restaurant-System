@@ -45,10 +45,11 @@ async function SendLoginRequest(credentials){
         //check if the status of the response is success or not as per the login form credentials
         if(data.status === "success"){
             //if the verification is success then shift page to the content menu
-            location.href="ContentMenu.php";
+            location.href="../../src/views/ContentMenu.php";
 
         }else{
-            alert("Your Login has wrong credentials");
+            //if any failure the message is show cased with reason as per defined
+            alert(data.message);
         }
     }catch(e){
         alert('Login Failed'+e.message);

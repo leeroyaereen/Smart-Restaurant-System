@@ -1,7 +1,10 @@
 <?php
     require_once '../middleware/databaseConnector.php';
+    require_once '../middleware/loginAuthenticator.php';
 
+    $cookieDuration = 30;//in terms of days
     if(!$connection){
+        echo json_encode(["status"=>'failure', "message" => "Can't Connect to the database"]);
         die();
     }
 
@@ -21,15 +24,22 @@
         $pass = $data['password'] ?? null;
 
         if($phone!=null && $pass != null){
-            echo json_encode(["status"=>'success', "message" => "login Successful"]);
+            if(checkIfLoginDataMatches($phone,$pass)){
+                setcookie('phoneNumber',$phone, 86400 * $cookieDuration,"","",true);
+                echo json_encode(["status"=>'success', "message" => "Login Successful, Credentials are Valid"]);
+
+            }else{
+                echo json_encode(["status"=>'failure', "message" => "Login Failed due to incorrect credentials"]);
+
+            }
         }else{
-            echo json_encode(["status"=>'failure', "message" => "login Failure due to empty values"]);
+            echo json_encode(["status"=>'failure', "message" => "Login Failed due to empty values"]);
 
         }
 
     }else{
-        echo json_encode(["status"=>'failure', "message" => "login Failure "]);
-
+        echo json_encode(["status"=>'failure', "message" => "Login Failed due to different request method"]);
+        
     }
 
     
