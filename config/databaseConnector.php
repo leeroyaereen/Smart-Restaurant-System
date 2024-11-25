@@ -5,9 +5,10 @@
         $connection = mysqli_connect($mainServername,$mainUsername, $mainPassword,$dbname);
         if(!$connection){
             echo "<script>alert('Error Connecting to Database')</script>";
-
+            die();
         }
     }
+    
     $mainServername = "localhost";
     $mainUsername = "root";
     $mainPassword = "";

@@ -4,10 +4,10 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Document</title>
-		<link rel="stylesheet" href="../CSS/PageStructure.css" />
-		<link rel="stylesheet" href="../CSS/TrayItem.css" />
-        <script src="../JS/Universal.js" defer></script>
-        <script src="../JS/MyTrayItems.js" defer></script>
+		<link rel="stylesheet" href="assets/css/PageStructure.css" />
+		<link rel="stylesheet" href="assets/css/TrayItem.css" />
+        <script src="assets/js/Universal.js" defer></script>
+        <script src="assets/js/MyTrayItems.js" defer></script>
 	</head>
 	<body>
 		<div id="TrayItemsHeader" class="section Header">
