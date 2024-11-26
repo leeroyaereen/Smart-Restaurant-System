@@ -1,5 +1,5 @@
 <?php
-    // require_once "../config/databaseConnector.php";
+
     require_once "../config/constants.php";
     require_once "./routes.php";
     

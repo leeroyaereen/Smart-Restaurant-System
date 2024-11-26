@@ -1,9 +1,10 @@
 <?php
     function route($request) {
+        require_once "../config/databaseConnector.php";
         switch ($request) {
-            case 'getFoodItems/a':
+            case 'getFoodItems':
                 require_once __DIR__ . '/controllers/getFoodItemList.php';
-                retrieveFoodItems(); // Example function in UserController.php
+                retrieveFoodItems($connection); // Example function in UserController.php
                 break;
     
             // case 'v1/create-user':
