@@ -1,5 +1,11 @@
 RewriteEngine On
+RewriteBase /Smart-Restaurant-System/
+
+# Redirect to the api directory
+RewriteRule ^api/(.*)$ api/index.php [L,QSA]
 
 # Redirect to the public directory
 RewriteRule ^$ public/ [L]
 RewriteRule (.*) public/$1 [L]
+
+ErrorDocument 404 /public/views/404.php

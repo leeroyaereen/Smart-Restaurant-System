@@ -1,17 +1,7 @@
 # Enable the rewrite engine
 RewriteEngine On
-RewriteBase /Smart-Restaurant-System/
-
-# Handle API requests
-RewriteCond %{REQUEST_URI} ^/api/ [NC]
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^api/(.*)$ ../api/v1/routes.php [L]
-
 # Handle Frontend requests
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^index.php$ - [L]
-RewriteRule ^([a-zA-Z0-9_/-]+)$ index.php [QSA,L]
+RewriteRule ^ index.php [L]
 
-ErrorDocument 404 /404.php
