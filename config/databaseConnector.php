@@ -1,14 +1,5 @@
 <?php
 
-    function changeDatabaseConnection($dbname){
-        global $connection,$mainPassword,$mainServername,$mainUsername;
-        $connection = mysqli_connect($mainServername,$mainUsername, $mainPassword,$dbname);
-        if(!$connection){
-            echo "<script>alert('Error Connecting to Database')</script>";
-            die();
-        }
-    }
-    
     $mainServername = "localhost";
     $mainUsername = "root";
     $mainPassword = "";
@@ -16,6 +7,24 @@
 
     $connection;
 
+    function changeDatabaseConnection($dbname){
+        global $connection;
+        $mainServername = "localhost";
+        $mainUsername = "root";
+        $mainPassword = "";
+        $connection = mysqli_connect($mainServername,$mainUsername, $mainPassword,$dbname);
+        if(!$connection){
+            echo "<script>alert('Error Connecting to Database')</script>";
+            die();
+        }
+        return $connection;
+    }
+
+    function getConnection(){
+        global $connection;
+        return $connection;
+    }
+    
     $connection = mysqli_connect($mainServername, $mainUsername, $mainPassword, $mainDatabase);
             
     if (!$connection) {

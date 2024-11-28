@@ -1,6 +1,5 @@
 <?php
     function route($request) {
-        require_once "../config/databaseConnector.php";
         switch ($request) {
             case 'getFoodItems':
                 require_once __DIR__ . '/controllers/getFoodItemList.php';
@@ -11,7 +10,16 @@
             //     require_once __DIR__ . '/controllers/UserController.php';
             //     createUser(); // Another example function
             //     break;
-    
+            case 'getFoodItemsDirect':
+                require_once __DIR__ . '/controllers/contentMenuController.php';
+                // Example function in UserController.php
+                getFoodItemsJSON();
+                break;
+            case 'getFoodCategories':
+                require_once __DIR__ . '/controllers/contentMenuController.php';
+                // Example function in UserController.php
+                getFoodCategoriesJSON();
+                break;
             default:
                 http_response_code(404);
                 echo json_encode(['error' => 'Endpoint not found']);

@@ -10,11 +10,11 @@
             while ($row = mysqli_fetch_assoc($result)) {
                 $foodItems[] = $row;
             }
-            echo json_encode($foodItems);
-            return ["foodItems" => $foodItems, "success" => true];
+            echo json_encode(["foodItems" => $foodItems, "success" => true]);
+            return ;
         } else {
-            echo "No food items found in the database.";
-            return ["success" => false, "message" => "No food items found in the database."];
+            echo json_encode(["message" => "No food items found in the database.", "success" => false]);
+            return ;
         }
     }
 ?>

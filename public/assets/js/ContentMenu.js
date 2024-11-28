@@ -8,7 +8,7 @@ function loadMenu() {
 	fetch(BASE_PATH + "/api/getFoodItems")
 		.then((response) => response.json())
 		.then((data) => {
-			fillMenu(data);
+			fillMenu(data.foodItems);
 		});
 }
 
