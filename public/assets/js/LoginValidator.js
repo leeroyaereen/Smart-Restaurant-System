@@ -27,7 +27,7 @@ async function SendLoginRequest(credentials){
     console.log(credentials.phoneNumber+ " "+ credentials.password);
 
     try{
-        var resp = await fetch('http://localhost/Smart-Restaurant-System/src/controllers/loginSubmit.php',{
+        var resp = await fetch('http://localhost/Smart-Restaurant-System/src/routes/checkLoginData.php',{
             method: 'POST',
             headers : {
                 'Content-Type': 'application/json',

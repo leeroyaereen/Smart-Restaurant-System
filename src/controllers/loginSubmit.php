@@ -1,4 +1,7 @@
 <?php
+    function CheckIfLoginCookiesStillExists(){
+        
+    }
     require_once '../middleware/databaseConnector.php';
     require_once '../middleware/loginAuthenticator.php';
 

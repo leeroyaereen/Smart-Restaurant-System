@@ -1,1 +1,1 @@
-<?php require '../controllers/contentMenuController.php'; getFoodItems();?>
+<?php require '../controllers/contentMenuController.php'; getFoodItemsJSON();?>

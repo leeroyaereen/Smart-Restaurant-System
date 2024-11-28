@@ -1,0 +1,91 @@
+<?php
+
+    require '../middleware/databaseConnector.php';
+    function CreateNewDatabaseForRestaurant($restaurantName){
+        global $connection;    
+        if ($connection) {
+            //sql statement to search if there is any database named same as the parametered name
+            $checkQuery = "SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '$restaurantName'";
+            $checkDB_Result = mysqli_query(self::$mainConnection,$checkQuery);
+
+            //if there exists any other database with the same name the count rises to 1 and the creation of database is restricted
+            if(mysqli_num_rows($checkDB_Result)>0){
+                return "Database you tried to create already exists";
+            }
+            // Correct the SQL syntax
+            $sql = "CREATE DATABASE `$restaurantName`";
+            $res = mysqli_query(self::$mainConnection, $sql); // Using mysqli_query with the connection resource
+
+            if ($res === true) {
+                return true;
+            } else {
+                return "Error Creating Database" . mysqli_error(self::$mainConnection);
+            }
+        }
+    }
+
+    function CreateTablesForRestaurant($restaurantName){
+        global $mainServername, $mainUsername,$mainPassword;
+        $conn = mysqli_connect($mainServername,$mainUsername, $mainPassword,$restaurantName);
+        if(!$conn){
+            return "Unable to connect to the database";
+        }
+
+        $sqlUserTable = "CREATE TABLE User (
+            User_ID INT PRIMARY KEY AUTO_INCREMENT,
+            Role_ID INT,
+            FirstName VARCHAR(50) NOT NULL,
+            LastName VARCHAR(50) NOT NULL,
+            Email VARCHAR(100) NOT NULL,
+            PhoneNumber VARCHAR(15) NOT NULL,
+            Password VARCHAR(255) NOT NULL,
+            FOREIGN KEY (Role_ID) REFERENCES Role(Role_ID)
+        );";
+
+        $sqlRoleTable = "CREATE TABLE Role(
+            Role_ID INT PRIMARY KEY AUTO_INCREMENT,
+            RoleName VARCHAR(30) NOT NULL,
+            Responsibility VARCHAR(100)
+        );";
+
+        $sqlMenuTable = "CREATE TABLE Menu (
+            Menu_ID INT PRIMARY KEY AUTO_INCREMENT,
+            Category_ID INT,
+            CanteenName VARCHAR(100),
+            FOREIGN KEY (Category_ID) REFERENCES FoodCategory(Category_ID)
+        );";
+
+        $sqlFoodCategoryTable = "CREATE TABLE FoodCategory (
+            Category_ID INT PRIMARY KEY AUTO_INCREMENT,
+            CategoryName VARCHAR(100) NOT NULL
+        );";
+
+        $sqlFoodItem = "CREATE TABLE FoodItems (
+            FoodItem_ID INT PRIMARY KEY AUTO_INCREMENT,
+            FoodName VARCHAR(100) NOT NULL,
+            FoodType VARCHAR(30),
+            Category_ID INT NOT NULL,
+            FoodRating DECIMAL(2, 1),
+            FoodPreparationTime INT,
+            FoodReview TEXT,
+            FoodDescription TEXT,
+            FoodImage VARCHAR(255),
+            FoodPrice DECIMAL(10, 2),
+            FoodAvailability BOOLEAN DEFAULT TRUE,
+            TotalOrders INT DEFAULT 0,
+            FOREIGN KEY (Category_ID) REFERENCES FoodCategory(Category_ID)
+        );";
+
+
+        //add all the sql commands in array and executing one by one
+        $queries = [$sqlFoodCategoryTable,$sqlFoodItem,$sqlMenuTable,$sqlRoleTable,$sqlUserTable];
+        foreach($queries as $sql){
+            $res = self::$restuarantDatabaseConnection->query($sql);
+            if(!$res){
+                return "Error Inserting $res";
+            }
+        }                    
+        return true;
+
+    }
+?>

@@ -1,64 +1,3 @@
-<?php
-    require "../PHP/DatabaseUtilities.php";
-    function AddCategory(){
-        if(isset($_POST['categoryName']) ){
-            
-            if($_POST['categoryName']){
-                DatabaseUtility::CreateCategory($_POST['categoryName']);
-            }else{
-                echo "<script>alert('The form has been aborted due to missing data in the form, recheck and submit the form again')</script>";
-
-            }
-        }
-    }
-
-    function AddFoodItem(){
-        //check if the form submission has required data or not
-        if(isset($_POST['foodName'],$_POST['foodType'],$_POST['foodCategory'],$_POST['foodPreparationTime'],$_POST['foodPrice'],$_POST['foodImage'],$_POST['foodDescription'])){
-            //check if the data from the form fulfills the requirement
-            if($_POST['foodName'] && $_POST['foodCategory'] && $_POST['foodPreparationTime'] && $_POST['foodPrice'] /*&& $_POST['foodImage']*/&& $_POST['foodDescription']){
-                $newFood = new FoodItem();
-                $newFood->FoodName = $_POST['foodName'];
-                $newFood->FoodType = $_POST['foodType'];
-                $newFood->FoodCategory = $_POST['foodCategory'];
-                $newFood->FoodPreparationTime = $_POST['foodPreparationTime'];
-                $newFood->FoodPrice = $_POST['foodPrice'];
-                $newFood->FoodImage = $_POST['foodImage'];
-                $newFood->FoodDescription = $_POST['foodDescription'];
-                $newFood->FoodReview = "No Reviews Yet";
-                $newFood->FoodAvailability = true;
-                $newFood->FoodRating = 0;        
-                
-                $res = DatabaseUtility::CreateItems($newFood);
-
-                if($res){
-                    echo "<script>alert('Food Item Added');</script>";
-                }else{
-                    echo "<script>alert('Food Item Couldnt be Added');</script>";
-                }
-   
-            }else{
-                echo "<script>".$_POST['foodName'].$_POST['foodCategory'].$_POST['foodPreparationTime'].$_POST['foodPrice'].$_POST['foodDescription']."</script>";
-                echo "<script>alert('The form has been aborted due to missing data in the form, recheck and submit the form again')</script>";
-            }
-        }
-    }
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-        DatabaseUtility::ChangeRestaurant('ACHS Canteen');
-        if (isset($_POST["categoryName"])) {
-            AddCategory();
-        } else if (isset($_POST["foodName"])) {
-            AddFoodItem();
-        } else {
-            echo "<script>alert('Please Enter the Data');</script>";
-        }            
-
-    }
-    
-?>
-
 <html>
     <head>
     
@@ -88,25 +27,6 @@
                 <label for="foodCategory">Set in Category</label>
                 <select name="foodCategory">
 
-                <?php
-                    $sql = "SELECT Category_ID, CategoryName FROM FoodCategory";
-                    $conn = DatabaseUtility::GetRestaurantConnectionWithName('ACHS Canteen');
-                    if(!$conn){
-                        echo "<script>alert('There was null')</script>";
-
-                    }
-                    $res = $conn->query($sql);
-
-                    if ($res) {
-                        while ($row = mysqli_fetch_assoc($res)) {
-                            echo "<option value='" . $row['Category_ID'] . "'>" . $row['CategoryName'] . "</option>";
-                        }
-                    } else {
-                        echo "<script>alert('There was an error adding category')</script>";
-                    }
-                ?>
-
-                    
                 </select>
             </div>
             <div class="input-group">
