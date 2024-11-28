@@ -1,11 +1,8 @@
 const menuItemList = document.querySelector("#MenuItemList");
 const menuItemTemplate = document.querySelector("#MenuItemTemplate");
+let menuItems;
 
 window.onload = loadMenu;
-
-document.querySelector("#OrderButton Button").onclick = () => {
-	window.location.href = "confirm-order";
-};
 
 function loadMenu() {
 	fetch(BASE_PATH + "/api/getFoodItems")
@@ -15,6 +12,7 @@ function loadMenu() {
 		});
 }
 
+
 function fillMenu(data) {
 	data.forEach((item) => {
 		let templateClone = menuItemTemplate.content.cloneNode(true);
@@ -23,6 +21,23 @@ function fillMenu(data) {
 		menuItem.querySelector("#MenuItemSubCategory").innerText = item.FoodType;
 		menuItem.querySelector("#MenuItemPrice span").innerText = item.FoodPrice;
 		menuItem.querySelector("#MenuItemDuration span").innerText = item.FoodPreparationTime+" min";
+		addQuantityCounter(menuItem.querySelector(".ItemQuantity"));
+		observer.observe(menuItem.querySelector(".ItemQuantity span"), {childList: true});
 		menuItemList.appendChild(menuItem);
 	});
+	menuItems = document.querySelectorAll('#MenuItem');
 }
+
+// Calculate Total Cost of choosen menu items without any discount and display it
+const orderCost = document.querySelector("#OrderCost");
+
+// Initialize the MutationObserver
+const observer = new MutationObserver(() => {
+	let total = calculateOrderCost(menuItems);
+	orderCost.innerText = "Rs " + total;
+});
+
+
+document.querySelector("#OrderButton Button").onclick = () => {
+	window.location.href = "confirm-order";
+};

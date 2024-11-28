@@ -7,8 +7,9 @@
 		<link rel="stylesheet" href="assets/css/PageStructure.css" />
 		<link rel="stylesheet" href="assets/css/ContentMenu.css" />
 		<script src="assets/js/config.js.php"></script>
-		<script src="assets/js/Universal.js" defer></script>
+        <script src="assets/js/Universal.js" defer></script>
 		<script src="assets/js/ContentMenu.js" defer></script>
+		<script src="assets/js/Utilities.js"></script>
 	</head>
 
 	<body>
@@ -138,7 +139,7 @@
 									<path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
 									<path d="M9 12l6 0" />
 								</svg>
-								<span>01</span>
+								<span>00</span>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									width="45"
@@ -161,7 +162,7 @@
 		<div id="OrderOverview" class="section Footer">
 			<div id="OrderDetails">
 				<div id="OrderCostBlock">
-					Total: <span id="OrderCost">Rs 10132</span>
+					Total: <span id="OrderCost">Rs 0</span>
 				</div>
 				<div id="OrderTimeBlock">
 					<svg

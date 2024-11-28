@@ -8,6 +8,7 @@
 		<link rel="stylesheet" href="assets/css/TrayItem.css" />
         <script src="assets/js/Universal.js" defer></script>
         <script src="assets/js/MyTrayItems.js" defer></script>
+        <script src="assets/js/Utilities.js" type="module"></script>
 	</head>
 	<body>
 		<div id="TrayItemsHeader" class="section Header">
