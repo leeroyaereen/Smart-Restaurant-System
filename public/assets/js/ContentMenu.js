@@ -1,17 +1,54 @@
+const categoryList = document.querySelector("#foodCategoryList");
+const categoryTemplate = document.querySelector("#foodCategoryTemplate");
+
 const menuItemList = document.querySelector("#MenuItemList");
 const menuItemTemplate = document.querySelector("#MenuItemTemplate");
 let menuItems;
 
-window.onload = loadMenu;
+window.onload = loadPage;
 
-function loadMenu() {
-	fetch(BASE_PATH + "/api/getFoodItems")
-		.then((response) => response.json())
-		.then((data) => {
-			fillMenu(data.foodItems);
-		});
+async function fetchData(endpoint) {
+    const response = await fetch(BASE_PATH + endpoint, {
+        method: "GET",
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": "application/json",
+        },
+    });
+    return response.json();
 }
 
+async function loadPage() {
+    try {
+        // Fetch categories
+        const categoriesData = await fetchData("/api/getFoodCategories");
+		console.log(categoriesData);
+        fillCategory(categoriesData.foodCategories);
+        
+        // Fetch food items
+        const foodItemsData = await fetchData("/api/getFoodItems");
+        console.log(foodItemsData);
+
+        if (!foodItemsData.success) {
+            alert(foodItemsData.message);
+            return;
+        }
+
+        fillMenu(foodItemsData.foodItems);
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        alert("An error occurred while loading the page.");
+    }
+}
+
+function fillCategory(data) {
+	Object.entries(data).forEach(([id, category]) => {
+		let templateClone = categoryTemplate.content.cloneNode(true);
+		let foodCategory = templateClone.querySelector("#foodCategory");
+		foodCategory.innerText = category;
+		categoryList.appendChild(foodCategory);
+	});
+}
 
 function fillMenu(data) {
 	data.forEach((item) => {
@@ -27,6 +64,7 @@ function fillMenu(data) {
 	});
 	menuItems = document.querySelectorAll('#MenuItem');
 }
+
 
 // Calculate Total Cost of choosen menu items without any discount and display it
 const orderCost = document.querySelector("#OrderCost");

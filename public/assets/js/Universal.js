@@ -25,7 +25,7 @@ function addQuantity(element) {
 
 function subtractQuantity(element) {
     var quantity = parseInt(element.querySelector('span').innerText);
-    if (quantity > 1) {
+    if (quantity > 0) {
         quantity--;
         element.querySelector('span').innerText = formatNumber(quantity);
     }
@@ -33,7 +33,6 @@ function subtractQuantity(element) {
 
 function calculateOrderCost(ItemList){
     let TotalPrice = 0;
-    console.log(ItemList);
     ItemList.forEach(element => {
         let ItemPrice = element.querySelector('.ItemPrice span');
         let ItemQuantity = element.querySelector('.ItemQuantity span');

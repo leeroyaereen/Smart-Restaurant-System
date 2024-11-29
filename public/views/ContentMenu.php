@@ -41,11 +41,9 @@
 				<i class="fa fa-search"></i>
 			</div>
 			<div id="foodCategoryList">
-				<div id="foodCategory">Momo</div>
-				<div id="foodCategory">Snacks</div>
-				<div id="foodCategory">Lunch</div>
-				<div id="foodCategory">Cold drink</div>
-				<div id="foodCategory">Combo 1</div>
+				<template id="foodCategoryTemplate" class="hidden-template">
+					<div id="foodCategory"></div>
+				</template>
 			</div>
 		</div>
 		<div id="MenuItemList" class="section Body">
