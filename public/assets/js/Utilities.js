@@ -29,3 +29,26 @@ function formatNumber(number){
     let formattedNumber = new Intl.NumberFormat('en-US', { minimumIntegerDigits: 2 }).format(number);
     return formattedNumber;
 }
+
+async function fetchDataGet(endpoint) {
+    const response = await fetch(BASE_PATH + endpoint, {
+        method: "GET",
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": "application/json",
+        },
+    });
+    return response.json();
+}
+
+async function fetchDataPost(endpoint, body) {
+    const response = await fetch(BASE_PATH + endpoint, {
+        method: "POST",
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+    });
+    return response.json();
+}

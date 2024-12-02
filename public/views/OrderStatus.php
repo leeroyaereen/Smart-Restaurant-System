@@ -4,8 +4,8 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Document</title>
-		<link rel="stylesheet" href="../CSS/PageStructure.css" />
-		<link rel="stylesheet" href="../CSS/OrderStatus.css" />
+		<link rel="stylesheet" href="assets/css/PageStructure.css" />
+		<link rel="stylesheet" href="assets/css/OrderStatus.css" />
 	</head>
 	<body>
 		<div id="OrderStatusHeader" class="section Header">

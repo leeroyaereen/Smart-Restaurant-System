@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Register</title>
-    <script type="module" src="../JS/RegistrationValidator.js"></script>
-    <link rel="stylesheet" href="../CSS/RegisterPage.css">
+    <link rel="stylesheet" href="assets/css/RegisterPage.css">
 
+    <script src="assets/js/config.js.php"></script>
+    <script src="assets/js/RegistrationValidator.js" defer></script>
+	<script src="assets/js/Utilities.js"></script>
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-box">
+    <div class="register-container">
+        <div class="register-box">
             <h2>Register</h2>
             <form id="registerForm"> 
                 
@@ -46,7 +48,7 @@
                     <input type="password" id="confirmPassword" placeholder='Example123#'required/>
                 </div>
                 
-                <button type="submit" class="login-button">Register</button>
+                <button type="submit" class="register-button">Register</button>
             </form>
         </div>
     </div>

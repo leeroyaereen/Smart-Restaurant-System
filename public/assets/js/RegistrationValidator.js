@@ -1,32 +1,42 @@
-//Imports function from Utilities module
-import { isValidPhoneNumber,isValidPassword,isValidEmail,isValidWithConfirmPassowrd } from './Utilities.js';
+const form = document.querySelector("#registerForm");
+const firstName = document.querySelector("#firstName");
+const lastName = document.querySelector("#lastName");
+const email = document.querySelector("#email");
+const phoneNumber = document.querySelector("#phoneNumber");
+const password = document.querySelector("#password");
+const confirmPassword = document.querySelector("#confirmPassword");
 
-//invokes the function when the document gets loaded.
-document.addEventListener('DOMContentLoaded',function(){
-    var form = document.getElementById("registerForm");
 
-    form.addEventListener('submit',function(event){
+form.addEventListener("submit", function (event) {
+	event.preventDefault(); //prevent Submission
 
-        //gettig all values from the form
-        var firstName = document.getElementById("firstName").value;
-        var lastName = document.getElementById("lastName").value;
-        var email = document.getElementById("email").value;
-        var phoneNumber = document.getElementById("phoneNumber").value;
-        var password = document.getElementById("password").value;
-        var confirmPassword = document.getElementById("confirmPassword").value;
+	//bool value to track if the form inpust is valid
+	let isValidForm = true;
 
-        event.preventDefault();//prevent Submission
+	// isValidForm = isValidEmail(email.value) && isValidPhoneNumber(phoneNumber.value) && isValidPassword(password.value) && isValidWithConfirmPassowrd(password.value, confirmPassword.value);
 
-        //bool value to track if the form inpust is valid
-        let isValidForm = false;
+	console.log(isValidForm);
 
-        isValidForm =isValidEmail(email) && isValidPhoneNumber(phoneNumber) && isValidPassword(password) && isValidWithConfirmPassowrd(password,confirmPassword); 
-
-        console.log(isValidForm);
-        if(isValidForm){
-            window.location.href = '/src/HTML/LoginPage.html';
-            alert("Your Registration is being verified");
-        }
-    });
+	if (isValidForm) {
+        let userData = {
+            firstName: firstName.value,
+            lastName: lastName.value,
+            email: email.value,
+            phoneNumber: phoneNumber.value,
+            password: password.value,
+        };
+        registerUser(userData);
+	}
 });
 
+async function registerUser(userData) {
+
+	const registrationStatus = await fetchDataPost("/api/registerUser", userData);
+    if (registrationStatus.success) {
+        alert("Registration Successful");
+        window.location.href = "login";
+    } else {
+        alert(registrationStatus.message);
+    }
+
+}

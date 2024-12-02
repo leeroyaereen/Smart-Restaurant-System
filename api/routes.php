@@ -20,6 +20,18 @@
                 // Example function in UserController.php
                 getFoodCategoriesJSON();
                 break;
+
+            case 'registerUser':
+                require_once __DIR__ . '/controllers/userController.php';
+                // Example function in UserController.php
+                registerUser();
+                break;
+            case 'loginUser':
+                require_once __DIR__ . '/controllers/userController.php';
+                // Example function in UserController.php
+                loginUser();
+                break;
+                
             default:
                 http_response_code(404);
                 echo json_encode(['error' => 'Endpoint not found']);

@@ -9,11 +9,14 @@ $request_view = substr($request_path, strlen(BASE_PATH));
 
 // Define routes and map them to specific view files
 $routes = [
-    '/' => 'views/MainDashboard.php',
+    '/' => (isset($_SESSION['phoneNumber']))? 'views/ContentMenu.php' : 'views/LoginPage.php',
     '/menu' => 'views/ContentMenu.php',
     '/confirm-order' => 'views/MyTrayItems.php',
-    // '/about' => 'views/about.php',
-    // '/contact' => 'views/contact.php',
+    '/order-status' => 'views/OrderStatus.php',
+    '/register' => 'views/RegisterPage.php',
+    '/login' => 'views/LoginPage.php',
+    '/order-monitor' => 'views/OrderMonitor.php',
+    '/contact' => 'views/contact.php',
     '/error' => 'views/404.php'
 ];
 

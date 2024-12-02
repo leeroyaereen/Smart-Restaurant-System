@@ -7,6 +7,7 @@ let discountPercentage = 10;
 
 function calculateTotal(){
     let subTotalPrice = calculateOrderCost(ItemList);
+    subTotal.innerText = subTotalPrice;
     let discountPrice = Math.floor(subTotalPrice * (discountPercentage / 100));
     discount.innerText = discountPrice;
     total.innerText = subTotalPrice - discountPrice;

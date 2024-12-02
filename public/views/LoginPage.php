@@ -4,9 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../public/assets/css/LoginPage.css">
-  <script type="module" src="../../public/assets/js/LoginValidator.js"></script>
+  <link rel="stylesheet" href="assets/css/LoginPage.css">
+
+  <script src="assets/js/config.js.php"></script>
+  <script src="assets/js/LoginValidator.js" defer></script>
+  <script src="assets/js/Utilities.js"></script>
 </head>
 <body>
 
@@ -16,8 +18,8 @@
       
       <form  id="loginForm">
         <div class="input-group">
-          <label for="phone">Phone Number</label>
-          <input type="tel" id="phone" placeholder="Your phone number" required>
+          <label for="phoneNumber">Phone Number</label>
+          <input type="tel" id="phoneNumber" placeholder="Your phone number" required>
         </div>
 
         <div class="input-group">
@@ -37,8 +39,8 @@
         </div>
 
         <div class="action-buttons">
-          <button type="button" class="sign-up" onclick="window.location.href='/src/HTML/RegisterPage.html'">Sign Up</button>
-          <button type="button" class="skip" onclick="window.location.href='/src/HTML/ContentMenu.html'">Skip</button>
+          <button type="button" class="sign-up" onclick="window.location.href='/register'">Sign Up</button>
+          <button type="button" class="skip" onclick="window.location.href='/menu'">Skip</button>
         </div>
       </form>
     </div>

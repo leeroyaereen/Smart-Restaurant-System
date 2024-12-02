@@ -7,26 +7,15 @@ let menuItems;
 
 window.onload = loadPage;
 
-async function fetchData(endpoint) {
-    const response = await fetch(BASE_PATH + endpoint, {
-        method: "GET",
-        headers: {
-            "X-Requested-With": "XMLHttpRequest",
-            "Content-Type": "application/json",
-        },
-    });
-    return response.json();
-}
-
 async function loadPage() {
     try {
         // Fetch categories
-        const categoriesData = await fetchData("/api/getFoodCategories");
+        const categoriesData = await fetchDataGet("/api/getFoodCategories");
 		console.log(categoriesData);
         fillCategory(categoriesData.foodCategories);
         
         // Fetch food items
-        const foodItemsData = await fetchData("/api/getFoodItems");
+        const foodItemsData = await fetchDataGet("/api/getFoodItems");
         console.log(foodItemsData);
 
         if (!foodItemsData.success) {

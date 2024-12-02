@@ -16,7 +16,14 @@
 		<div id="MenuHeader" class="section Header">
 			<div id="MenuHeaderTitle" class="HeaderTitle">Menu</div>
 			<div id="MenuHeaderTable" class="HeaderSubTitle">
-				Customer Name: Ram Nepali
+				<?php 
+					session_start();
+					if(isset($_SESSION["phoneNumber"])){
+						echo "Welcome ".$_SESSION["phoneNumber"]; 
+					}else{
+						echo "Welcome Guest";
+					}
+				?>
 			</div>
 			<div id="searchBoxContainer">
 				<form action="">
