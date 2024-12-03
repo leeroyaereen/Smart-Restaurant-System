@@ -76,9 +76,35 @@
             FOREIGN KEY (Category_ID) REFERENCES FoodCategory(Category_ID)
         );";
 
+        $sqlOrderTray = "CREATE TABLE OrderTray (
+            OrderTray_ID INT PRIMARY KEY AUTO_INCREMENT,
+            User_ID INT,
+            KitchenOrderTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (User_ID) REFERENCES USER(User_ID)
+        );";
+        $sqlOrderItem = "CREATE TABLE OrderItem (
+            OrderItem_ID INT PRIMARY KEY AUTO_INCREMENT,
+            OrderTray_ID INT,
+            FoodItem_ID INT,
+            Quantity INT NOT NULL,
+            OrderStatus VARCHAR(50) NOT NULL,
+            Note TEXT,
+            FOREIGN KEY (OrderTray_ID) REFERENCES OrderTray(OrderTray_ID),
+            FOREIGN KEY (FoodItem_ID) REFERENCES FoodItems(FoodItem_ID)
+        );";
+        $sqlReview = "    CREATE TABLE Review (
+            Review_ID INT PRIMARY KEY AUTO_INCREMENT,
+            FoodItem_ID INT,
+            User_ID INT,
+            Rating INT CHECK (Rating >= 1 AND Rating <= 5),
+            ReviewText TEXT,
+            ReviewDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (FoodItem_ID) REFERENCES FoodItems(FoodItem_ID),
+            FOREIGN KEY (User_ID) REFERENCES User(User_ID)
+        );";
 
         //add all the sql commands in array and executing one by one
-        $queries = [$sqlFoodCategoryTable,$sqlFoodItem,$sqlMenuTable,$sqlRoleTable,$sqlUserTable];
+        $queries = [$sqlFoodCategoryTable,$sqlFoodItem,$sqlMenuTable,$sqlRoleTable,$sqlUserTable,$sqlOrderTray,$sqlOrderItem,$sqlReview];
         foreach($queries as $sql){
             $res = self::$restuarantDatabaseConnection->query($sql);
             if(!$res){
@@ -87,5 +113,41 @@
         }                    
         return true;
 
+    }
+
+    function CreateOrderItemTable(){
+        $sql = 'CREATE TABLE ORDER (
+            Order_ID INT PRIMARY KEY AUTO_INCREMENT,
+            OrderTray_ID INT,
+            FoodItem_ID INT,
+            Quantity INT NOT NULL,
+            OrderStatus VARCHAR(50) NOT NULL,
+            Note TEXT,
+            FOREIGN KEY (OrderTray_ID) REFERENCES OrderTray(OrderTray_ID),
+            FOREIGN KEY (FoodItem_ID) REFERENCES FOOD(FoodItem_ID)
+        );';
+    }
+
+
+    function CreateOrderTrayTable(){
+        $sql = 'CREATE TABLE OrderTray (
+            OrderTray_ID INT PRIMARY KEY AUTO_INCREMENT,
+            User_ID INT,
+            OrderDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (User_ID) REFERENCES USER(User_ID)
+        );';
+    }
+
+    function CreateReviewTable(){
+        $sql = 'CREATE TABLE REVIEW (
+            Review_ID INT PRIMARY KEY AUTO_INCREMENT,
+            FoodItem_ID INT,
+            User_ID INT,
+            Rating INT CHECK (Rating >= 1 AND Rating <= 5),
+            ReviewText TEXT,
+            ReviewDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (FoodItem_ID) REFERENCES FOOD(FoodItem_ID),
+            FOREIGN KEY (User_ID) REFERENCES USER(User_ID)
+        );';
     }
 ?>
