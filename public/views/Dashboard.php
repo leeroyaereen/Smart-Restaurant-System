@@ -154,11 +154,11 @@
 			form.addEventListener("submit", (e) => {
 				e.preventDefault();
 				const formData = {
-					FoodName: form.querySelector("#FoodName").value,
-					FoodCategory: form.querySelector("#FoodCategory").value,
-					FoodPreparationTime: form.querySelector("#FoodPreparationTime").value,
-					FoodPrice: form.querySelector("#FoodPrice").value,
-					FoodDescription: form.querySelector("#FoodDescription").value,
+					foodName: form.querySelector("#FoodName").value,
+					foodCategory: form.querySelector("#FoodCategory").value,
+					foodPreparationTime: form.querySelector("#FoodPreparationTime").value,
+					foodPrice: form.querySelector("#FoodPrice").value,
+					foodDescription: form.querySelector("#FoodDescription").value,
 				}
 				fetch(`${BASE_PATH}/api/addFoodItem`, {
 					method: "POST",
@@ -166,10 +166,15 @@
 						"Content-Type": "application/json",
 						"X-Requested-With": "XMLHttpRequest",
 					},
-					body: formData,
+					body: JSON.stringify(formData),
 				})
-					.then((response) => response.json())
+					.then((response) => {
+						response.json();
+						
+					})
 					.then((data) => {
+						
+						
 						if (data.success) {
 							alert("Food item added successfully");
 						} else {

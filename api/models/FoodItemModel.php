@@ -89,8 +89,11 @@
 
     function AddCategory($categoryName){
         global $connection;
-        if (!$connection) {
-            return "There is no connection with the database";
+        if(!$connection){
+            $connection = changeDatabaseConnection('ACHS canteen');
+            if(!$connection){
+                return "Null connection";
+            }
         }
         
         $sql = "INSERT INTO foodcategory (CategoryName) VALUES ('$categoryName')";
@@ -105,9 +108,11 @@
 
     function RemoveCategoryData($categoryId){
         global $connection;
-        if($connection){
-            return "There is no connection with the database";
-
+        if(!$connection){
+            $connection = changeDatabaseConnection('ACHS canteen');
+            if(!$connection){
+                return "Null connection";
+            }
         }
 
         $sql = "DELETE FROM FoodCategory
@@ -123,11 +128,13 @@
     }
 
     function AddFoodItem($newFood){
+
         global $connection;   
         if($newFood instanceof FoodItem){
             //Check if the connection is valid
             if (!$connection) {
-                return "Not connected to the restaurant database.";
+                $connection = changeDatabaseConnection('achs canteen');
+                if (!$connection) return "Not connected to the restaurant database.";
             }
             
 
@@ -138,7 +145,7 @@
 
             //check if the sql statment was prepared for execution 
             if($statement===FALSE){
-                echo "There was error preparing statement";
+                return "There was error preparing statement";
             }
             //set variables of the sql
             //s represents string type
