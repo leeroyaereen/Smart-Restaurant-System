@@ -10,6 +10,12 @@
             //     require_once __DIR__ . '/controllers/UserController.php';
             //     createUser(); // Another example function
             //     break;
+
+            case 'addFoodItem':
+                require_once __DIR__ . '/controllers/AdminDashboardController.php';
+                CreateFoodItem();
+                break;
+                
             case 'getFoodItems':
                 require_once __DIR__ . '/controllers/contentMenuController.php';
                 getFoodItemsJSON();

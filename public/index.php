@@ -19,7 +19,8 @@ if ($request_view == '/'){
 }
 
 $routes = [
-    '/' => 'views/MainDashboard.php',
+    '/' => 'views/Dashboard.php',
+    '/dashboard' => 'views/Dashboard.php',
     '/menu' => 'views/ContentMenu.php',
     '/confirm-order' => 'views/MyTrayItems.php',
     '/order-status' => 'views/OrderStatus.php',

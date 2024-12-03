@@ -1,131 +1,185 @@
-<?php
-    require "../PHP/DatabaseUtilities.php";
-    function AddCategory(){
-        if(isset($_POST['categoryName']) ){
-            
-            if($_POST['categoryName']){
-                DatabaseUtility::CreateCategory($_POST['categoryName']);
-            }else{
-                echo "<script>alert('The form has been aborted due to missing data in the form, recheck and submit the form again')</script>";
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<link rel="stylesheet" href="assets/css/PageStructure.css" />
+		<link rel="stylesheet" href="assets/css/AdminDashboard.css" />
+		<script src="assets/js/config.js.php"></script>
+		<script src="assets/js/Utilities.js"></script>
+		
+	</head>
+	<body>
+		<div id="AdminDashboardHeader" class="section Header HeaderTitle">
+			<span>Admin</span>
+			<span>Dashboard</span>
+		</div>
+		<div class="section Body">
+			<div>
+				<div>
+					<div></div>
+					<div></div>
+				</div>
+				<div>
+					<div>
+						<div>Add Food Item</div>
+						<form id="AddFoodItemForm">
+							<input type="text" name="FoodName" id="FoodName" />
+							<select name="FoodCategory" id="FoodCategory">
+								<option value="1" selected>momo</option>
+							</select>
+							<input type="number" name="FoodPreparationTime" id="FoodPreparationTime" />
+							<input type="price" name="FoodPrice" id="FoodPrice"/>
+							<input type="description" name="FoodDescription" id="FoodDescription"/>
+							<div>
+								<button id="CreateFoodItem" type="submit">Add Item</button>
+								<button id="CancelFoodItem" type="reset">Cancel</button>
+							</div>
+						</form>
+						<div id="DashboardFoodItemsList">
+							<template
+								id="DashboardFoodCategoryTemplate"
+								class="hidden-template"
+							>
+								<div id="DashboardFoodCategory">
+									<div id="DasgboardFoodCategoryTitle">Momo</div>
+									<div id="DashboardFoodCategoryItems">
+										<template id="DashboardItemTemplate" class="hidden-template">
+											<div id="DashboardItem">
+												<div id="DashboardItemImage">
+													<img
+														src="https://t4.ftcdn.net/jpg/06/49/25/27/360_F_649252736_LK6ign50vHZicrNR6Fe2mSpmPDNupx6Y.jpg"
+														alt=""
+														width="80"
+														height="80"
+														class="ItemImage"
+													/>
+												</div>
+												<div id="DashboardItemDetails">
+													<div id="DashboardItemTitle">
+														<div id="DashboardItemName">Fried Momo</div>
+														<div>
+															<svg
+																xmlns="http://www.w3.org/2000/svg"
+																width="24"
+																height="24"
+																viewBox="0 0 24 24"
+																fill="none"
+																stroke="#545F71"
+																stroke-width="2"
+																stroke-linecap="round"
+																stroke-linejoin="round"
+																class="icon icon-tabler icons-tabler-outline icon-tabler-info-circle"
+															>
+																<path
+																	stroke="none"
+																	d="M0 0h24v24H0z"
+																	fill="none"
+																/>
+																<path
+																	d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"
+																/>
+																<path d="M12 9h.01" />
+																<path d="M11 12h1v4h1" />
+															</svg>
+														</div>
+													</div>
+													<div
+														id="DashboardItemSubCategory"
+														class="HeaderSubTitle"
+													></div>
+													<div id="DashboardItemFooter" class="ItemFooter">
+														<div id="DashboardItemPrice" class="ItemPrice">
+															<span></span>
+														</div>
+														<div id="DashboardItemQuantity" class="ItemQuantity">
+															<svg
+																xmlns="http://www.w3.org/2000/svg"
+																width="40"
+																height="40"
+																viewBox="0 0 24 24"
+																fill="none"
+																stroke="#FE724C"
+																stroke-width="1"
+																stroke-linecap="round"
+																stroke-linejoin="round"
+																class="icon icon-tabler icons-tabler-outline icon-tabler-circle-minus"
+															>
+																<path
+																	stroke="none"
+																	d="M0 0h24v24H0z"
+																	fill="none"
+																/>
+																<path
+																	d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"
+																/>
+																<path d="M9 12l6 0" />
+															</svg>
+															<span>00</span>
+															<svg
+																xmlns="http://www.w3.org/2000/svg"
+																width="40"
+																height="40"
+																viewBox="0 0 24 24"
+																fill="#FE724C"
+																class="icon icon-tabler icons-tabler-filled icon-tabler-circle-plus"
+															>
+																<path
+																	stroke="none"
+																	d="M0 0h24v24H0z"
+																	fill="none"
+																/>
+																<path
+																	d="M4.929 4.929a10 10 0 1 1 14.141 14.141a10 10 0 0 1 -14.14 -14.14zm8.071 4.071a1 1 0 1 0 -2 0v2h-2a1 1 0 1 0 0 2h2v2a1 1 0 1 0 2 0v-2h2a1 1 0 1 0 0 -2h-2v-2z"
+																/>
+															</svg>
+														</div>
+													</div>
+												</div>
+											</div>
+										</template>
+									</div>
+								</div>
+							</template>
+						</div>
+					</div>
 
-            }
-        }
-    }
-
-    function AddFoodItem(){
-        //check if the form submission has required data or not
-        if(isset($_POST['foodName'],$_POST['foodType'],$_POST['foodCategory'],$_POST['foodPreparationTime'],$_POST['foodPrice'],$_POST['foodImage'],$_POST['foodDescription'])){
-            //check if the data from the form fulfills the requirement
-            if($_POST['foodName'] && $_POST['foodCategory'] && $_POST['foodPreparationTime'] && $_POST['foodPrice'] /*&& $_POST['foodImage']*/&& $_POST['foodDescription']){
-                $newFood = new FoodItem();
-                $newFood->FoodName = $_POST['foodName'];
-                $newFood->FoodType = $_POST['foodType'];
-                $newFood->FoodCategory = $_POST['foodCategory'];
-                $newFood->FoodPreparationTime = $_POST['foodPreparationTime'];
-                $newFood->FoodPrice = $_POST['foodPrice'];
-                $newFood->FoodImage = $_POST['foodImage'];
-                $newFood->FoodDescription = $_POST['foodDescription'];
-                $newFood->FoodReview = "No Reviews Yet";
-                $newFood->FoodAvailability = true;
-                $newFood->FoodRating = 0;        
-                
-                $res = DatabaseUtility::CreateItems($newFood);
-
-                if($res){
-                    echo "<script>alert('Food Item Added');</script>";
-                }else{
-                    echo "<script>alert('Food Item Couldnt be Added');</script>";
-                }
-   
-            }else{
-                echo "<script>".$_POST['foodName'].$_POST['foodCategory'].$_POST['foodPreparationTime'].$_POST['foodPrice'].$_POST['foodDescription']."</script>";
-                echo "<script>alert('The form has been aborted due to missing data in the form, recheck and submit the form again')</script>";
-            }
-        }
-    }
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-        DatabaseUtility::ChangeRestaurant('ACHS Canteen');
-        if (isset($_POST["categoryName"])) {
-            AddCategory();
-        } else if (isset($_POST["foodName"])) {
-            AddFoodItem();
-        } else {
-            echo "<script>alert('Please Enter the Data');</script>";
-        }            
-
-    }
-    
-?>
-
-<html>
-    <head>
-    
-    </head>
-    <body>
-        <!-- Form for adding a category -->
-        <form method="POST" action="">
-            <label for="categoryName">Category Name</label>
-            <input type="text" id="categoryName" name="categoryName"/>
-            <button type="submit">Add Category</button>
-        </form>
-
-        <!-- Form for adding a food item -->
-        <form method="POST" action="">
-            <div class="input-group">
-                <label for="foodName">Food Name</label>
-                <input type="text" id="foodName" name="foodName"/>
-            </div>
-            <div class="input-group">
-                <label for="foodType">Food Type</label>
-                <input type="text" id="foodType" name="foodType" list="foodTypeLists"/>
-                <datalist id="foodTypeLists">
-                    <!-- <option value="Normal">System Analysis and Design</option> -->
-                </datalist>
-            </div>
-            <div class="input-group">
-                <label for="foodCategory">Set in Category</label>
-                <select name="foodCategory">
-
-                <?php
-                    $sql = "SELECT Category_ID, CategoryName FROM FoodCategory";
-                    $conn = DatabaseUtility::GetRestaurantConnectionWithName('ACHS Canteen');
-                    if(!$conn){
-                        echo "<script>alert('There was null')</script>";
-
-                    }
-                    $res = $conn->query($sql);
-
-                    if ($res) {
-                        while ($row = mysqli_fetch_assoc($res)) {
-                            echo "<option value='" . $row['Category_ID'] . "'>" . $row['CategoryName'] . "</option>";
-                        }
-                    } else {
-                        echo "<script>alert('There was an error adding category')</script>";
-                    }
-                ?>
-
-                    
-                </select>
-            </div>
-            <div class="input-group">
-                <label for="foodPreparationTime">Time For Preparation</label>
-                <input type="number" id="foodPreparationTime" name="foodPreparationTime"/>
-            </div>
-            <div class="input-group">
-                <label for="foodDescription">Description of food</label>
-                <textarea id="foodDescription" name="foodDescription"></textarea>
-            </div>
-            <div class="input-group">
-                <label for="foodPrice">Price</label>
-                <input type="number" step="0.01" name="foodPrice" id="foodPrice"/>
-            </div>
-            <div class="input-group">
-                <label for="foodImage">Food Image</label>
-                <input type="file" id="foodImage" name="foodImage"/>
-            </div>
-            <button type="submit">Add Food Item</button>
-        </form>
-    </body>
+					<div></div>
+				</div>
+			</div>
+		</div>
+		<script defer>
+			const form = document.querySelector("#AddFoodItemForm");
+			form.addEventListener("submit", (e) => {
+				e.preventDefault();
+				const formData = {
+					FoodName: form.querySelector("#FoodName").value,
+					FoodCategory: form.querySelector("#FoodCategory").value,
+					FoodPreparationTime: form.querySelector("#FoodPreparationTime").value,
+					FoodPrice: form.querySelector("#FoodPrice").value,
+					FoodDescription: form.querySelector("#FoodDescription").value,
+				}
+				fetch(`${BASE_PATH}/api/addFoodItem`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						"X-Requested-With": "XMLHttpRequest",
+					},
+					body: formData,
+				})
+					.then((response) => response.json())
+					.then((data) => {
+						if (data.success) {
+							alert("Food item added successfully");
+						} else {
+							alert("Failed to add food item");
+						}
+					})
+					.catch((error) => {
+						console.error("Error:", error);
+					});
+			});
+		</script>
+	</body>
 </html>
