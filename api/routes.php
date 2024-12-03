@@ -12,23 +12,31 @@
             //     break;
             case 'getFoodItems':
                 require_once __DIR__ . '/controllers/contentMenuController.php';
-                // Example function in UserController.php
                 getFoodItemsJSON();
                 break;
+
             case 'getFoodCategories':
                 require_once __DIR__ . '/controllers/contentMenuController.php';
-                // Example function in UserController.php
                 getFoodCategoriesJSON();
+                break;
+
+            case 'setTrayItems':
+                require_once __DIR__ . '/controllers/contentMenuController.php';
+                setTrayItems();
+                break;
+
+            case 'getTrayItems':
+                require_once __DIR__ . '/controllers/contentMenuController.php';
+                getTrayItems();
                 break;
 
             case 'registerUser':
                 require_once __DIR__ . '/controllers/userController.php';
-                // Example function in UserController.php
                 registerUser();
                 break;
+
             case 'loginUser':
                 require_once __DIR__ . '/controllers/userController.php';
-                // Example function in UserController.php
                 loginUser();
                 break;
                 

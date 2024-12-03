@@ -11,7 +11,7 @@ const BASE_PATH = "<?php echo BASE_PATH; ?>";
 
 // Check if the user is logged in and provide the appropriate values
 <?php if ($loggedIn): ?>
-    const user_isAuthenticated = TRUE;
+    const user_isAuthenticated = true;
 <?php else: ?>
-    const user_isAuthenticated = FALSE;
+    const user_isAuthenticated = false;
 <?php endif; ?>

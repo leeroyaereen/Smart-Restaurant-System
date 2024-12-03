@@ -5,8 +5,20 @@
     $mainPassword = "";
     $mainDatabase = "ACHS canteen";
 
-    $connection;
+    $connection = mysqli_connect($mainServername, $mainUsername, $mainPassword, $mainDatabase);
 
+
+    if (!$connection) {
+        echo "<script>alert('Error Connecting to Database')</script>";
+        die();
+    }
+
+    
+    function getConnection(){
+        global $connection;
+        return $connection;
+    }
+    
     function changeDatabaseConnection($dbname){
         global $connection;
         $mainServername = "localhost";
@@ -18,18 +30,6 @@
             die();
         }
         return $connection;
-    }
-
-    function getConnection(){
-        global $connection;
-        return $connection;
-    }
-    
-    $connection = mysqli_connect($mainServername, $mainUsername, $mainPassword, $mainDatabase);
-            
-    if (!$connection) {
-        echo "<script>alert('Error Connecting to Database')</script>";
-        die();
     }
 
 ?>

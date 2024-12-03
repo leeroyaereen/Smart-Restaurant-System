@@ -17,7 +17,6 @@
 			<div id="MenuHeaderTitle" class="HeaderTitle">Menu</div>
 			<div id="MenuHeaderTable" class="HeaderSubTitle">
 				<?php 
-					session_start();
 					if(isset($_SESSION["phoneNumber"])){
 						echo "Welcome ".$_SESSION["phoneNumber"]; 
 					}else{

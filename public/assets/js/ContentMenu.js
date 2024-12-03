@@ -5,6 +5,8 @@ const menuItemList = document.querySelector("#MenuItemList");
 const menuItemTemplate = document.querySelector("#MenuItemTemplate");
 let menuItems;
 
+let TrayItems = [];
+
 window.onload = loadPage;
 
 async function loadPage() {
@@ -43,9 +45,10 @@ function fillMenu(data) {
 	data.forEach((item) => {
 		let templateClone = menuItemTemplate.content.cloneNode(true);
 		let menuItem = templateClone.querySelector("#MenuItem");
+		menuItem.dataset.id = item.FoodItem_ID;
 		menuItem.querySelector("#MenuItemName").innerText = item.FoodName;
 		menuItem.querySelector("#MenuItemSubCategory").innerText = item.FoodType;
-		menuItem.querySelector("#MenuItemPrice span").innerText = item.FoodPrice;
+		menuItem.querySelector("#MenuItemPrice span").innerText = Math.floor(item.FoodPrice);
 		menuItem.querySelector("#MenuItemDuration span").innerText = item.FoodPreparationTime+" min";
 		addQuantityCounter(menuItem.querySelector(".ItemQuantity"));
 		observer.observe(menuItem.querySelector(".ItemQuantity span"), {childList: true});
@@ -66,5 +69,26 @@ const observer = new MutationObserver(() => {
 
 
 document.querySelector("#OrderButton Button").onclick = () => {
-	window.location.href = "confirm-order";
+	menuItems.forEach((element) => {
+		let quantity = parseInt(element.querySelector('.ItemQuantity span').innerText);
+		if (quantity > 0) {
+			let item = {
+				FoodItem_ID: element.dataset.id,
+				Quantity: quantity
+			};
+			TrayItems.push(item);
+		}
+	});
+	setTray();
 };
+
+async function setTray() {
+	const setTrayStatus = await fetchDataPost("/api/setTrayItems", {TrayItems: TrayItems});
+	console.log(setTrayStatus);
+	if (setTrayStatus.success) {
+		window.location.href = "confirm-order";
+		console.log("Tray set successfully");
+	}else{
+		alert(setTrayStatus.message);
+	}
+}
