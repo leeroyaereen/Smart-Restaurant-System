@@ -74,7 +74,8 @@ document.querySelector("#OrderButton Button").onclick = () => {
 		if (quantity > 0) {
 			let item = {
 				FoodItem_ID: element.dataset.id,
-				Quantity: quantity
+				Quantity: quantity,
+				Note : "",
 			};
 			TrayItems.push(item);
 		}

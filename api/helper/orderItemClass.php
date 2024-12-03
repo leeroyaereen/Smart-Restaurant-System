@@ -7,15 +7,17 @@
         public $quantity;
         public OrderStatus $orderStatus;
         public $note;
+
+        
     }
 
-    enum OrderStatus {
-        case InQueue;
-        case Preparing;
-        case Ready;
-        case Served;
-        case Cancelled;
-        case paid;
+    enum OrderStatus: string {
+        case InQueue = "InQueue";
+        case Preparing = "Preparing";
+        case Ready = "Ready";
+        case Served = "Served";
+        case Cancelled = "Cancelled";
+        case paid = "Paid";
     }
     
 ?>
