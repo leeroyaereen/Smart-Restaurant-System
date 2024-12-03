@@ -20,7 +20,6 @@
         $result = $userModel->registerUser($firstName, $lastName, $email, $phoneNumber, $password);
 
         if($result){
-            session_start();
             $_SESSION['phoneNumber'] = $phoneNumber;
             $_SESSION['firstName'] = $firstName;
             $_SESSION['lastName'] = $lastName;
@@ -46,7 +45,6 @@
         $result = $userModel->loginUser($phoneNumber, $password);
 
         if($result){
-            session_start();
             $_SESSION['phoneNumber'] = $phoneNumber;
             $_SESSION['firstName'] = $result['FirstName'];
             $_SESSION['lastName'] = $result['LastName'];
@@ -57,8 +55,7 @@
     }
 
     function logoutUser(){
-        session_start();
-        session_destroy();
+        session_unset();
         echo json_encode(['success'=>true, 'message'=>'User logged out successfully']);
     }
 ?>

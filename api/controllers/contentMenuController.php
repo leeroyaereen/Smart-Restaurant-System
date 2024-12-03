@@ -46,22 +46,79 @@
         echo json_encode(['success'=>true,'message'=>$message,'foodCategories'=>$categoriesJson]);
     }
 
-    function getFoodItemAndCategoriesJSON(){
-        if($_SERVER['REQUEST_METHOD']==='POST'){           
-            $foodItems = GetFoodCategoriess();
-            $foodCategories = GetFoodItems();
-            if($foodItems==null || $foodCategories==null){
-                echo json_encode(["success"=>false, "message" => "Can't get the any of the two requested data"]);
+    // function getFoodItemAndCategoriesJSON(){
+    //     if($_SERVER['REQUEST_METHOD']==='POST'){           
+    //         $foodItems = GetFoodCategoriess();
+    //         $foodCategories = GetFoodItems();
+    //         if($foodItems==null || $foodCategories==null){
+    //             echo json_encode(["success"=>false, "message" => "Can't get the any of the two requested data"]);
+    //         }
+    //         $message = 'No message';
+    //         if(is_string($foodItems)){
+    //             $message = $foodItems;
+    //             echo json_encode(["success"=>false, "message" => $message]);
+    //             return;
+    //         }
+    //         echo json_encode(['success'=>true,'message'=>$message,'foodItem'=>$foodItems,'$foodCategories'=>$foodItems]);
+    //     }else{
+    //         echo json_encode(["success"=>false, "message" => "Can't Handle Request due to invalid method"]);
+    //     }
+    // }
+
+    function setTrayItems(){
+        if($_SERVER['REQUEST_METHOD']==='POST'){
+            $data = json_decode(file_get_contents('php://input'), true);
+            if(isset($data['TrayItems'])){
+                $TrayItems = $data['TrayItems'];
+                $_SESSION['TrayItems'] = $TrayItems;
+                echo json_encode(['success'=>true,'message'=>'Tray Items Set Successfully']);
+            }else{
+                echo json_encode(['success'=>false,'message'=>'Tray Items Not Set']);
             }
-            $message = 'No message';
-            if(is_string($foodItems)){
-                $message = $foodItems;
-                echo json_encode(["success"=>false, "message" => $message]);
-                return;
-            }
-            echo json_encode(['success'=>true,'message'=>$message,'foodItem'=>$foodItems,'$foodCategories'=>$foodItems]);
         }else{
-            echo json_encode(["success"=>false, "message" => "Can't Handle Request due to invalid method"]);
+            echo json_encode(['success'=>false,'message'=>'Invalid Request Method']);
         }
     }
+
+    function getTrayItems() {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            if (isset($_SESSION['TrayItems'])) {
+                $TrayItemsDetails = [];
+                $TrayItems = $_SESSION['TrayItems'];
+    
+                foreach ($TrayItems as $trayItem) {
+                    // Fetch the food item details by its ID
+                    $foodItem = getFoodItemByID($trayItem['FoodItem_ID']);
+                    if (!$foodItem) {
+                        continue; // Skip if food item is not found
+                    }
+    
+                    // Format as [Category ID => [Food Item Details, Quantity]]
+                    $categoryID = $foodItem->FoodCategory;
+                    if (!isset($TrayItemsDetails[$categoryID])) {
+                        $TrayItemsDetails[$categoryID] = [
+                            'CategoryName' => getCategoryByID($categoryID), // Fetch category name
+                            'foodItems' => []
+                        ];
+                    }
+    
+                    // Add the food item and its quantity
+                    $TrayItemsDetails[$categoryID]['foodItems'][] = [
+                        'foodItemDetails' => $foodItem,
+                        'Quantity' => $trayItem['Quantity']
+                    ];
+                }
+    
+                // Sort by category ID for consistency
+                // ksort($TrayItemsDetails);
+    
+                echo json_encode(['success' => true, 'TrayItems' => $TrayItemsDetails]);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Tray Items Not Found']);
+            }
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Invalid Request Method']);
+        }
+    }
+    
 ?>

@@ -8,8 +8,18 @@ $request_path = parse_url($request_uri, PHP_URL_PATH);
 $request_view = substr($request_path, strlen(BASE_PATH));
 
 // Define routes and map them to specific view files
+session_start();
+if ($request_view == '/'){
+    if (isset($_SESSION['phoneNumber'])){
+        header("Location:".BASE_PATH."/menu");
+    }
+    else{
+        header("Location: /login");
+    }
+}
+
 $routes = [
-    '/' => (isset($_SESSION['phoneNumber']))? 'views/ContentMenu.php' : 'views/LoginPage.php',
+    '/' => 'views/MainDashboard.php',
     '/menu' => 'views/ContentMenu.php',
     '/confirm-order' => 'views/MyTrayItems.php',
     '/order-status' => 'views/OrderStatus.php',
@@ -26,5 +36,4 @@ if (array_key_exists($request_view, $routes)) {
 } else {
     include $routes['/error'];
 }
-
 ?>

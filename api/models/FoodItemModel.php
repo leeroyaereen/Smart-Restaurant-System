@@ -5,7 +5,8 @@
 
     use Src\Helpers\FoodItem;
 
-   function GetFoodItems(){
+    $connection = getConnection();
+    function GetFoodItems(){
         global $connection;
         $foodItems = [];
 
@@ -182,15 +183,67 @@
             return "Error Connecting to the database".$connection->error;
             
         }
-
         if($res){
             return true;
         }
         else{
             return "Error Executing the query".$connection->error;
         }
-
-
     }
 
+    function getFoodItemByID($foodItem_ID){
+        global $connection;
+
+        $foodItem = new FoodItem;
+
+        if(!$connection){
+            $connection = changeDatabaseConnection('ACHS canteen');
+            if(!$connection){
+                return "Null connection";
+            }
+        }
+
+        $sql = "SELECT * FROM foodItems WHERE FoodItem_ID = ".$foodItem_ID;
+        $res = $connection->query($sql);
+        if($res){
+            $item = mysqli_fetch_assoc($res);
+            $foodItem->FoodItem_ID = $item['FoodItem_ID'];
+            $foodItem->FoodName = $item['FoodName'];
+            $foodItem->FoodType = $item['FoodType'];
+            $foodItem->FoodCategory = $item['Category_ID'];
+            $foodItem->FoodRating = $item['FoodRating'];
+            $foodItem->FoodPreparationTime = $item['FoodPreparationTime'];
+            $foodItem->FoodReview = $item['FoodReview'];
+            $foodItem->FoodDescription = $item['FoodDescription'];
+            $foodItem->FoodImage = $item['FoodImage'];
+            $foodItem->FoodPrice = $item['FoodPrice'];
+            $foodItem->FoodAvailability = $item['FoodAvailability'];
+            $foodItem->TotalOrders = $item['TotalOrders'];
+            return $foodItem;
+        }
+        else{
+            return "Can't get the any object";
+        }
+    }
+
+    function getCategoryByID($category_ID){
+        global $connection;
+
+        if(!$connection){
+            $connection = changeDatabaseConnection('ACHS canteen');
+            if(!$connection){
+                return "Null connection";
+            }
+        }
+
+        $sql = "SELECT * FROM foodCategory WHERE Category_ID = ".$category_ID;
+        $res = $connection->query($sql);
+        if($res){
+            $category = mysqli_fetch_assoc($res);
+            return $category['CategoryName'];
+        }
+        else{
+            return "Can't get the any object";
+        }
+    }
 ?> 
