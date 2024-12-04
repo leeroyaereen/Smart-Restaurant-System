@@ -73,7 +73,28 @@ const observer = new MutationObserver(() => {
 });
 
 confirmationButton.onclick = () => {
-    alert("Your order has been confirmed");
-};
+    let orderItems = [];
+
+    FoodItemList.forEach((item) => {
+        let orderItem = {
+            "FoodItem_ID": parseInt(item.dataset.id),
+            "Quantity": parseInt(item.querySelector('.ItemQuantity span').innerText),
+            "Note": item.querySelector('#TrayItemNote textarea').value
+        }
+        orderItems.push(orderItem)
+    })
+    storeOrder(orderItems);
+}
+
+async function storeOrder(orderItems){
+
+    const OrderItemsResponse = await fetchDataPOST("/api/placeOrder", orderItems);
+    if (OrderItemsResponse.success){
+        alert("order placed successfully");
+    }else{
+        alert("some error occured")
+    }
+    
+}
 
 
