@@ -14,7 +14,7 @@ if ($request_view == '/'){
         header("Location:".BASE_PATH."/menu");
     }
     else{
-        header("Location: /login");
+        header("Location:".BASE_PATH."/login");
     }
 }
 

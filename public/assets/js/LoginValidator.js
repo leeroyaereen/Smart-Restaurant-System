@@ -25,7 +25,7 @@ async function loginUser(userData) {
     console.log(loginStatus);
     if (loginStatus.success) {
         console.log("Login Successful");
-        // window.location.href = "menu";
+        window.location.href = "menu";
     } else {
         alert(loginStatus.message);
     }

@@ -23,15 +23,17 @@
 				</div>
 				<div>
 					<div>
-						<div>Add Food Item</div>
+						<div class="HeaderTitle">Add Food Item</div>
 						<form id="AddFoodItemForm">
-							<input type="text" name="FoodName" id="FoodName" />
-							<select name="FoodCategory" id="FoodCategory">
-								<option value="1" selected>momo</option>
+							<input type="text" name="FoodName" id="FoodName" placeholder="Name" />
+							<select name="FoodCategory" id="FoodCategory" placeholder="Category">
+								<optgroup>
+									<option selected>Choose a Category</option>
+								</optgroup>
 							</select>
-							<input type="number" name="FoodPreparationTime" id="FoodPreparationTime" />
-							<input type="price" name="FoodPrice" id="FoodPrice"/>
-							<input type="description" name="FoodDescription" id="FoodDescription"/>
+							<input type="number" name="FoodPreparationTime" id="FoodPreparationTime" placeholder="Preparation Time" />
+							<input type="number" name="FoodPrice" id="FoodPrice" placeholder="Price"/>
+							<input type="description" name="FoodDescription" id="FoodDescription" placeholder="Description"/>
 							<div>
 								<button id="CreateFoodItem" type="submit">Add Item</button>
 								<button id="CancelFoodItem" type="reset">Cancel</button>
@@ -151,6 +153,29 @@
 		</div>
 		<script defer>
 			const form = document.querySelector("#AddFoodItemForm");
+
+			window.onload = fillCategories;
+
+			async function fillCategories(){
+				const categoriesData = await fetchDataGet("/api/getFoodCategories");
+				console.log(categoriesData);
+				
+				if (!categoriesData.success){
+					alert("couldn't fetch categories");
+					return;
+				}
+
+				const categories = document.querySelector('select');
+				Object.entries(categoriesData.foodCategories).forEach(([id, category]) => {
+					const option = document.createElement('option');
+					option.value = id;
+					option.innerText = category;
+					categories.append(option)
+			});
+			}
+
+	
+			
 			form.addEventListener("submit", (e) => {
 				e.preventDefault();
 				const formData = {
@@ -173,8 +198,7 @@
 						
 					})
 					.then((data) => {
-						
-						
+						window.location.href = "menu";
 						if (data.success) {
 							alert("Food item added successfully");
 						} else {
