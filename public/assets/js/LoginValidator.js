@@ -1,3 +1,5 @@
+import { isValidPhoneNumber} from "./Utilities";
+
 const form = document.querySelector("#loginForm");
 const phoneNumber = document.querySelector("#phoneNumber");
 const password = document.querySelector("#password");
@@ -7,7 +9,7 @@ form.addEventListener("submit", function (event) {
 
 	//bool value to track if the form inpust is valid
 	let isValidForm = true;
-	// isValidForm = isValidPhoneNumber(phoneNumber.value)
+	isValidForm = isValidPhoneNumber(phoneNumber.value)
 
 	if (isValidForm) {
         let userData = {

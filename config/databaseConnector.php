@@ -1,35 +1,43 @@
 <?php
 
     function getConnection(){
-        global $connection;
+        $connection = DatabaseConnector::$connection;
         return $connection;
     }
 
     function changeDatabaseConnection($dbname){
-        global $connection;
-        $mainServername = "localhost";
-        $mainUsername = "root";
-        $mainPassword = "";
-        $connection = mysqli_connect($mainServername,$mainUsername, $mainPassword,$dbname);
-        if(!$connection){
-            echo "<script>alert('Error Connecting to Database')</script>";
-            die();
+        
+        return DatabaseConnector::ConnectDatabase($dbname);
+    }
+    class DatabaseConnector{            
+        public static $mainServername = "localhost";
+        public static $mainUsername = "root";
+        public static $mainPassword = "";
+        public static $mainDatabase = "ACHS canteen";
+
+        public static $connection;
+
+        public static function Construct(){
+            self::$connection = mysqli_connect(self::$mainServername, self::$mainUsername, self::$mainPassword, self::$mainDatabase);
+
+            if (!self::$connection) {
+                echo "Error Connecting to Database with :".self::$mainServername.self::$mainUsername. self::$mainPassword.self::$mainDatabase;
+                die();
+            }
         }
-        return $connection;
+
+        public static function ConnectDatabase($dbname = 'ACHS canteen'){
+            self::$connection = mysqli_connect(self::$mainServername,self::$mainUsername, self::$mainPassword,$dbname);
+            if(!self::$connection){
+                echo "Error Connecting to Database with :".self::$mainServername.self::$mainUsername. self::$mainPassword.$dbname;
+                die();
+            }
+            return self::$connection;
+        }
+
+        
     }
-
-    $mainServername = "localhost";
-    $mainUsername = "root";
-    $mainPassword = "";
-    $mainDatabase = "ACHS canteen";
-
-    $connection = mysqli_connect($mainServername, $mainUsername, $mainPassword, $mainDatabase);
-
-
-    if (!$connection) {
-        echo "<script>alert('Error Connecting to Database')</script>";
-        die();
-    }
+    DatabaseConnector::Construct();
 
     
 ?>

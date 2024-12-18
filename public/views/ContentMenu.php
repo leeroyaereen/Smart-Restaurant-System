@@ -17,8 +17,8 @@
 			<div id="MenuHeaderTitle" class="HeaderTitle">Menu</div>
 			<div id="MenuHeaderTable" class="HeaderSubTitle">
 				<?php 
-					if(isset($_SESSION["phoneNumber"])){
-						echo "Welcome ".$_SESSION["phoneNumber"]; 
+					if(isset($_SESSION["firstName"])){
+						echo "Welcome ".$_SESSION["firstName"]; 
 					}else{
 						echo "Welcome Guest";
 					}
@@ -188,8 +188,8 @@
 					<span id="OrderTime">30 min</span>
 				</div>
 			</div>
-			<div id="OrderButton" class="DefaultOrderButton">
-				<button>
+			<div id="OrderButton" class="DefaultOrderButton" style="background-color: green;">
+				<button style="background-color:green;">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="24"

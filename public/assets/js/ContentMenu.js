@@ -28,7 +28,7 @@ async function loadPage() {
         fillMenu(foodItemsData.foodItems);
     } catch (error) {
         console.error("Error fetching data:", error);
-        alert("An error occurred while loading the page.");
+        alert("An error occurred while loading the page."+ error);
     }
 }
 

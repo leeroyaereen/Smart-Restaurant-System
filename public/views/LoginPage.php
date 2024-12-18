@@ -39,8 +39,8 @@
         </div>
 
         <div class="action-buttons">
-          <button type="button" class="sign-up" onclick="window.location.href='/register'">Sign Up</button>
-          <button type="button" class="skip" onclick="window.location.href='/menu'">Skip</button>
+          <button type="button" class="sign-up" onclick="window.location.href='register'">Sign Up</button>
+          <button type="button" class="skip" onclick="window.location.href='menu'">Skip</button>
         </div>
       </form>
     </div>

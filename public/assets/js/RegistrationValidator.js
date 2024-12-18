@@ -11,8 +11,7 @@ form.addEventListener("submit", function (event) {
 	event.preventDefault(); //prevent Submission
 
 	//bool value to track if the form inpust is valid
-	let isValidForm = true;
-
+    let isValidForm = isValidWithConfirmPassowrd(password.value, confirmPassword.value) || isValidPhoneNumber(phoneNumber.value);
 	// isValidForm = isValidEmail(email.value) && isValidPhoneNumber(phoneNumber.value) && isValidPassword(password.value) && isValidWithConfirmPassowrd(password.value, confirmPassword.value);
 
 	console.log(isValidForm);
@@ -34,7 +33,7 @@ async function registerUser(userData) {
 	const registrationStatus = await fetchDataPost("/api/registerUser", userData);
     if (registrationStatus.success) {
         alert("Registration Successful");
-        window.location.href = "login";
+        window.location.href = "menu";
     } else {
         alert(registrationStatus.message);
     }

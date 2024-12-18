@@ -1,24 +1,21 @@
 <?php
-require_once __DIR__.'/../helper/OrderItemClass.php';
-require_once __DIR__.'/../helper/OrderTrayClass.php';
-require_once __DIR__."/../models/OrderModel.php";
-use Src\Helpers\OrderItem;
-use Src\Helpers\OrderStatus;
-use Src\Helpers\OrderTray;
+    require_once __DIR__.'/../helper/OrderItemClass.php';
+    require_once __DIR__.'/../helper/OrderTrayClass.php';
+    require_once __DIR__."/../models/OrderModel.php";
 
-    function PlaceOrder(){
+    use Src\Helpers\OrderItem;
+    use Src\Helpers\OrderStatus;
+    use Src\Helpers\OrderTray;
+
+    function ChangeState(){
         if($_SERVER['REQUEST_METHOD']!=='POST'){
             echo json_encode(['success'=>false,'message'=>'Invalid Request Method']);
             return;
         }
         $data = json_decode(file_get_contents('php://input'), true);
-        if(isset($data['TrayItems'])){
+        if(isset($data['OrderItem_ID'],$data['OrderStatus'])){
             $TrayItems = $data['TrayItems'];
             
-            //!!!!!!!!!!!!!!!!!!
-            //Requires user authentication 
-            //!!!!!!!!!!!!!!!!!!
-
             $user = 1;
             $newOrderTray = new OrderTray;
             $newOrderTray->userID = $user;
@@ -44,8 +41,7 @@ use Src\Helpers\OrderTray;
 
             echo json_encode(['success'=>true,'message'=>'Tray Items Set Successfully']);
         }else{
-            echo json_encode(['success'=>false,'message'=>'Tray Items Not Set because of emty data'.file_get_contents('php://input')]);
+            echo json_encode(['success'=>false,'message'=>'Tray Items Not Set because of emty data']);
         }
     }
-    
 ?>

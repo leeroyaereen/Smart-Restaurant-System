@@ -83,16 +83,26 @@ confirmationButton.onclick = () => {
         }
         orderItems.push(orderItem)
     })
-    storeOrder(orderItems);
+
+    let payload = {
+        "TrayItems":orderItems
+    };
+    storeOrder(payload);
 }
 
 async function storeOrder(orderItems){
 
-    const OrderItemsResponse = await fetchDataPOST("/api/placeOrder", orderItems);
-    if (OrderItemsResponse.success){
-        alert("order placed successfully");
-    }else{
-        alert("some error occured")
+    try{
+        const OrderItemsResponse = await fetchDataPost("/api/placeOrder", orderItems);
+        if (OrderItemsResponse.success){
+            alert("order placed successfully");
+            window.location.href = "order-status";
+        }else{
+            alert("some error occured"+OrderItemsResponse.message);
+        }
+    }catch(e){
+        console.log("Error message: "+e);
+        alert("We got some unexpected error");
     }
     
 }

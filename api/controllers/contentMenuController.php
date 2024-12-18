@@ -8,7 +8,7 @@
 
         //if the object is null then it is regarded as failure
         if($itemJson==null){
-            echo json_encode(["success"=>false, "message" => "Can't get the any object"]);
+            echo json_encode(["success"=>false, "message" => "Can't get any object"]);
             return;
         }
         $message = 'no message';
