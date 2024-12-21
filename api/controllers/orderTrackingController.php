@@ -14,34 +14,30 @@
         }
         $data = json_decode(file_get_contents('php://input'), true);
         if(isset($data['OrderItem_ID'],$data['OrderStatus'])){
-            $TrayItems = $data['TrayItems'];
-            
-            $user = 1;
-            $newOrderTray = new OrderTray;
-            $newOrderTray->userID = $user;
-            $newOrderTray->kitchenOrderTime = date("Y-m-d H:i:s");//current time stamp
-            $res = RegisterNewTrayData($newOrderTray);
-            if($res !==true){
-                echo json_encode(['success'=>false,'message'=>'Tray Items Not Set'.$res]);
+            //set values in the order item instance.
+            $order = new OrderItem();
+            $order->orderId = $data['OrderItem_ID'];
+            $order->orderStatus = OrderStatus::from($data['OrderStatus']);
+
+            //send to database about the modification
+            $res = ChangeOrderStatus($order);
+            if($res === true){
+                echo json_encode(['success'=>true,'message'=>'Order Item Status Changed Successfully']);
                 return;
             }
-            foreach($TrayItems as $order){
-                $newOrder = new OrderItem;
-                $newOrder->foodItemID = $order['FoodItem_ID'];
-                $newOrder->quantity = $order['Quantity'];
-                $newOrder->note = $order['Note'];
-                $newOrder->orderTrayID = $newOrderTray->orderTrayID;
-                $newOrder->orderStatus = OrderStatus::InQueue;
-                $res = RegisterNewOrder($newOrder);
-                if($res !== true){
-                    echo json_encode(['success'=>false,'message'=>'Tray Items Not Set'.$res]);
-                    return;
-                }
-            }
-
-            echo json_encode(['success'=>true,'message'=>'Tray Items Set Successfully']);
+            echo json_encode(['success'=>false,'message'=>$res]);
         }else{
-            echo json_encode(['success'=>false,'message'=>'Tray Items Not Set because of emty data']);
+            echo json_encode(['success'=>false,'message'=>'Tray Items Not Set because of empty data']);
         }
+    }
+
+    function getOrderStatus(){
+        //gives message and stops the flow if there is no order tray id
+        if(!isset($_SESSION['currentOrderTrayID'])){
+            echo json_encode(['success'=>false,'message'=>'No Foods Ordered.']);
+            return;
+        }
+        
+
     }
 ?>

@@ -16,7 +16,7 @@
             }
         }
 
-        public function registerUser($firstName, $lastName, $email, $phoneNumber, $password) {
+        public static function registerUser($firstName, $lastName, $email, $phoneNumber, $password) {
             $query = "INSERT INTO User (FirstName, LastName, Email, PhoneNumber, Password) VALUES (?, ?, ?, ?, ?)";
             $stmt = self::$connection->prepare($query); // Prepare the query
         
@@ -38,7 +38,7 @@
                 return false;
             }
         }
-        public function getUserDetailsWithPhoneNumber($phoneNumber){
+        public static function getUserDetailsWithPhoneNumber($phoneNumber){
         
             $query = "SELECT * FROM User WHERE phoneNumber = ?";
             $stmt = self::$connection->prepare($query);
@@ -60,7 +60,7 @@
             }
         }
 
-        public function loginUser($phoneNumber, $password) {
+        public static function loginUser($phoneNumber, $password) {
             // Use prepared statements to prevent SQL injection
             $query = "SELECT * FROM User WHERE phoneNumber = ?";
             $stmt = self::$connection->prepare($query);

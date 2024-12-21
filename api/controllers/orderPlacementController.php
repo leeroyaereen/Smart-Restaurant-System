@@ -41,7 +41,8 @@ use Src\Helpers\OrderTray;
                     return;
                 }
             }
-
+            session_start();
+            $_SESSION['currentOrderTrayID'] = $newOrderTray->orderTrayID;
             echo json_encode(['success'=>true,'message'=>'Tray Items Set Successfully']);
         }else{
             echo json_encode(['success'=>false,'message'=>'Tray Items Not Set because of emty data'.file_get_contents('php://input')]);

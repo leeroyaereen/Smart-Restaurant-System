@@ -5,10 +5,8 @@
         public $orderTrayID;
         public $foodItemID;
         public $quantity;
-        public OrderStatus $orderStatus;
-        public $note;
-
-        
+        public OrderStatus $orderStatus = OrderStatus::InQueue;
+        public $note;        
     }
 
     enum OrderStatus: string {

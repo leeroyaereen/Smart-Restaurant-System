@@ -38,9 +38,7 @@ function RegisterNewOrder($newOrders){
         $stmt->bind_param("iiiss", $newOrders->orderTrayID,$newOrders->foodItemID, $newOrders->quantity, $orderStatus , $newOrders->note);
 
 
-        if ($stmt->execute()) {
-            
-        } else {
+        if (!$stmt->execute()) {
             return "Error: " . $stmt->error;
         }
         $stmt->close();
@@ -48,4 +46,90 @@ function RegisterNewOrder($newOrders){
     }
 }
 
+function ChangeOrderStatus($orderItem){
+    if($orderItem instanceof OrderItem){
+        //set variable data
+        $orderItemID = $orderItem->orderId;
+        $orderStatus = $orderItem->orderStatus;
+        
+        $conn = getConnection();
+        $sql = "UPDATE orderitem
+                SET OrderStatus = ?
+                WHERE OrderItem_ID = ? ";
+        $stmt =$conn->prepare($sql);
+        if(!$stmt){
+            return "Failed to change status";
+        }
+        $stmt->bind_param("si",$orderStatus,$orderItemID);
+        $res = $stmt->execute();
+
+        if(!$res){
+            return "Failed to change status in records";
+        }
+        return true;
+
+    }else{
+        return "Wrong instance of the class";
+    }
+}
+
+function GetAllOrderItemDetailsForTracking($orderTrayID){
+     $conn = getConnection();
+     $sql ="SELECT fooditems.FoodItem_ID,fooditems.FoodName,fooditems.FoodType,orderitem.Quantity,fooditems.FoodPrice,orderitem.Note,fooditems.FoodPreparationTime, orderitem.OrderStatus 
+            FROM orderitem
+            INNER JOIN fooditems
+            ON orderitem.FoodItem_ID = fooditems.FoodItem_ID";
+    $res = mysqli_query($conn,$sql);
+    if(!$res){
+        return "Connection Error";
+
+    }
+    $orderDetails = [];
+    if($res->num_rows>0){
+        $count = 0;
+        while($data = mysqli_fetch_assoc($res)){
+            $orderDetails[$count]=[
+                "FoodItem_ID" => $data["FoodItem_ID"],
+                "FoodName" => $data["FoodName"],
+                "FoodType" => $data["FoodType"],
+                "Quantity" => $data["Quantity"],
+                "FoodPrice" => $data["FoodPrice"],
+                "Note" => $data["Note"],
+                "FoodPreparationTime" => $data["FoodPreparationTime"],
+                "OrderStatus" => $data["OrderStatus"]
+            ];
+        }
+    }
+    return $orderDetails;
+}
+
+function GetAllOrderDetailsForMonitoring(){
+    $conn = getConnection();
+    // $sql = "SELECT ordertray.OrderTray_ID, ordertray.KitchenOrderTime, ordertray.User_ID, 
+    //                 orderitem.OrderItem_ID,fooditems.FoodName, fooditems.FoodType, orderitem.Note, fooditems.FoodPrice, orderitem.OrderStatus
+    //         FROM orderitem
+    //         INNER JOIN fooditems
+    //         ON orderitem.FoodItem_ID = fooditems.FoodItem_ID
+    //         INNER JOIN ordertray
+    //         ON  orderitem.OrderTray_ID = ordertray.OrderTray_ID
+    //         GROUP BY ordertray.OrderTray_ID";
+
+    $sql = "SELECT ordertray.OrderTray_ID, ordertray.KitchenOrderTime, ordertray.User_ID, 
+                GROUP_CONCAT(orderitem.OrderItem_ID)AS OrderID,
+                GROUP_CONCAT(fooditems.FoodName) AS FoodNames,
+                GROUP_CONCAT(fooditems.FoodType) AS FoodTypes,
+                GROUP_CONCAT(orderitem.Note) AS Notes,
+                GROUP_CONCAT(fooditems.FoodPrice) AS Prices,
+                GROUP_CONCAT(orderitem.OrderStatus) AS OrderStatuses
+            FROM orderitem
+            INNER JOIN fooditems
+            ON orderitem.FoodItem_ID = fooditems.FoodItem_ID
+            INNER JOIN ordertray
+            ON  orderitem.OrderTray_ID = ordertray.OrderTray_ID
+            GROUP BY ordertray.OrderTray_ID";
+}
 ?>
+
+SELECT Customers.CustomerName, Orders.Product
+FROM Customers
+INNER JOIN Orders ON Customers.CustomerID = Orders.CustomerID;

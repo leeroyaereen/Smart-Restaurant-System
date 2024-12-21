@@ -2,7 +2,6 @@
     require_once __DIR__.'/../models/UserModel.php';
 
     function registerUser(){
-        $userModel = new UserModel();
         $rawData = file_get_contents("php://input");
         $userData = json_decode($rawData, true);
 
@@ -17,9 +16,11 @@
         $phoneNumber = $userData['phoneNumber'];
         $password = $userData['password'];
 
-        $result = $userModel->registerUser($firstName, $lastName, $email, $phoneNumber, $password);
+        $result = UserModel::registerUser($firstName, $lastName, $email, $phoneNumber, $password);
 
-        if($result){
+        if($result===true){
+            session_start();//starts session just in case
+
             $_SESSION['phoneNumber'] = $phoneNumber;
             $_SESSION['firstName'] = $firstName;
             $_SESSION['lastName'] = $lastName;
@@ -30,7 +31,6 @@
     }
 
     function loginUser(){
-        $userModel = new UserModel();
         $rawData = file_get_contents("php://input");
         $userData = json_decode($rawData, true);
 
@@ -42,9 +42,10 @@
         $phoneNumber = $userData['phoneNumber'];
         $password = $userData['password'];
 
-        $result = $userModel->loginUser($phoneNumber, $password);
+        $result = UserModel::loginUser($phoneNumber, $password);
 
-        if($result){
+        if($result===true){
+            session_start(); //starts session just in case
             $_SESSION['phoneNumber'] = $phoneNumber;
             $_SESSION['firstName'] = $result['FirstName'];
             $_SESSION['lastName'] = $result['LastName'];
