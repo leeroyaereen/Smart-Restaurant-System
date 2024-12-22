@@ -50,6 +50,11 @@
                 require_once __DIR__ . '/controllers/orderPlacementController.php';
                 PlaceOrder();
                 break;
+
+            case 'getAllMonitorOrderDetail':
+                require_once __DIR__ . '/controllers/orderMonitorController.php';
+                getMonitorDetails();
+                break;
             default:
                 http_response_code(404);
                 echo json_encode(['error' => 'Endpoint not found']);

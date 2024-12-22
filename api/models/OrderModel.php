@@ -120,16 +120,36 @@ function GetAllOrderDetailsForMonitoring(){
                 GROUP_CONCAT(fooditems.FoodType) AS FoodTypes,
                 GROUP_CONCAT(orderitem.Note) AS Notes,
                 GROUP_CONCAT(fooditems.FoodPrice) AS Prices,
-                GROUP_CONCAT(orderitem.OrderStatus) AS OrderStatuses
+                GROUP_CONCAT(orderitem.OrderStatus) AS OrderStatuses,
+                COUNT(*)
             FROM orderitem
             INNER JOIN fooditems
             ON orderitem.FoodItem_ID = fooditems.FoodItem_ID
             INNER JOIN ordertray
             ON  orderitem.OrderTray_ID = ordertray.OrderTray_ID
             GROUP BY ordertray.OrderTray_ID";
+    $res = $conn->query($sql);
+    $items = [];
+    if($res->num_rows>0){
+        while($item = $res->fetch_assoc()){
+            $c =$item['COUNT(*)'];
+            $arrangedData = [];
+
+            $orderIDs = explode(",",$item['OrderID'],$c);
+            $foodNames = explode(",",$item['FoodNames'],$c);
+            $foodTypes = explode(",",$item['FoodTypes'],$c);
+            $notes = explode(",",$item['Notes'],$c);
+            $prices = explode(",",$item['Prices'],$c);
+            $orderStatuses = explode(",",$item['OrderStatuses'],$c);
+            for($i = 0 ; $i < $c; $i++){
+                $arrangedData[] = ["OrderItem_ID"=>$orderIDs[$i], "FoodName"=>$foodNames[$i], "FoodTypes" => $foodTypes[$i], "Notes" => $notes[$i], "Price" => $prices[$i], "OrderStatus" => $orderStatuses[$i]];
+            }
+            $obj = ["OrderTray_ID" => $item['OrderTray_ID'], "KitchenOrderTime"=> $item["KitchenOrderTime"], "User_ID" => $item['User_ID'], "Orders"=> $arrangedData];
+            $items[] = $obj;
+        }
+        return $items;
+    }else{
+        return "No data available";
+    }
 }
 ?>
-
-SELECT Customers.CustomerName, Orders.Product
-FROM Customers
-INNER JOIN Orders ON Customers.CustomerID = Orders.CustomerID;
