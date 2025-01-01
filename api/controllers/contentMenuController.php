@@ -89,7 +89,7 @@
                 foreach ($TrayItems as $trayItem) {
                     // Fetch the food item details by its ID
                     $foodItem = getFoodItemByID($trayItem['FoodItem_ID']);
-                    if (!$foodItem) {
+                    if (!$foodItem || is_string($foodItem)) {
                         continue; // Skip if food item is not found
                     }
     

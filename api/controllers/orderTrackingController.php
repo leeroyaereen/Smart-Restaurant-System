@@ -7,17 +7,19 @@
     use Src\Helpers\OrderStatus;
     use Src\Helpers\OrderTray;
 
-    function ChangeState(){
-        if($_SERVER['REQUEST_METHOD']!=='POST'){
-            echo json_encode(['success'=>false,'message'=>'Invalid Request Method']);
-            return;
-        }
+    function CancelOrder(){
+        // if($_SERVER['REQUEST_METHOD']!=='POST'){
+        //     echo json_encode(['success'=>false,'message'=>'Invalid Request Method']);
+        //     return;
+        // }
+        //sets data in variables associatively
         $data = json_decode(file_get_contents('php://input'), true);
-        if(isset($data['OrderItem_ID'],$data['OrderStatus'])){
+        
+        if(isset($data['OrderItem_ID'])){
             //set values in the order item instance.
             $order = new OrderItem();
             $order->orderId = $data['OrderItem_ID'];
-            $order->orderStatus = OrderStatus::from($data['OrderStatus']);
+            $order->orderStatus = OrderStatus::Cancelled;
 
             //send to database about the modification
             $res = ChangeOrderStatus($order);
@@ -31,13 +33,37 @@
         }
     }
 
-    function getOrderStatus(){
+    function getAllOrderStatus(){
+        function getOrderTrayIDFromClientInput(){
+            $data = json_decode(file_get_contents('php://input'), true);
+            if(isset($data['OrderTray_ID'])){
+                return $data['OrderTray_ID'];
+            }
+            return null;
+        }
         //gives message and stops the flow if there is no order tray id
         if(!isset($_SESSION['currentOrderTrayID'])){
-            echo json_encode(['success'=>false,'message'=>'No Foods Ordered.']);
+            $orderTrayId = getOrderTrayIDFromClientInput();
+            if(!$orderTrayId){
+                echo json_encode(['success'=>false,'message'=>'No Foods Ordered.']);
+                return;
+            }
+            
+            
+        }else{
+            $orderTrayId = $_SESSION['currentOrderTrayID'];
+        }
+
+        $res = GetAllOrderItemDetailsForTracking($orderTrayId);
+        if(is_string($res) ){
+            echo json_encode(['success'=>false,'message'=>$res]);
+
             return;
         }
+        echo json_encode(['success'=>true,'message'=>'', "OrderedItems"=>$res]);
+
         
 
     }
+    
 ?>

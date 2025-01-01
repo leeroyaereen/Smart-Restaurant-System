@@ -55,6 +55,22 @@
                 require_once __DIR__ . '/controllers/orderMonitorController.php';
                 getMonitorDetails();
                 break;
+
+            case 'getAllOrderForTracking':
+                require_once __DIR__ . '/controllers/orderTrackingController.php';
+                getAllOrderStatus();
+                break;
+
+            case 'cancelOrder':
+                require_once __DIR__ . '/controllers/orderTrackingController.php';
+                CancelOrder();
+                break;
+
+            case 'changeOrderItemStatus':
+                require_once __DIR__.'/controllers/orderMonitorController.php';
+                ChangeState();
+                break;
+                
             default:
                 http_response_code(404);
                 echo json_encode(['error' => 'Endpoint not found']);
