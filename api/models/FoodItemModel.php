@@ -135,7 +135,7 @@
         return $foodCategories;
     }
 
-    function AddCategory($categoryName){
+    function AddCategoryData($categoryName){
         global $connection;
         if(!$connection){
             $connection = changeDatabaseConnection('ACHS canteen');
@@ -154,26 +154,53 @@
         }
     }
 
-    function RemoveCategoryData($categoryId){
+    function RemoveCategoryData($categoryId) {
         global $connection;
-        if(!$connection){
-            $connection = changeDatabaseConnection('ACHS canteen');
-            if(!$connection){
-                return "Null connection";
+    
+        if (!$connection) {
+            $connection = getConnection();
+            if (!$connection) {
+                return "Unable to connect to the database.";
             }
         }
-
-        $sql = "DELETE FROM FoodCategory
-            WHERE Category_ID = ".$categoryId/*." OR CategoryName = ".$categoryId.";"*/;
-
-        $res=$connection->query($sql);
-        if($res){
-            return true;
-        }else{
-            return "Error in executing the query";
+    
+        $updateSql = "UPDATE FoodItems SET Category_ID = NULL WHERE Category_ID = ?";
+        $updateStmt = $connection->prepare($updateSql);
+    
+        if (!$updateStmt) {
+            return "Error: Failed to prepare update query - " . $connection->error;
         }
-
+    
+        $updateStmt->bind_param("i", $categoryId);
+        if (!$updateStmt->execute()) {
+            $updateStmt->close();
+            return "Error: Failed to update FoodItem dependencies - " . $updateStmt->error;
+        }
+        $updateStmt->close();
+    
+        $deleteSql = "DELETE FROM FoodCategory WHERE Category_ID = ?";
+        $deleteStmt = $connection->prepare($deleteSql);
+    
+        if (!$deleteStmt) {
+            return "Error: Failed to prepare delete query - " . $connection->error;
+        }
+    
+        $deleteStmt->bind_param("i", $categoryId);
+        if ($deleteStmt->execute()) {
+            if ($deleteStmt->affected_rows > 0) {
+                $deleteStmt->close();
+                return true;
+            } else {
+                $deleteStmt->close();
+                return "No category found with the provided ID.";
+            }
+        } else {
+            $deleteStmt->close();
+            return "Error: Failed to delete category - " . $deleteStmt->error;
+        }
     }
+    
+    
 
     function AddFoodItem($newFood){
 
@@ -241,7 +268,7 @@
             }
         }
     
-        // Start a transaction
+        // Starting a transaction so that incase one of the query fails both are reverted back
         $connection->begin_transaction();
     
         try {

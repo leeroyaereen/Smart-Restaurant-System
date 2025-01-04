@@ -57,14 +57,14 @@
 
         $sqlFoodCategoryTable = "CREATE TABLE FoodCategory (
             Category_ID INT PRIMARY KEY AUTO_INCREMENT,
-            CategoryName VARCHAR(100) NOT NULL
+            CategoryName VARCHAR(100) NOT NULL 
         );";
-
+        $sqlAddDefaultCategory = "INSERT INTO FoodCategory (CategoryName) VALUE ('Others')";
         $sqlFoodItem = "CREATE TABLE FoodItems (
             FoodItem_ID INT PRIMARY KEY AUTO_INCREMENT,
             FoodName VARCHAR(100) NOT NULL,
             FoodType VARCHAR(30),
-            Category_ID INT NOT NULL,
+            Category_ID INT NOT NULL DEFAULT 1,
             FoodRating DECIMAL(2, 1),
             FoodPreparationTime INT,
             FoodReview TEXT,
@@ -104,7 +104,7 @@
         );";
 
         //add all the sql commands in array and executing one by one
-        $queries = [$sqlFoodCategoryTable,$sqlFoodItem,$sqlMenuTable,$sqlRoleTable,$sqlUserTable,$sqlOrderTray,$sqlOrderItem,$sqlReview];
+        $queries = [$sqlFoodCategoryTable,$sqlAddDefaultCategory,$sqlFoodItem,$sqlMenuTable,$sqlRoleTable,$sqlUserTable,$sqlOrderTray,$sqlOrderItem,$sqlReview];
         foreach($queries as $sql){
             $res = self::$restuarantDatabaseConnection->query($sql);
             if(!$res){
