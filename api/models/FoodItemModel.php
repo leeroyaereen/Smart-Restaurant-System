@@ -54,6 +54,54 @@
 
         return $foodItems;
     }
+    function GetAvailableFoodItems(){
+        global $connection;
+        $foodItems = [];
+
+        // if (!class_exists('FoodItem')) {
+        //     return "Still class doesnot exist".class_exists('FoodItem');
+        // }
+        if(!$connection){
+            $connection = changeDatabaseConnection('ACHS canteen');
+            if(!$connection){
+                return "Null connection";
+            }
+        }
+        
+        $sqlFoodItems = "SELECT * FROM FoodItems WHERE FoodAvailability = '1'";
+        $resFoodItems = $connection->query($sqlFoodItems);
+
+        //incase the query doesnt work
+        if(!$resFoodItems){
+
+            return  "Query Not Working";
+        }
+        //incase there are no datas available
+        if(!$resFoodItems->num_rows>0){
+            
+            return "No food item data in database";
+        }
+        // Fetching all food items
+        while ($item = mysqli_fetch_assoc($resFoodItems)) {
+            $foodItem = new FoodItem;
+            $foodItem->FoodItem_ID = $item['FoodItem_ID'];
+            $foodItem->FoodName = $item['FoodName'];
+            $foodItem->FoodType = $item['FoodType'];
+            $foodItem->FoodCategory = $item['Category_ID'];
+            $foodItem->FoodRating = $item['FoodRating'];
+            $foodItem->FoodPreparationTime = $item['FoodPreparationTime'];
+            $foodItem->FoodReview = $item['FoodReview'];
+            $foodItem->FoodDescription = $item['FoodDescription'];
+            $foodItem->FoodImage = $item['FoodImage'];
+            $foodItem->FoodPrice = $item['FoodPrice'];
+            $foodItem->FoodAvailability = $item['FoodAvailability'];
+            $foodItem->TotalOrders = $item['TotalOrders'];
+
+            $foodItems[] = $foodItem;
+        }
+
+        return $foodItems;
+    }
 
     function GetFoodCategories(){
         global $connection;
@@ -253,7 +301,7 @@
             return "Can't get the any object";
         }
     }
-
+    
     function getFoodItemsByCategory($category_ID){
         global $connection;
         $foodItems = [];
@@ -290,5 +338,65 @@
         else{
             return [];
         }
+    }
+
+    function updateFoodItem($foodItem){
+
+        global $connection;
+        if(!($foodItem instanceof FoodItem)){
+            return "Invalid Class Type of the instance";
+        }
+
+        if(!$foodItem){
+            return "Cant Process with Null Value";
+        }
+
+        if(!$foodItem->FoodItem_ID){
+            return "The Id of the fooditem is not referenced";
+        }
+
+        if(!$connection){
+            $connection = getConnection();
+            if(!$connection){
+        
+                return "Error connecting to the database";
+            }
+        }
+        if(!is_numeric($foodItem->FoodCategory)){
+            $sql = "SELECT Category_ID FROM foodCategory WHERE CategoryName = ?";
+            $stmt = $connection->prepare($sql);
+            if(!$stmt){
+                return "Failed to prepare query";
+            }
+            $stmt->bind_param("s",$foodItem->FoodCategory);
+            $res = $stmt->execute();
+            if(!$res){
+                return " Failed to execute the query";
+            }
+            $res = $stmt->get_result();
+            if($res->num_rows<1){
+                return "No Any Category Based on the provided name found";
+            }
+            $catId = $res->fetch_assoc();
+            $foodItem->FoodCategory = $catId['Category_ID'];
+            $stmt->close();
+        }
+        $sql = "UPDATE fooditems 
+                SET FoodName = ?, FoodType = ?, Category_ID = ?, FoodPreparationTime = ?, FoodDescription = ?, FoodImage = ?, FoodPrice = ?
+                WHERE FoodItem_ID = ?";
+        $stmt = $connection->prepare($sql);
+        $stmt->bind_param("ssiissii", 
+            $foodItem->FoodName, 
+            $foodItem->FoodType, 
+            $foodItem->FoodCategory, 
+            $foodItem->FoodPreparationTime, 
+            $foodItem->FoodDescription, 
+            $foodItem->FoodImage, 
+            $foodItem->FoodPrice, 
+            $foodItem->FoodItem_ID
+        );
+        $res = $stmt->execute();
+        $stmt->close();
+        return $res;
     }
 ?> 

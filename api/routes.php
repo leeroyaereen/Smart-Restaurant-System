@@ -75,7 +75,10 @@
                 require_once __DIR__.'/controllers/orderMonitorController.php';
                 ChangeState();
                 break;
-                
+            case 'editFoodItem':
+                require_once __DIR__ . '/controllers/AdminDashboardController.php';
+                EditFoodItem();
+                break;
             default:
                 http_response_code(404);
                 echo json_encode(['error' => 'Endpoint not found']);

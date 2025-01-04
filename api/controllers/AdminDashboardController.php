@@ -10,10 +10,6 @@
                 echo json_encode(['success'=>false, 'message'=>'Invalid data']);
                 return;
             }
-            if(!$foodItemDetails){
-                echo json_encode(['success'=>false, 'message'=>'Invalid data']);
-                return;
-            }
             $foodItem = new FoodItem();
             $foodItem->FoodName = $foodItemDetails['foodName'];
             $foodItem->FoodPrice = $foodItemDetails['foodPrice'];
@@ -28,5 +24,48 @@
                 echo json_encode(['success'=>false, 'message'=>'Failed to add food item'.$result]);
             }
         }
+    }
+
+    function RemoveFoodItem(){
+        if($_SERVER['REQUEST_METHOD']!=='POST'){
+            echo json_encode(['success'=>false, 'message'=>'Failed to remove due to invalid request method']);
+            return ;           
+        }
+        $data =  json_decode(file_get_contents("php://input"), true);
+        if(!$data){
+            echo json_encode(['success'=>false, 'message'=>'Invalid data format']);
+            return;
+        }
+        $id = $data['FoodItem_ID'];
+    }
+
+    function EditFoodItem(){
+        if($_SERVER['REQUEST_METHOD']!=='POST'){
+            echo json_encode(['success'=>false, 'message'=>'Failed to remove due to invalid request method']);
+            return ;           
+        }
+        $data =  json_decode(file_get_contents("php://input"), true);
+        if(!$data){
+            echo json_encode(['success'=>false, 'message'=>'Invalid data format']);
+            return;
+        }
+        $foodItem = new FoodItem();
+        $foodItem->FoodItem_ID = $data['foodItem_ID'];
+        $foodItem->FoodName = $data['foodName'];
+        $foodItem->FoodType = $data['foodType'];
+        $foodItem->FoodPrice = $data['foodPrice'];
+        $foodItem->FoodPreparationTime = $data['foodPreparationTime'];
+        $foodItem->FoodCategory = $data['foodCategory'];
+        $foodItem->FoodDescription = $data['foodDescription'];
+        $foodItem->FoodImage = $data['foodImage'];
+
+        $res = updateFoodItem($foodItem);
+        if(is_string($res)){
+            echo json_encode(['success'=>false, 'message'=>$res]);
+
+            return ;
+        }  
+        echo json_encode(['success'=>true, 'message'=>'Edited Successfully']);
+
     }
 ?>
