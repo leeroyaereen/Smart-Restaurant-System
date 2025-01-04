@@ -5,10 +5,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Document</title>
 		<link rel="stylesheet" href="assets/css/PageStructure.css" />
-		<link rel="stylesheet" href="assets/css/AdminDashboard.css" />
+		<link rel="stylesheet" href="assets/css/Dashboard.css" />
 		<script src="assets/js/config.js.php"></script>
 		<script src="assets/js/Utilities.js"></script>
-		
 	</head>
 	<body>
 		<div id="AdminDashboardHeader" class="section Header HeaderTitle">
@@ -16,25 +15,75 @@
 			<span>Dashboard</span>
 		</div>
 		<div class="section Body">
-			<div>
-				<div>
-					<div></div>
-					<div></div>
+			<div id="AdminDashboardBody">
+				<div id="AdminDashboardToggler">
+					<div id="FoodItemToggle" class="active">Food Items</div>
+					<div id="FoodCategoryToggle" class="">Food Category</div>
 				</div>
-				<div>
-					<div>
-						<div class="HeaderTitle">Add Food Item</div>
+				<div id="FoodItemSection" class="section-2">
+					<div id="AddFoodItemSection">
+						<div class="AdminDashboardTitle" id="AddFoodItemSectionTitle">
+							Add Food Item
+						</div>
 						<form id="AddFoodItemForm">
-							<input type="text" name="FoodName" id="FoodName" placeholder="Name" />
-							<select name="FoodCategory" id="FoodCategory" placeholder="Category">
+							<input
+								type="text"
+								name="FoodName"
+								id="FoodName"
+								placeholder="Name"
+							/>
+							<select
+								name="FoodCategory"
+								id="FoodCategory"
+								placeholder="Category"
+							>
 								<optgroup>
 									<option selected>Choose a Category</option>
 								</optgroup>
 							</select>
-							<input type="number" name="FoodPreparationTime" id="FoodPreparationTime" placeholder="Preparation Time" />
-							<input type="number" name="FoodPrice" id="FoodPrice" placeholder="Price"/>
-							<input type="description" name="FoodDescription" id="FoodDescription" placeholder="Description"/>
-							<div>
+
+							<textarea
+								name="FoodDescription"
+								id="FoodDescription"
+								placeholder="Description"
+							></textarea>
+
+							<label for="FoodImage" id="FoodImageContainer">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="48"
+									height="48"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="#fdba74"
+									stroke-width="1.5"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="icon icon-tabler icons-tabler-outline icon-tabler-camera"
+								>
+									<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+									<path
+										d="M5 7h1a2 2 0 0 0 2 -2a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2"
+									/>
+									<path d="M9 13a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+								</svg>
+								<input type="file" name="FoodImage" id="FoodImage" />
+							</label>
+
+							<input
+								type="number"
+								name="FoodPrice"
+								id="FoodPrice"
+								placeholder="Price"
+							/>
+
+							<input
+								type="number"
+								name="FoodPreparationTime"
+								id="FoodPreparationTime"
+								placeholder="Preparation Time"
+							/>
+							<div id="FormBtnGrp">
 								<button id="CreateFoodItem" type="submit">Add Item</button>
 								<button id="CancelFoodItem" type="reset">Cancel</button>
 							</div>
@@ -47,7 +96,10 @@
 								<div id="DashboardFoodCategory">
 									<div id="DasgboardFoodCategoryTitle">Momo</div>
 									<div id="DashboardFoodCategoryItems">
-										<template id="DashboardItemTemplate" class="hidden-template">
+										<template
+											id="DashboardItemTemplate"
+											class="hidden-template"
+										>
 											<div id="DashboardItem">
 												<div id="DashboardItemImage">
 													<img
@@ -95,7 +147,10 @@
 														<div id="DashboardItemPrice" class="ItemPrice">
 															<span></span>
 														</div>
-														<div id="DashboardItemQuantity" class="ItemQuantity">
+														<div
+															id="DashboardItemQuantity"
+															class="ItemQuantity"
+														>
 															<svg
 																xmlns="http://www.w3.org/2000/svg"
 																width="40"
@@ -146,69 +201,41 @@
 							</template>
 						</div>
 					</div>
-
-					<div></div>
+					<div id="EditFoodItemSection">
+						<div class="AdminDashboardTitle" id="EditFoodItemSectionTitle">
+							Edit Food Item
+						</div>
+						<div></div>
+						<div id="EditFoodItemSectionItems">
+							<div id="EditFoodItemCategoryContainer">
+							<template id="EditFoodItemTemplate" class="hidden">
+								<div id="EditFoodItem">
+									<div id="EditFoodItemImage">
+										<img src="https://imgs.search.brave.com/Vc_LT_XtikkAbIBPyfReLh-bKN4ZBGo6kAigj8UxNlI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9lMS5w/eGZ1ZWwuY29tL2Rl/c2t0b3Atd2FsbHBh/cGVyLzMyNS8zNjgv/ZGVza3RvcC13YWxs/cGFwZXItcGl6emEt/bWFyZ2hlcml0YS5q/cGc" alt="" class="ItemImage"/>
+									</div>
+									<div id="EditFoodItemTitle">Margeritta Pizza</div>
+									<div id="EditFoodItemType">Non Veg</div>
+									<div id="EditFoodItemDescription">Classic pizza with tomato sauce, mozzarella, and basil</div>
+									<b id="EditFoodItemPrice">Price: <span>Rs 12.99</span></b>
+									<div id="EditFoodItemPreparationTime">Prep Time: <span>10 mins</span></div>
+									<div id="EditFoodItemBtnGrp">
+										<button id="EditFoodItemButton">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pen w-4 h-4 mr-2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>
+											Edit
+										</button>
+										<button id="DeleteFoodItemButton">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2 w-4 h-4 mr-2"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg>
+											Delete
+										</button>
+									</div>
+							</template>
+							</div>
+						</div>
+					</div>
 				</div>
+				<div id="FoodCategorySection" class="section-2 hidden"></div>
 			</div>
 		</div>
-		<script defer>
-			const form = document.querySelector("#AddFoodItemForm");
-
-			window.onload = fillCategories;
-
-			async function fillCategories(){
-				const categoriesData = await fetchDataGet("/api/getFoodCategories");
-				console.log(categoriesData);
-				
-				if (!categoriesData.success){
-					alert("couldn't fetch categories");
-					return;
-				}
-
-				const categories = document.querySelector('select');
-				Object.entries(categoriesData.foodCategories).forEach(([id, category]) => {
-					const option = document.createElement('option');
-					option.value = id;
-					option.innerText = category;
-					categories.append(option)
-			});
-			}
-
-	
-			
-			form.addEventListener("submit", (e) => {
-				e.preventDefault();
-				const formData = {
-					foodName: form.querySelector("#FoodName").value,
-					foodCategory: form.querySelector("#FoodCategory").value,
-					foodPreparationTime: form.querySelector("#FoodPreparationTime").value,
-					foodPrice: form.querySelector("#FoodPrice").value,
-					foodDescription: form.querySelector("#FoodDescription").value,
-				}
-				fetch(`${BASE_PATH}/api/addFoodItem`, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-						"X-Requested-With": "XMLHttpRequest",
-					},
-					body: JSON.stringify(formData),
-				})
-					.then((response) => {
-						response.json();
-						
-					})
-					.then((data) => {
-						window.location.href = "menu";
-						if (data.success) {
-							alert("Food item added successfully");
-						} else {
-							alert("Failed to add food item");
-						}
-					})
-					.catch((error) => {
-						console.error("Error:", error);
-					});
-			});
-		</script>
+		<script src="assets/js/Dashboard.js"></script>
 	</body>
 </html>

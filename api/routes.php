@@ -26,6 +26,11 @@
                 getFoodCategoriesJSON();
                 break;
 
+            case 'getCategorizedFoodItems':
+                require_once __DIR__ . '/controllers/contentMenuController.php';
+                getCategorizedFoodItemsJSON();
+                break;
+
             case 'setTrayItems':
                 require_once __DIR__ . '/controllers/contentMenuController.php';
                 setTrayItems();

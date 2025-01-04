@@ -7,7 +7,6 @@
 
         if(!$userData){
             echo json_encode(['success'=>false, 'message'=>'Invalid data']);
-            return;
         }
 
         $firstName = $userData['firstName'];
@@ -19,7 +18,7 @@
         $result = UserModel::registerUser($firstName, $lastName, $email, $phoneNumber, $password);
 
         if($result===true){
-            session_start();//starts session just in case
+            // session_start();//starts session just in case
 
             $_SESSION['phoneNumber'] = $phoneNumber;
             $_SESSION['firstName'] = $firstName;
@@ -45,7 +44,7 @@
         $result = UserModel::loginUser($phoneNumber, $password);
 
         if($result===true){
-            session_start(); //starts session just in case
+            // session_start(); //starts session just in case
             $_SESSION['phoneNumber'] = $phoneNumber;
             $_SESSION['firstName'] = $result['FirstName'];
             $_SESSION['lastName'] = $result['LastName'];

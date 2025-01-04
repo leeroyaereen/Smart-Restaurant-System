@@ -26,7 +26,7 @@
 
     function getFoodCategoriesJSON(){ 
         //get food Categories from foodItemModel        
-        $categoriesJson = GetFoodCategoriess();
+        $categoriesJson = GetFoodCategories();
 
         //check if the categoriesJson is null then it is regarded as failure and the funciton is stopped
         if($categoriesJson==null){
@@ -46,9 +46,47 @@
         echo json_encode(['success'=>true,'message'=>$message,'foodCategories'=>$categoriesJson]);
     }
 
+    function getCategorizedFoodItemsJSON(){
+        if($_SERVER['REQUEST_METHOD']==='GET'){
+            $categorizedFoodItems = [];
+
+            $foodItems = GetFoodItems();
+            if(is_string($foodItems)){
+                $message = $foodItems;
+                echo json_encode(["success"=>false, "message" => $message]);
+                return;
+            }
+
+            $foodCategories = GetFoodCategories();
+            if(is_string($foodCategories)){
+                $message = $foodCategories;
+                echo json_encode(["success"=>false, "message" => $message]);
+                return;
+            }
+
+            if($foodItems==null || $foodCategories==null){
+                echo json_encode(["success"=>false, "message" => "Can't get the any of the two requested data"]);
+                return;
+            }
+
+            $message = 'No message';
+
+            foreach($foodCategories as $key => $value){
+                $categoryID = $key;
+                $categorizedFoodItems[$categoryID] = [
+                        'CategoryName' => $value,
+                        'foodItems' => getFoodItemsByCategory($categoryID)
+                    ];
+            }
+            echo json_encode(['success'=>true,'message'=>$message,'categorizedFoodItems'=>$categorizedFoodItems]);
+        }else{
+            echo json_encode(["success"=>false, "message" => "Can't Handle Request due to invalid method"]);
+        }
+    }
+
     // function getFoodItemAndCategoriesJSON(){
     //     if($_SERVER['REQUEST_METHOD']==='POST'){           
-    //         $foodItems = GetFoodCategoriess();
+    //         $foodItems = GetFoodCategories();
     //         $foodCategories = GetFoodItems();
     //         if($foodItems==null || $foodCategories==null){
     //             echo json_encode(["success"=>false, "message" => "Can't get the any of the two requested data"]);

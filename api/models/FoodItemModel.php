@@ -55,7 +55,7 @@
         return $foodItems;
     }
 
-    function GetFoodCategoriess(){
+    function GetFoodCategories(){
         global $connection;
         $foodCategories=[];
         
@@ -251,6 +251,44 @@
         }
         else{
             return "Can't get the any object";
+        }
+    }
+
+    function getFoodItemsByCategory($category_ID){
+        global $connection;
+        $foodItems = [];
+
+        if(!$connection){
+            $connection = changeDatabaseConnection('ACHS canteen');
+            if(!$connection){
+                return "Null connection";
+            }
+        }
+
+        $sql = "SELECT * FROM foodItems WHERE Category_ID = ".$category_ID;
+        $res = $connection->query($sql);
+        if($res){
+            while($item = mysqli_fetch_assoc($res)){
+                $foodItem = new FoodItem;
+                $foodItem->FoodItem_ID = $item['FoodItem_ID'];
+                $foodItem->FoodName = $item['FoodName'];
+                $foodItem->FoodType = $item['FoodType'];
+                $foodItem->FoodCategory = $item['Category_ID'];
+                $foodItem->FoodRating = $item['FoodRating'];
+                $foodItem->FoodPreparationTime = $item['FoodPreparationTime'];
+                $foodItem->FoodReview = $item['FoodReview'];
+                $foodItem->FoodDescription = $item['FoodDescription'];
+                $foodItem->FoodImage = $item['FoodImage'];
+                $foodItem->FoodPrice = $item['FoodPrice'];
+                $foodItem->FoodAvailability = $item['FoodAvailability'];
+                $foodItem->TotalOrders = $item['TotalOrders'];
+
+                $foodItems[] = $foodItem;
+            }
+            return $foodItems;
+        }
+        else{
+            return [];
         }
     }
 ?> 
