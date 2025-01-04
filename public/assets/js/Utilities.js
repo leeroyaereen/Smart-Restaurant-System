@@ -33,6 +33,25 @@ function formatNumber(number){
     return formattedNumber;
 }
 
+function formatTime(dateTimeString) {
+    // Replace space with 'T' to make it ISO-compliant
+    const date = new Date(dateTimeString.replace(' ', 'T'));
+
+    // Extract hours and minutes
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    // Format hours and minutes
+    const formattedHours = hours % 12 || 12; // Convert to 12-hour format
+    const formattedMinutes = String(minutes).padStart(2, '0'); // Ensure two digits
+
+    // Determine AM/PM
+    const period = hours >= 12 ? 'PM' : 'AM';
+
+    // Return the formatted time
+    return `${formattedHours}:${formattedMinutes} ${period}`;
+}
+
 async function fetchDataGet(endpoint) {
     const response = await fetch(BASE_PATH + endpoint, {
         method: "GET",
