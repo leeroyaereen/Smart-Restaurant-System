@@ -79,6 +79,10 @@
                 require_once __DIR__ . '/controllers/AdminDashboardController.php';
                 EditFoodItem();
                 break;
+            case 'removeFoodItem':
+                require_once __DIR__ . '/controllers/AdminDashboardController.php';
+                RemoveFoodItem();
+                break;
             default:
                 http_response_code(404);
                 echo json_encode(['error' => 'Endpoint not found']);

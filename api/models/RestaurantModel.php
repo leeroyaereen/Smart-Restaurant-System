@@ -119,7 +119,7 @@
         $sql = 'CREATE TABLE ORDER (
             Order_ID INT PRIMARY KEY AUTO_INCREMENT,
             OrderTray_ID INT,
-            FoodItem_ID INT,
+            FoodItem_ID VARCHAR(50),
             Quantity INT NOT NULL,
             OrderStatus VARCHAR(50) NOT NULL,
             Note TEXT,

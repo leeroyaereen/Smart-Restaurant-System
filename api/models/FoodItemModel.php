@@ -230,21 +230,55 @@
         }
     }
 
-    function RemoveFoodItemData($foodItem_ID){
+    function RemoveFoodItemData($foodItem_ID) {
         global $connection;
-        $sql = "DELETE FROM foodItems WHERE 'FoodItem_ID' ==".$foodItem_ID;
-        $res = $connection->query($sql);
-        if(!$connection){
-            return "Error Connecting to the database".$connection->error;
-            
+    
+        // Ensure the connection is active
+        if (!$connection) {
+            $connection = getConnection();
+            if (!$connection) {
+                return "Error Connecting to the database: " . $connection->error;
+            }
         }
-        if($res){
+    
+        // Start a transaction
+        $connection->begin_transaction();
+    
+        try {
+            // Update `orderitem` table to handle dependent records
+            $sqlUpdate = 'UPDATE orderitem SET FoodItem_ID = NULL WHERE FoodItem_ID = ?';
+            $stmtUpdate = $connection->prepare($sqlUpdate);
+            if (!$stmtUpdate) {
+                throw new Exception("Failed to prepare update query: " . $connection->error);
+            }
+            $stmtUpdate->bind_param("i", $foodItem_ID);
+            if (!$stmtUpdate->execute()) {
+                throw new Exception("Failed to execute update query: " . $stmtUpdate->error);
+            }
+            $stmtUpdate->close();
+    
+            // Delete the food item from `foodItems` table
+            $sqlDelete = 'DELETE FROM foodItems WHERE FoodItem_ID = ?';
+            $stmtDelete = $connection->prepare($sqlDelete);
+            if (!$stmtDelete) {
+                throw new Exception("Failed to prepare delete query: " . $connection->error);
+            }
+            $stmtDelete->bind_param("i", $foodItem_ID);
+            if (!$stmtDelete->execute()) {
+                throw new Exception("Failed to execute delete query: " . $stmtDelete->error);
+            }
+            $stmtDelete->close();
+    
+            // Commit the transaction
+            $connection->commit();
             return true;
-        }
-        else{
-            return "Error Executing the query".$connection->error;
+        } catch (Exception $e) {
+            // Rollback the transaction on error
+            $connection->rollback();
+            return "Transaction failed: " . $e->getMessage();
         }
     }
+    
 
     function getFoodItemByID($foodItem_ID){
         global $connection;
@@ -362,6 +396,8 @@
                 return "Error connecting to the database";
             }
         }
+
+        //resets the value of food category name with relative food Category id
         if(!is_numeric($foodItem->FoodCategory)){
             $sql = "SELECT Category_ID FROM foodCategory WHERE CategoryName = ?";
             $stmt = $connection->prepare($sql);
@@ -373,6 +409,8 @@
             if(!$res){
                 return " Failed to execute the query";
             }
+
+            //sets the resulted output from database to the variable
             $res = $stmt->get_result();
             if($res->num_rows<1){
                 return "No Any Category Based on the provided name found";
@@ -381,8 +419,26 @@
             $foodItem->FoodCategory = $catId['Category_ID'];
             $stmt->close();
         }
+
+        //checking if fooditem with the referenced id exists
+        $sql = "SELECT 1 FROM fooditems WHERE FoodItem_ID = ".$foodItem->FoodItem_ID;
+        $res = $connection->query($sql);
+        if(!$res){
+            return 'Failed to execute query';
+        }
+        if($res->num_rows<1){
+            return "No Referenced Food Item Available";
+        }
+
+        //update foodItem
         $sql = "UPDATE fooditems 
-                SET FoodName = ?, FoodType = ?, Category_ID = ?, FoodPreparationTime = ?, FoodDescription = ?, FoodImage = ?, FoodPrice = ?
+                SET FoodName = COALESCE(?,FoodName), 
+                    FoodType =  COALESCE(?,FoodType), 
+                    Category_ID =  COALESCE(?,Category_ID), 
+                    FoodPreparationTime = COALESCE(?,FoodPreparationTime), 
+                    FoodDescription = COALESCE(?,FoodDescription), 
+                    FoodImage = COALESCE(?,FoodImage), 
+                    FoodPrice = COALESCE(?,FoodPrice)
                 WHERE FoodItem_ID = ?";
         $stmt = $connection->prepare($sql);
         $stmt->bind_param("ssiissii", 
@@ -399,4 +455,5 @@
         $stmt->close();
         return $res;
     }
+
 ?> 

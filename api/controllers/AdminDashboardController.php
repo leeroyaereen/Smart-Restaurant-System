@@ -36,7 +36,13 @@
             echo json_encode(['success'=>false, 'message'=>'Invalid data format']);
             return;
         }
-        $id = $data['FoodItem_ID'];
+        $id = $data['foodItem_ID'];
+        $res = RemoveFoodItemData($id);
+        if($res){
+            echo json_encode(['success'=>true, 'message'=>'Removed Data Successfully']);
+            return;
+        }
+        echo json_encode(['success'=>false, 'message'=>'Failed to remove data']);
     }
 
     function EditFoodItem(){
