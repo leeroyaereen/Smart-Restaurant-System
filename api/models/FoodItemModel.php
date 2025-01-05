@@ -202,7 +202,7 @@
     
     
 
-    function AddFoodItem($newFood){
+    function AddFoodItem(FoodItem $newFood){
 
         global $connection;   
         if($newFood instanceof FoodItem){
@@ -213,7 +213,7 @@
             }
             
 
-            $sql = "INSERT INTO FoodItems (FoodName, FoodType, Category_ID, FoodRating, FoodPreparationTime, FoodReview, FoodDescription, FoodImage, FoodPrice, FoodAvailability, TotalOrders) 
+            $sql = "INSERT INTO FoodItems (FoodName, FoodType, Category_ID, FoodRating, FoodPreparationTime, FoodReview, FoodDescription, FoodPrice, FoodAvailability, TotalOrders) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             //compiles the structure without defining parameters without executing it.
             $statement = $connection->prepare($sql);
@@ -227,7 +227,7 @@
             //d represents double type
             //i represents integer type
             //b represents blob (objects like image and files that are heavy in size)
-            $statement->bind_param('ssidisssdii',
+            $statement->bind_param('ssidissdii',
                 $newFood->FoodName,
                 $newFood->FoodType,
                 $newFood->FoodCategory,
@@ -235,13 +235,22 @@
                 $newFood->FoodPreparationTime,
                 $newFood->FoodReview,
                 $newFood->FoodDescription, 
-                $newFood->FoodImage, 
                 $newFood->FoodPrice, 
                 $newFood->FoodAvailability, 
                 $newFood->TotalOrders
             );
 
             $res = $statement->execute();
+
+            if(!$res){
+                $statement->close();
+                return "There was error executing statement";
+            }
+            $newFood->FoodItem_ID = $connection->insert_id;
+            $newFood->SetImageAddress();
+
+            $sql = "UPDATE FoodItems SET FoodImage = ".$newFood->FoodImage."WHERE FoodItem_ID = ".$newFood->FoodItem_ID;
+            $res = $connection->query($sql);
 
             //check if the statement execution was successfull or not
             if($res){

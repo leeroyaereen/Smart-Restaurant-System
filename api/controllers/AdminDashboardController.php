@@ -16,13 +16,14 @@
             $foodItem->FoodPreparationTime = $foodItemDetails['foodPreparationTime'];
             $foodItem->FoodCategory = $foodItemDetails['foodCategory'];
             $foodItem->FoodDescription = $foodItemDetails['foodDescription'];
-
             $result = AddFoodItem($foodItem);
-            if($result===true){
-                echo json_encode(['success'=>true, 'message'=>'Food Item added successfully']);
-            }else{
+            if($result!==true){
                 echo json_encode(['success'=>false, 'message'=>'Failed to add food item'.$result]);
+                return;
             }
+
+            echo json_encode(['success'=>true, 'message'=>'Food Item added successfully']);
+
         }
     }
 
