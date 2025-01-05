@@ -95,6 +95,23 @@
     }
 
     function AddCategory(){
+        if($_SERVER['REQUEST_METHOD']!=='POST'){
+            echo json_encode(['success'=>false, 'message'=>'Failed to remove due to invalid request method']);
+            return ;           
+        }
+        $data =  json_decode(file_get_contents("php://input"), true);
+        if(!$data){
+            echo json_encode(['success'=>false, 'message'=>'Invalid data format']);
+            return;
+        }
 
+        $name = $data['categoryName'];
+        $res = AddCategoryData($name);
+        if($res){
+            echo json_encode(['success'=>true, 'message'=>'Added Data Successfully']);
+        }else{
+            echo json_encode(['success'=>false, 'message'=>'Failed to add data']);
+
+        }
     }
 ?>
