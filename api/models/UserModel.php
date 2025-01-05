@@ -79,6 +79,7 @@
         
                 // Verify the password
                 if ($password === $user['Password']) {
+                    $_SESSION['id'] = $user['User_ID'];
                     return $user; // Return user data on successful login
                 } else {
                     return false; // Password mismatch
