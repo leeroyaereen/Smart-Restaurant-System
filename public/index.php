@@ -27,6 +27,7 @@ $routes = [
     '/register' => 'views/RegisterPage.php',
     '/login' => 'views/LoginPage.php',
     '/order-monitor' => 'views/OrderMonitor.php',
+    '/orders' => 'views/OrderStatus.php',
     '/contact' => 'views/contact.php',
     '/error' => 'views/404.php'
 ];

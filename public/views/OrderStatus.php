@@ -6,6 +6,9 @@
 		<title>Document</title>
 		<link rel="stylesheet" href="assets/css/PageStructure.css" />
 		<link rel="stylesheet" href="assets/css/OrderStatus.css" />
+		<script src="assets/js/config.js.php"></script>
+		<script src="assets/js/Utilities.js"></script>
+		<script src="assets/js/OrderStatus.js" defer></script>
 	</head>
 	<body>
 		<div id="OrderStatusHeader" class="section Header">

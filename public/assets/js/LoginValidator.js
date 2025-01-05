@@ -1,5 +1,3 @@
-import { isValidPhoneNumber} from "./Utilities";
-
 const form = document.querySelector("#loginForm");
 const phoneNumber = document.querySelector("#phoneNumber");
 const password = document.querySelector("#password");
