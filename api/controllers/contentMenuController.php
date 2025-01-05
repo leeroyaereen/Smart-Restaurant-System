@@ -4,7 +4,7 @@
    
     function getFoodItemsJSON(){   
         //get the objects from the FoodItemModel
-        $itemJson = GetFoodItems();
+        $itemJson = GetAvailableFoodItems();
 
         //if the object is null then it is regarded as failure
         if($itemJson==null){
@@ -50,7 +50,7 @@
         if($_SERVER['REQUEST_METHOD']==='GET'){
             $categorizedFoodItems = [];
 
-            $foodItems = GetFoodItems();
+            $foodItems = GetAvailableFoodItems();
             if(is_string($foodItems)){
                 $message = $foodItems;
                 echo json_encode(["success"=>false, "message" => $message]);

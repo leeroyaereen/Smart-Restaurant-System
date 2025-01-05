@@ -16,8 +16,6 @@
         case Ready = "Ready";
         case Served = "Served";
         case Cancelled = "Cancelled";
-        case Paid = "Paid";
-
         case Closed = "Closed";
 
         public static function fromString(string $status): ?OrderStatus {

@@ -15,10 +15,10 @@
         echo json_encode(["success"=>true,"data"=>$res]);
     }
     function ChangeState(){
-        // if($_SERVER['REQUEST_METHOD']!=='POST'){
-        //     echo json_encode(['success'=>false,'message'=>'Invalid Request Method']);
-        //     return;
-        // }
+        if($_SERVER['REQUEST_METHOD']!=='POST'){
+            echo json_encode(['success'=>false,'message'=>'Invalid Request Method']);
+            return;
+        }
         //sets data in variables associatively
         $data = json_decode(file_get_contents('php://input'), true);
         

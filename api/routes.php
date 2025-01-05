@@ -75,6 +75,26 @@
                 require_once __DIR__.'/controllers/orderMonitorController.php';
                 ChangeState();
                 break;
+
+            case 'editFoodItem':
+                require_once __DIR__ . '/controllers/AdminDashboardController.php';
+                EditFoodItem();
+                break;
+
+            case 'removeFoodItem':
+                require_once __DIR__ . '/controllers/AdminDashboardController.php';
+                RemoveFoodItem();
+                break;
+
+            case 'removeCategory':
+                require_once __DIR__ . '/controllers/AdminDashboardController.php';
+                RemoveCategory();
+                break;
+
+            case 'addCategory':
+                require_once __DIR__ . '/controllers/AdminDashboardController.php';
+                AddCategory();
+                break;
                 
             default:
                 http_response_code(404);

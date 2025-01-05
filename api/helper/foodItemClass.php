@@ -12,7 +12,11 @@
         public $FoodDescription = "No Description";
         public $FoodImage = "";
         public $FoodPrice = 0;
-        public $FoodAvailability = false;
+        public $FoodAvailability = true;
         public $TotalOrders = 0;
+
+        public function SetImageAddress(){
+            $this->FoodImage = BASE_PATH . "/public/assets/images/". $this->FoodName.$this->FoodType.$this->FoodItem_ID;
+        }
     }
 ?>

@@ -144,6 +144,7 @@ function GetAllOrderDetailsForMonitoring(){
                 GROUP_CONCAT(orderitem.Note) AS Notes,
                 GROUP_CONCAT(fooditems.FoodPrice) AS Prices,
                 GROUP_CONCAT(orderitem.OrderStatus) AS OrderStatuses,
+                GROUP_CONCAT(orderitem.Quantity) AS Quantity,
                 COUNT(*)
             FROM orderitem
             INNER JOIN fooditems
@@ -165,6 +166,7 @@ function GetAllOrderDetailsForMonitoring(){
             $notes = explode(",",$item['Notes'],$c);
             $prices = explode(",",$item['Prices'],$c);
             $orderStatuses = explode(",",$item['OrderStatuses'],$c);
+            $quantity = explode(",",$item['Quantity'],$c);
             for($i = 0 ; $i < $c; $i++){
                 if(OrderStatus::fromString($orderStatuses[$i])!=OrderStatus::Closed) {
                     $arrangedData[] = ["OrderItem_ID"=>$orderIDs[$i], "FoodName"=>$foodNames[$i], "FoodTypes" => $foodTypes[$i], "Notes" => $notes[$i], "Price" => $prices[$i], "OrderStatus" => $orderStatuses[$i]];
@@ -172,7 +174,7 @@ function GetAllOrderDetailsForMonitoring(){
                 }
             }
             if(count($arrangedData)<1) continue;
-            $obj = ["OrderTray_ID" => $item['OrderTray_ID'], "KitchenOrderTime"=> $item["KitchenOrderTime"], "User_ID" => $item['User_ID'], "Orders"=> $arrangedData];
+            $obj = ["OrderTray_ID" => $item['OrderTray_ID'], "KitchenOrderTime"=> $item["KitchenOrderTime"], "User_ID" => $item['User_ID'], "Orders"=> $arrangedData, "Quantity"=> $quantity];
             $items[] = $obj;
         }
         if(sizeof($items)<1){
