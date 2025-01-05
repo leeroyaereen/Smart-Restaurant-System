@@ -235,4 +235,8 @@ function GetAllOrderDetailsForMonitoring(){
         return "No data available";
     }
 }
+
+function getOrderOnlyStatusData(){
+    
+}
 ?>

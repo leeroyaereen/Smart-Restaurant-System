@@ -35,7 +35,7 @@ use Src\Helpers\OrderTray;
                 $newOrder->note = $order['Note'];
                 $newOrder->orderTrayID = $newOrderTray->orderTrayID;
                 $newOrder->orderStatus = OrderStatus::InQueue;
-                $res = RegisterNewOrder($user);
+                $res = RegisterNewOrder($newOrder);
                 if($res !== true){
                     echo json_encode(['success'=>false,'message'=>'Tray Items Not Set'.$res]);
                     return;
@@ -45,7 +45,7 @@ use Src\Helpers\OrderTray;
             $_SESSION['currentOrderTrayID'] = $newOrderTray->orderTrayID;
             echo json_encode(['success'=>true,'message'=>'Tray Items Set Successfully']);
         }else{
-            echo json_encode(['success'=>false,'message'=>'Tray Items Not Set because of emty data'.file_get_contents('php://input')]);
+            echo json_encode(['success'=>false,'message'=>'Tray Items Not Set because of emty data']);
         }
     }
     

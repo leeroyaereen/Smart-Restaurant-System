@@ -14,7 +14,9 @@
             $foodItem->FoodName = $foodItemDetails['foodName'];
             $foodItem->FoodPrice = $foodItemDetails['foodPrice'];
             $foodItem->FoodPreparationTime = $foodItemDetails['foodPreparationTime'];
-            $foodItem->FoodCategory = $foodItemDetails['foodCategory'];
+            if(isset($foodItemDetails['foodCategory'])){
+                $foodItem->FoodCategory = $foodItemDetails['foodCategory'];
+            }
             $foodItem->FoodDescription = $foodItemDetails['foodDescription'];
             $result = AddFoodItem($foodItem);
             if($result!==true){

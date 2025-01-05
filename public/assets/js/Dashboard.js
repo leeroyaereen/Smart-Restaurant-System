@@ -52,6 +52,7 @@ async function fillCategories() {
 	});
 }
 
+
 async function fillCategorizedFoodItems() {
 	const categorizedFoodItemsData = await fetchDataGet("/api/getCategorizedFoodItems");
 	console.log(categorizedFoodItemsData);
