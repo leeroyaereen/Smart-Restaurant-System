@@ -35,13 +35,13 @@ use Src\Helpers\OrderTray;
                 $newOrder->note = $order['Note'];
                 $newOrder->orderTrayID = $newOrderTray->orderTrayID;
                 $newOrder->orderStatus = OrderStatus::InQueue;
-                $res = RegisterNewOrder($newOrder);
+                $res = RegisterNewOrder($user);
                 if($res !== true){
                     echo json_encode(['success'=>false,'message'=>'Tray Items Not Set'.$res]);
                     return;
                 }
             }
-            session_start();
+            if(session_status()!==PHP_SESSION_ACTIVE) session_start();
             $_SESSION['currentOrderTrayID'] = $newOrderTray->orderTrayID;
             echo json_encode(['success'=>true,'message'=>'Tray Items Set Successfully']);
         }else{

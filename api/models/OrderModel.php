@@ -89,13 +89,28 @@ function ChangeOrderStatus($orderItem) {
     }
 }
 
-function GetAllOrderItemDetailsForTracking($orderTrayID){
+function GetAllOrderItemDetailsForTracking($userID){
      $conn = getConnection();
-     $sql ="SELECT orderitem.OrderItem_ID,fooditems.FoodItem_ID,fooditems.FoodName,fooditems.FoodType,orderitem.Quantity,fooditems.FoodPrice,orderitem.Note,fooditems.FoodPreparationTime, orderitem.OrderStatus 
+     $sql ="SELECT orderitem.OrderItem_ID,
+                    fooditems.FoodItem_ID,
+                    fooditems.FoodName,
+                    fooditems.FoodType,
+                    orderitem.Quantity,
+                    fooditems.FoodPrice,
+                    orderitem.Note,
+                    fooditems.FoodPreparationTime, 
+                    orderitem.OrderStatus 
             FROM orderitem
             
             INNER JOIN fooditems
-            ON orderitem.FoodItem_ID = fooditems.FoodItem_ID WHERE orderitem.orderTray_ID = ".$orderTrayID.""
+            ON orderitem.FoodItem_ID = fooditems.FoodItem_ID 
+
+            INNER JOIN ordertray
+            ON orderitem.OrderTray_ID = ordertray.OrderTray_ID
+
+            
+            WHERE ordertray.User_ID = 1 && orderitem.OrderStatus <> 'Cancelled'  && orderitem.OrderStatus <> 'Closed'
+            ORDER BY orderitem.OrderItem_ID"
             ;
     $res = mysqli_query($conn,$sql);
     if(!$res){
@@ -125,7 +140,42 @@ function GetAllOrderItemDetailsForTracking($orderTrayID){
         return 'No Food has been ordered';
     }
 }
+function GetOrderTrayBasedOrderItemDetailsForTracking($orderTrayID){
+    $conn = getConnection();
+    $sql ="SELECT orderitem.OrderItem_ID,fooditems.FoodItem_ID,fooditems.FoodName,fooditems.FoodType,orderitem.Quantity,fooditems.FoodPrice,orderitem.Note,fooditems.FoodPreparationTime, orderitem.OrderStatus 
+           FROM orderitem
+           
+           INNER JOIN fooditems
+           ON orderitem.FoodItem_ID = fooditems.FoodItem_ID WHERE orderitem.orderTray_ID = ".$orderTrayID.""
+           ;
+   $res = mysqli_query($conn,$sql);
+   if(!$res){
+       return "Connection Error";
 
+   }
+   $orderDetails = [];
+   if($res->num_rows>0){
+       $count = 0;
+       while($data = mysqli_fetch_assoc($res)){
+           $orderDetails[$count]=[
+               "OrderItem_ID" => $data["OrderItem_ID"],
+               "FoodItem_ID" => $data["FoodItem_ID"],
+               "FoodName" => $data["FoodName"],
+               "FoodType" => $data["FoodType"],
+               "Quantity" => $data["Quantity"],
+               "FoodPrice" => $data["FoodPrice"],
+               "Note" => $data["Note"],
+               "FoodPreparationTime" => $data["FoodPreparationTime"],
+               "OrderStatus" => $data["OrderStatus"]
+           ];
+           $count++;
+       }
+       return $orderDetails;
+
+   }else{
+       return 'No Food has been ordered';
+   }
+}
 function GetAllOrderDetailsForMonitoring(){
     $conn = getConnection();
     // $sql = "SELECT ordertray.OrderTray_ID, ordertray.KitchenOrderTime, ordertray.User_ID, 

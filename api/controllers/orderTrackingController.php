@@ -34,6 +34,40 @@
     }
 
     function getAllOrderStatus(){
+//Requires Fetching userid from session
+
+        // function getOrderTrayIDFromClientInput(){
+        //     $data = json_decode(file_get_contents('php://input'), true);
+        //     if(isset($data['OrderTray_ID'])){
+        //         return $data['OrderTray_ID'];
+        //     }
+        //     return null;
+        // }
+        // //gives message and stops the flow if there is no order tray id
+        // if(!isset($_SESSION['currentOrderTrayID'])){
+        //     $orderTrayId = getOrderTrayIDFromClientInput();
+        //     if(!$orderTrayId){
+        //         echo json_encode(['success'=>false,'message'=>'No Foods Ordered.']);
+        //         return;
+        //     }
+            
+            
+        // }else{
+        //     $orderTrayId = $_SESSION['currentOrderTrayID'];
+        // }
+
+        $res = GetAllOrderItemDetailsForTracking( 1);
+        if(is_string(value: $res) ){
+            echo json_encode(['success'=>false,'message'=>$res]);
+
+            return;
+        }
+        echo json_encode(['success'=>true,'message'=>'', "OrderedItems"=>$res]);
+
+        
+
+    }
+    function getAllOrderStatusFromOrderTray(){
         function getOrderTrayIDFromClientInput(){
             $data = json_decode(file_get_contents('php://input'), true);
             if(isset($data['OrderTray_ID'])){
@@ -54,8 +88,8 @@
             $orderTrayId = $_SESSION['currentOrderTrayID'];
         }
 
-        $res = GetAllOrderItemDetailsForTracking($orderTrayId);
-        if(is_string($res) ){
+        $res = GetOrderTrayBasedOrderItemDetailsForTracking( $orderTrayId);
+        if(is_string(value: $res) ){
             echo json_encode(['success'=>false,'message'=>$res]);
 
             return;
@@ -65,7 +99,6 @@
         
 
     }
-    
     function getOnlyStatus(){
         
     }
