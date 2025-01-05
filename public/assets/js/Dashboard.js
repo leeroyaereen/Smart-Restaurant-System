@@ -93,7 +93,7 @@ form.addEventListener("submit", (e) => {
 		body: JSON.stringify(formData),
 	})
 		.then((response) => {
-			response.json();
+			return response.json();
 		})
 		.then((data) => {
 			//window.location.href = "dashboard";
