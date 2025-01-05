@@ -5,7 +5,7 @@
         public $FoodItem_ID = 00000;
         public $FoodName = "Unnamed";
         public $FoodType = "";
-        public $FoodCategory;
+        public $FoodCategory = 1;
         public $FoodRating = 0.0;
         public $FoodPreparationTime = 30;
         public $FoodReview = "No Food Review";

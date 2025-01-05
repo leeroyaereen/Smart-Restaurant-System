@@ -4,8 +4,9 @@ const foodCategoryToggle = document.querySelector("#FoodCategoryToggle");
 const foodItemSection = document.querySelector("#FoodItemSection");
 const foodCategorySection = document.querySelector("#FoodCategorySection");
 
-window.onload = fillFormCategories;
-window.onload = fillCategorizedFoodItems;
+window.addEventListener("load", fillFormCategories);
+window.addEventListener("load", fillCategorizedFoodItems);
+
 
 foodItemToggle.addEventListener("click", () => {
 	foodItemToggle.classList.add("active");
@@ -22,6 +23,7 @@ foodCategoryToggle.addEventListener("click", () => {
 });
 
 async function fillFormCategories() {
+	
 	const categoriesData = await fetchDataGet("/api/getFoodCategories");
 	console.log(categoriesData);
 
@@ -38,6 +40,7 @@ async function fillFormCategories() {
 		categories.append(option);
 	});
 }
+
 
 async function fillCategorizedFoodItems() {
 	const categorizedFoodItemsData = await fetchDataGet("/api/getCategorizedFoodItems");
@@ -93,7 +96,7 @@ form.addEventListener("submit", (e) => {
 			response.json();
 		})
 		.then((data) => {
-			window.location.href = "menu";
+			//window.location.href = "dashboard";
 			if (data.success) {
 				alert("Food item added successfully");
 			} else {
