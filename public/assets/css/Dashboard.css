@@ -56,11 +56,22 @@
     gap: 1rem;
 }
 
-#AddFoodItemForm input, #AddFoodItemForm select, #AddFoodItemForm textarea{
+#AddCategoryForm{
+    margin: 1rem 0 2rem 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+#AddCategoryForm #CategoryName{
+    width: 100%;
+}
+
+#AddFoodItemForm input, #AddFoodItemForm select, #AddFoodItemForm textarea, #AddCategoryForm input{
     border-radius: 6px;
     padding: 8px;
     outline: none;
-    border: 1px solid rgba(82, 82, 82, 0.454);
+    border: 1px solid #fed7aa;
 }
 
 #AddFoodItemForm textarea{
@@ -78,26 +89,43 @@
     display: none;
 }
 
+#PricePrepTimeContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
 #FormBtnGrp{
     display: flex;
     gap: 5px;
     justify-content: flex-end;
+    font-size: 1rem;
 }
 
-#AddFoodItemForm button{
-    padding: 8px;
+button{
+    padding: 0.6rem 1rem;
     border-radius: 6px;
     border: none;
     cursor: pointer;
     background-color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-#AddFoodItemForm #CreateFoodItem{
+#FormBtnGrp #CreateFoodItem{
     background-color: #FE724C;
     color: white;
 }
 
-#AddFoodItemForm #CancelFoodItem{
+#FormBtnGrp #CreateCategory{
+    padding: 0.6rem;
+    background-color: #FE724C;
+    color: white;
+    gap: 5px;
+}
+
+#CancelFoodItem{
     outline: 1px solid #ff4625ab;
 }
 
@@ -108,13 +136,19 @@
     margin-top: -2rem;
 }
 
+#EditCategorySectionItems{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
 #EditFoodItemCategoryContainer{
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
-#EditFoodItem{
+#EditFoodItem, #EditCategory{
     border-radius: 10px;
     padding: 1rem;
     border: 1px solid #fed7aa;
@@ -122,6 +156,13 @@
     display: flex;
     flex-direction: column;
     gap: 0.7rem;
+}
+
+#EditCategory{
+    font-size: 1rem;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.7rem;
 }
 
 #EditFoodItem #EditFoodItemImage{
@@ -136,9 +177,16 @@
     border-radius: 10px;
 }
 
-#EditFoodItemTitle{
+#EditFoodItemTitle, #EditCategoryTitle{
     font-size: 1.2rem;
     font-weight: 600;
+}
+
+#EditCategoryTitle{
+    font-size: 1.1rem;
+    color: #f97316;
+    display: block;
+    align-content: center;
 }
 
 #EditFoodItemType{
@@ -146,7 +194,7 @@
     margin-top: -0.5rem;
 }
 
-#EditFoodItemBtnGrp{
+#EditFoodItemBtnGrp, #EditCategoryBtnGrp{
     display: flex;
     gap: 8px;
     justify-content: flex-end;
@@ -154,27 +202,21 @@
     line-height: 1.25rem;
 }
 
-#EditFoodItem #DeleteFoodItemButton{
+#EditFoodItem #DeleteFoodItemButton, #EditCategory #DeleteCategoryButton{
     background-color: #ef4444;
     color: white;
     border: none;
-    padding: 0.6rem 1rem;
+    padding: 0.5rem 0.9rem;
     border-radius: 6px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 10px;
 }
 
-#EditFoodItem #EditFoodItemButton{
+#EditFoodItem #EditFoodItemButton, #EditCategory #EditCategoryButton{
     background-color: white;
     border: 1px solid #e4e4e7;
-    padding: 0.6rem 1rem;
+    padding: 0.5rem 0.9rem;
     border-radius: 6px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 10px;
 }
 
 #EditFoodItemCategory{

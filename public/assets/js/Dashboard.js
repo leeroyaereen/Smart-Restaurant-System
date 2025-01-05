@@ -1,11 +1,17 @@
 const form = document.querySelector("#AddFoodItemForm");
+const formButton = document.querySelector("#CreateFoodItem");
 const foodItemToggle = document.querySelector("#FoodItemToggle");
 const foodCategoryToggle = document.querySelector("#FoodCategoryToggle");
 const foodItemSection = document.querySelector("#FoodItemSection");
 const foodCategorySection = document.querySelector("#FoodCategorySection");
 
-window.onload = fillFormCategories;
-window.onload = fillCategorizedFoodItems;
+const categorizedFoodItems = document.querySelector("#EditFoodItemSectionItems");
+const editCategoryItems = document.querySelector("#EditCategorySectionItems");
+
+window.onload = function () {
+	fillCategories();
+	fillCategorizedFoodItems();
+}
 
 foodItemToggle.addEventListener("click", () => {
 	foodItemToggle.classList.add("active");
@@ -21,7 +27,8 @@ foodCategoryToggle.addEventListener("click", () => {
 	foodCategorySection.classList.remove("hidden");
 });
 
-async function fillFormCategories() {
+async function fillCategories() {
+	console.log("fillFormCategories");
 	const categoriesData = await fetchDataGet("/api/getFoodCategories");
 	console.log(categoriesData);
 
@@ -36,6 +43,12 @@ async function fillFormCategories() {
 		option.value = id;
 		option.innerText = category;
 		categories.append(option);
+
+		let EditCategoryTemplateClone = document.querySelector("#EditCategoryTemplate").content.cloneNode(true);
+		let EditCategory = EditCategoryTemplateClone.querySelector("#EditCategory");
+		EditCategory.id = "EditCategory";
+		EditCategory.querySelector("#EditCategoryTitle").innerText = categoriesData.foodCategories[id];
+		editCategoryItems.append(EditCategory);
 	});
 }
 
@@ -47,8 +60,6 @@ async function fillCategorizedFoodItems() {
 		alert("couldn't fetch food items");
 		return;
 	}
-
-	const categorizedFoodItems = document.querySelector("#EditFoodItemSectionItems");
 	Object.entries(categorizedFoodItemsData.categorizedFoodItems).forEach(([id, category]) => {
 		console.log(id,category);
 		if(category["foodItems"].length === 0){
@@ -72,7 +83,8 @@ async function fillCategorizedFoodItems() {
 		categorizedFoodItems.append(EditFoodItemCategoryContainer);
 	});
 }
-form.addEventListener("submit", (e) => {
+
+formButton.addEventListener("click", async (e) => {
 	e.preventDefault();
 	const formData = {
 		foodName: form.querySelector("#FoodName").value,
@@ -81,26 +93,11 @@ form.addEventListener("submit", (e) => {
 		foodPrice: form.querySelector("#FoodPrice").value,
 		foodDescription: form.querySelector("#FoodDescription").value,
 	};
-	fetch(`${BASE_PATH}/api/addFoodItem`, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-			"X-Requested-With": "XMLHttpRequest",
-		},
-		body: JSON.stringify(formData),
-	})
-		.then((response) => {
-			response.json();
-		})
-		.then((data) => {
-			window.location.href = "menu";
-			if (data.success) {
-				alert("Food item added successfully");
-			} else {
-				alert("Failed to add food item");
-			}
-		})
-		.catch((error) => {
-			console.error("Error:", error);
-		});
+	
+	const addFoodResponse = await fetchDataPost("/api/addFoodItem", formData)
+	console.log(addFoodResponse);
+
+	if (addFoodResponse.success) {
+		alert("Food Item Added Successfully");
+	}
 });

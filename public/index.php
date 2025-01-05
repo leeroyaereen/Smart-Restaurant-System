@@ -20,7 +20,7 @@ if ($request_view == '/'){
 
 $routes = [
     '/' => 'views/Dashboard.php',
-    '/dashboard' => 'views/Dashboard.php',
+    '/dashboard' => 'views/Dashboard.html',
     '/menu' => 'views/ContentMenu.php',
     '/confirm-order' => 'views/MyTrayItems.php',
     '/order-status' => 'views/OrderStatus.php',
