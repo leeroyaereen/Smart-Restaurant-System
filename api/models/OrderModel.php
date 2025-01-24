@@ -236,7 +236,16 @@ function GetAllOrderDetailsForMonitoring(){
     }
 }
 
-function getOrderOnlyStatusData(){
-    
+function getOnlyStatusData(){
+    $con = getConnection();
+    $sql = "SELECT orderitem.OrderItem_ID, orderitem.OrderStatus FROM orderitem";
+    $res = $con->query($sql);
+    $items = [];
+    if($res->num_rows>0){
+        while($item = $res->fetch_assoc()){
+            $items[] = ["OrderItem_ID"=>$item['OrderItem_ID'], "OrderItemStatus"=>$item['OrderStatus']];
+        }
+        return $items;
+    }
 }
 ?>

@@ -100,6 +100,11 @@
 
     }
     function getOnlyStatus(){
-        $res = getOrderOnlyStatusData();
+        $res = getOnlyStatusData();
+        if(is_string(value: $res) ){
+            echo json_encode(['success'=>false,'message'=>$res]);
+            return;
+        }
+        echo json_encode(['success'=>true,'message'=>'', "OrderedItems"=>$res]);
     }
 ?>

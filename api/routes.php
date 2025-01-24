@@ -65,6 +65,11 @@
                 require_once __DIR__ . '/controllers/orderTrackingController.php';
                 getAllOrderStatus();
                 break;
+            
+            case 'getUpdatedItemStatus':
+                require_once __DIR__ . '/controllers/orderTrackingController.php';
+                getOnlyStatus();
+                break;
 
             case 'cancelOrder':
                 require_once __DIR__ . '/controllers/orderTrackingController.php';
