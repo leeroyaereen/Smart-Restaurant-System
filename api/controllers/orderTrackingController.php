@@ -19,7 +19,7 @@
             //set values in the order item instance.
             $order = new OrderItem();
             $order->orderId = $data['OrderItem_ID'];
-            $order->orderStatus = OrderStatus::Cancelled;
+            $order->orderStatus = $data['OrderItemStatus'];
 
             //send to database about the modification
             $res = ChangeOrderStatus($order);
@@ -63,10 +63,8 @@
             return;
         }
         echo json_encode(['success'=>true,'message'=>'', "OrderedItems"=>$res]);
-
-        
-
     }
+
     function getAllOrderStatusFromOrderTray(){
         function getOrderTrayIDFromClientInput(){
             $data = json_decode(file_get_contents('php://input'), true);
@@ -95,10 +93,8 @@
             return;
         }
         echo json_encode(['success'=>true,'message'=>'', "OrderedItems"=>$res]);
-
-        
-
     }
+    
     function getOnlyStatus(){
         $res = getOnlyStatusData();
         if(is_string(value: $res) ){

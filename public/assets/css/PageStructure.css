@@ -70,13 +70,38 @@ body {
 }
 
 .OrderStatusDesign{
-	font-size: 0.85rem;
+	font-size: 0.8rem;
     font-weight: 600;
-    color: #EAB344;
-    background-color: #FEF9C3;
+    color: #dfa32c;
+    background-color: #fff9b1;
     width: max-content;
     padding: 5px 10px;
-    border-radius: 10px;
+    border-radius: 15px;
+}
+
+.OrderStatus-InQueue{
+	color: #dfa32c;
+	background-color: #FEF9C3;
+}
+
+.OrderStatus-Preparing{
+	color: #1e40af;
+	background-color: #bfdbfe;
+}
+
+.OrderStatus-Ready{
+	color: #166534;
+	background-color: #bbf7d0;
+}
+
+.OrderStatus-Completed{
+	color: #4b5563;
+	background-color: #e2e8f0;
+}
+
+.OrderStatus-Cancelled {
+	color: #991b1b;
+	background-color: #f9c3c3;
 }
 
 .ItemFooter {

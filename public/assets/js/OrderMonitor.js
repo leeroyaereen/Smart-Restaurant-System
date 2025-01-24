@@ -24,9 +24,22 @@ async function fillOngoingOrders(){
             const orderItem = orderItemClone.querySelector("#OrderItem");
             orderItem.querySelector("#OrderItemName").innerText = item.FoodName + "-" + item.FoodTypes;
             orderItem.querySelector("#OrderItemPrice").innerText = "Rs "+ item.Price;
-            orderItem.querySelector("#OrderItemQuantity").innerText = "Qty: "+ 10;
+            orderItem.querySelector("#OrderItemQuantity").innerText = "Qty: "+ item.Quantity;
             orderItem.querySelector("#OrderItemNote").innerText = item.Notes;
             orderItem.querySelector("#OrderItemStatus").innerText = item.OrderStatus;
+            orderItem.querySelector("#OrderItemStatus").classList.add("OrderStatus-"+item.OrderStatus);
+
+            orderItem.querySelector("#OrderItemStatusDropdown").addEventListener("change", async (e) => {
+                const status = e.target.value;
+                e.disabled = true;
+                if (await updateOrderStatus(item.OrderItem_ID, status)){
+                    orderItem.querySelector("#OrderItemStatus").innerText = status;
+                    orderItem.querySelector("#OrderItemStatus").classList = `OrderStatusDesign OrderStatus-${status}`;
+                }else{
+                    alert("couldn't update order status");
+                }
+                e.disabled = false;
+            });
 
             orderContainer.querySelector("#OrderItemsList").appendChild(orderItem);
         })   
@@ -35,4 +48,18 @@ async function fillOngoingOrders(){
     })
 
     document.querySelector("#ActiveOrdersCount").innerText = ongoingOrdersData.data.length;
+}
+
+async function updateOrderStatus(itemId, status){
+    console.log(itemId, status);
+    const response = await fetchDataPost("/api/changeOrderItemStatus", {
+        OrderItem_ID: itemId,
+        OrderStatus: status
+    });
+
+    if (!response.success) {
+        console.log(response);
+        return false;
+    }
+    return true;
 }

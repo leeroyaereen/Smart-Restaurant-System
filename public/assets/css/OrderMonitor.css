@@ -42,7 +42,7 @@
 #OrderContainer #OrderItemsList #OrderItem {
 	display: flex;
 	flex-direction: column;
-	gap: 3px;
+	gap: 9px;
 	padding: 0.6rem 0;
 	border-bottom: 2px solid #d8d8d8;
 }
@@ -53,10 +53,16 @@
 }
 
 #OrderItem #OrderItemHeader,
-#OrderItem #OrderItemFooter {
+#OrderItem #OrderItemFooter, #OrderItem #OrderItemMid {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+}
+
+#OrderItem #OrderItemStatusDropdown {
+	padding: 0.3rem 0.5rem;
+	border-radius: 5px;
+	border: 1px solid #d3d3d3;
 }
 
 #OrderItem #OrderItemQuantity {

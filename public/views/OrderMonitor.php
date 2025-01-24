@@ -22,11 +22,21 @@
 					<div id="OrderItemHeader">
 						<div id="OrderItemName">Chicken Momo - Steamed</div>
 						<div id="OrderItemPrice">Rs 234</div>
-						</div>
+					</div>
+					<div id="OrderItemMid">
 						<div id="OrderItemQuantity">Qty: 2</div>
-						<div id="OrderItemFooter">
-									<div id="OrderItemNote">Add extra Cheese</div>
 						<div id="OrderItemStatus" class="OrderStatusDesign">InQueue</div>
+					</div>
+					<div id="OrderItemFooter">
+						<div id="OrderItemNote">Add extra Cheese</div>
+						<select id="OrderItemStatusDropdown">
+							<option selected disabled>Change Status</option>
+							<option value="InQueue">InQueue</option>
+							<option value="Preparing">Preparing</option>
+							<option value="Ready">Ready</option>
+							<option value="Completed">Completed</option>
+							<option value="Cancelled">Cancelled</option>
+						</select>
 					</div>
 				</div>
 			</template>

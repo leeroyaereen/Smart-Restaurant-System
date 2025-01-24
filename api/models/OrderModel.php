@@ -151,7 +151,6 @@ function GetOrderTrayBasedOrderItemDetailsForTracking($orderTrayID){
    $res = mysqli_query($conn,$sql);
    if(!$res){
        return "Connection Error";
-
    }
    $orderDetails = [];
    if($res->num_rows>0){
@@ -219,12 +218,12 @@ function GetAllOrderDetailsForMonitoring(){
             $quantity = explode(",",$item['Quantity'],$c);
             for($i = 0 ; $i < $c; $i++){
                 if(OrderStatus::fromString($orderStatuses[$i])!=OrderStatus::Closed) {
-                    $arrangedData[] = ["OrderItem_ID"=>$orderIDs[$i], "FoodName"=>$foodNames[$i], "FoodTypes" => $foodTypes[$i], "Notes" => $notes[$i], "Price" => $prices[$i], "OrderStatus" => $orderStatuses[$i]];
+                    $arrangedData[] = ["OrderItem_ID"=>$orderIDs[$i], "FoodName"=>$foodNames[$i], "FoodTypes" => $foodTypes[$i], "Notes" => $notes[$i], "Price" => $prices[$i], "OrderStatus" => $orderStatuses[$i], "Quantity" => $quantity[$i]];
             
                 }
             }
             if(count($arrangedData)<1) continue;
-            $obj = ["OrderTray_ID" => $item['OrderTray_ID'], "KitchenOrderTime"=> $item["KitchenOrderTime"], "User_ID" => $item['User_ID'], "Orders"=> $arrangedData, "Quantity"=> $quantity];
+            $obj = ["OrderTray_ID" => $item['OrderTray_ID'], "KitchenOrderTime"=> $item["KitchenOrderTime"], "User_ID" => $item['User_ID'], "Orders"=> $arrangedData];
             $items[] = $obj;
         }
         if(sizeof($items)<1){
