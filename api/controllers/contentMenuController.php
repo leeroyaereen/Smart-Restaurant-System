@@ -25,6 +25,9 @@
     }
 
     function getFoodCategoriesJSON(){ 
+        if($_SERVER['REQUEST_METHOD']!=='GET'){
+
+        }
         //get food Categories from foodItemModel        
         $categoriesJson = GetFoodCategories();
 

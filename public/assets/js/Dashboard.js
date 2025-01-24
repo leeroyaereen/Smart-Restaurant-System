@@ -85,20 +85,47 @@ async function fillCategorizedFoodItems() {
 	});
 }
 
-formButton.addEventListener("click", async (e) => {
-	e.preventDefault();
-	const formData = {
-		foodName: form.querySelector("#FoodName").value,
-		foodCategory: form.querySelector("#FoodCategory").value,
-		foodPreparationTime: form.querySelector("#FoodPreparationTime").value,
-		foodPrice: form.querySelector("#FoodPrice").value,
-		foodDescription: form.querySelector("#FoodDescription").value,
-	};
-	
-	const addFoodResponse = await fetchDataPost("/api/addFoodItem", formData)
-	console.log(addFoodResponse);
+// ... other existing variables ...
 
-	if (addFoodResponse.success) {
-		alert("Food Item Added Successfully");
-	}
+formButton.addEventListener("click", async (e) => {
+    e.preventDefault();
+    
+    // Create FormData object to handle file upload
+    const formData = new FormData();
+    
+    // Get the file input
+    const imageFile = form.querySelector("#FoodImage").files[0];
+    if (imageFile) {
+        formData.append("foodImage", imageFile);
+    }
+    
+    // Add other form fields
+    formData.append("foodName", form.querySelector("#FoodName").value);
+    formData.append("foodCategory", form.querySelector("#FoodCategory").value);
+    formData.append("foodPreparationTime", form.querySelector("#FoodPreparationTime").value);
+    formData.append("foodPrice", form.querySelector("#FoodPrice").value);
+    formData.append("foodDescription", form.querySelector("#FoodDescription").value);
+    
+    try {
+        const response = await fetch(BASE_PATH+"/api/addFoodItem", {
+			method: "POST",
+			headers: {
+				"X-Requested-With": "XMLHttpRequest",
+			},
+			body: formData
+		});
+        
+        const addFoodResponse = await response.json();
+        console.log(addFoodResponse);
+        
+        if (addFoodResponse.success) {
+            alert("Food Item Added Successfully");
+            await fillCategorizedFoodItems();
+        } else {
+            alert(addFoodResponse.message || "Failed to add food item");
+        }
+    } catch (error) {
+        console.error("Error adding food item:", error);
+        alert("Failed to add food item"+error+" "+ formData.get("foodName"));
+    }
 });

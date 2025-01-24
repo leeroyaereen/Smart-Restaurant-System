@@ -225,3 +225,6 @@ button{
     font-weight: 600;
     color: #f97316;
 }
+input[type="image"] {
+    display: none;
+}
