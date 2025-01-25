@@ -67,7 +67,7 @@
 									/>
 									<path d="M9 13a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
 								</svg>
-								<input type="file" name="FoodImage" id="FoodImage" />
+								<input type="file" name="FoodImage" id="FoodImage" accept="image/*" />
 							</label>
 
 							<div id="PricePrepTimeContainer">

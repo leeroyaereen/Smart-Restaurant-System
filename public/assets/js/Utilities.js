@@ -64,13 +64,29 @@ async function fetchDataGet(endpoint) {
 }
 
 async function fetchDataPost(endpoint, body) {
-    const response = await fetch(BASE_PATH + endpoint, {
-        method: "POST",
-        headers: {
-            "X-Requested-With": "XMLHttpRequest",
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-    });
-    return response.json();
+    try{
+        const response = await fetch(BASE_PATH + endpoint, {
+            method: "POST",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+        });
+        return response.json();
+    } catch (error) {
+        return error;
+    }
+}
+
+async function fetchFormDataPost(endpoint, body) {
+    try {
+        const response = await fetch(BASE_PATH + endpoint, {
+            method: "POST",
+            body: body,
+        });
+        return response.json();
+    } catch (error) {
+        return error;
+    }
 }
