@@ -23,6 +23,7 @@ async function fillOrders() {
         orderStatusItem.querySelector("#StatusItemQuantity").innerText = "Qty: " + orderItem.Quantity;
         orderStatusItem.querySelector("#StatusItemNote").innerText = orderItem.Note;
         orderStatusItem.querySelector("#StatusItemStatus").innerText = orderItem.OrderStatus;
+        orderStatusItem.querySelector("#StatusItemStatus").classList.add("OrderStatus-" + orderItem.OrderStatus);
 
         document.querySelector("#OrderStatusList").appendChild(orderStatusItem);
     });
@@ -40,6 +41,7 @@ async function refreshStatus() {
     UpdatedOrderStatusData.OrderedItems.forEach((orderItem) => {
         const orderStatusItem = document.querySelector(`[data-id="${orderItem.OrderItem_ID}"]`);
         orderStatusItem.querySelector("#StatusItemStatus").innerText = orderItem.OrderItemStatus;
+        orderStatusItem.querySelector("#StatusItemStatus").classList = `OrderStatusDesign OrderStatus-${orderItem.OrderItemStatus}`;
     });
 
 }

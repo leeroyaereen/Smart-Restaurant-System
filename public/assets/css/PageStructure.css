@@ -74,9 +74,13 @@ body {
     font-weight: 600;
     color: #dfa32c;
     background-color: #fff9b1;
-    width: max-content;
+    width: 10ch;
     padding: 5px 10px;
     border-radius: 15px;
+	text-align: center;
+	box-sizing: border-box;
+	overflow: hidden;
+	text-wrap: no-wrap;
 }
 
 .OrderStatus-InQueue{

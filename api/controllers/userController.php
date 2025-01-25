@@ -43,14 +43,14 @@
 
         $result = UserModel::loginUser($phoneNumber, $password);
 
-        if($result===true){
+        if($result){
             // session_start(); //starts session just in case
             $_SESSION['phoneNumber'] = $phoneNumber;
             $_SESSION['firstName'] = $result['FirstName'];
             $_SESSION['lastName'] = $result['LastName'];
             echo json_encode(['success'=>true, 'message'=>'User logged in successfully']);
         }else{
-            echo json_encode(['success'=>false, 'message'=>'User login failed']);
+            echo json_encode(['success'=>false, 'message'=>'User login failed', 'error'=>$result]);
         }
     }
 

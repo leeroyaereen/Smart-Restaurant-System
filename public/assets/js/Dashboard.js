@@ -1,12 +1,18 @@
-const form = document.querySelector("#AddFoodItemForm");
-const formButton = document.querySelector("#CreateFoodItem");
+const addFoodItemForm = document.querySelector("#AddFoodItemForm");
+const addFoodItemFormButton = document.querySelector("#CreateFoodItem");
+const addCategoryForm = document.querySelector("#AddCategoryForm");
+const addCategoryFormButton = document.querySelector("#CreateCategory");
+
 const foodItemToggle = document.querySelector("#FoodItemToggle");
 const foodCategoryToggle = document.querySelector("#FoodCategoryToggle");
+
 const foodItemSection = document.querySelector("#FoodItemSection");
 const foodCategorySection = document.querySelector("#FoodCategorySection");
 
 const categorizedFoodItems = document.querySelector("#EditFoodItemSectionItems");
 const editCategoryItems = document.querySelector("#EditCategorySectionItems");
+
+const selectCategory = document.querySelector("#selectCategory");
 
 window.onload = function () {
 	fillCategories();
@@ -28,7 +34,9 @@ foodCategoryToggle.addEventListener("click", () => {
 });
 
 async function fillCategories() {
-	console.log("fillFormCategories");
+	selectCategory.innerHTML = "";
+	editCategoryItems.innerHTML = "";
+	
 	const categoriesData = await fetchDataGet("/api/getFoodCategories");
 	console.log(categoriesData);
 
@@ -37,12 +45,11 @@ async function fillCategories() {
 		return;
 	}
 
-	const categories = document.querySelector("select");
 	Object.entries(categoriesData.foodCategories).forEach(([id, category]) => {
 		const option = document.createElement("option");
 		option.value = id;
 		option.innerText = category;
-		categories.append(option);
+		selectCategory.append(option);
 
 		let EditCategoryTemplateClone = document.querySelector("#EditCategoryTemplate").content.cloneNode(true);
 		let EditCategory = EditCategoryTemplateClone.querySelector("#EditCategory");
@@ -54,6 +61,8 @@ async function fillCategories() {
 
 
 async function fillCategorizedFoodItems() {
+	categorizedFoodItems.innerHTML = "";
+
 	const categorizedFoodItemsData = await fetchDataGet("/api/getCategorizedFoodItems");
 	console.log(categorizedFoodItemsData);
 
@@ -79,20 +88,25 @@ async function fillCategorizedFoodItems() {
 			let EditFoodItem = EditFoodItemTemplateClone.querySelector("#EditFoodItem");
 			EditFoodItem.id = "EditFoodItem";
 			EditFoodItem.dataset.id = item.FoodItem_ID;
+			EditFoodItem.querySelector("#EditFoodItemTitle").innerText = item.FoodName;
+			EditFoodItem.querySelector("#EditFoodItemType").innerText = item.FoodType;
+			EditFoodItem.querySelector("#EditFoodItemDescription").innerText = item.FoodDescription;
+			EditFoodItem.querySelector("#EditFoodItemPreparationTime").innerText = item.FoodPreparationTime + " mins";
+			EditFoodItem.querySelector("#EditFoodItemPrice").innerText = "Rs " + item.FoodPrice;
 			EditFoodItemCategoryContainer.append(EditFoodItem);
 		});
 		categorizedFoodItems.append(EditFoodItemCategoryContainer);
 	});
 }
 
-formButton.addEventListener("click", async (e) => {
+addFoodItemFormButton.addEventListener("click", async (e) => {
 	e.preventDefault();
 	const formData = {
-		foodName: form.querySelector("#FoodName").value,
-		foodCategory: form.querySelector("#FoodCategory").value,
-		foodPreparationTime: form.querySelector("#FoodPreparationTime").value,
-		foodPrice: form.querySelector("#FoodPrice").value,
-		foodDescription: form.querySelector("#FoodDescription").value,
+		foodName: addFoodItemForm.querySelector("#FoodName").value,
+		foodCategory: selectCategory.value,
+		foodPreparationTime: addFoodItemForm.querySelector("#FoodPreparationTime").value,
+		foodPrice: addFoodItemForm.querySelector("#FoodPrice").value,
+		foodDescription: addFoodItemForm.querySelector("#FoodDescription").value,
 	};
 	
 	const addFoodResponse = await fetchDataPost("/api/addFoodItem", formData)
@@ -100,5 +114,23 @@ formButton.addEventListener("click", async (e) => {
 
 	if (addFoodResponse.success) {
 		alert("Food Item Added Successfully");
+		addFoodItemForm.reset();
+		fillCategorizedFoodItems();
+	}
+});
+
+addCategoryFormButton.addEventListener("click", async (e) => {
+	e.preventDefault();
+	const formData = {
+		categoryName: addCategoryForm.querySelector("#CategoryName").value,
+	};
+	
+	const addCategoryResponse = await fetchDataPost("/api/addCategory", formData)
+	console.log(addCategoryResponse);
+
+	if (addCategoryResponse.success) {
+		alert("Category Added Successfully");
+		addCategoryForm.reset();
+		fillCategories();
 	}
 });

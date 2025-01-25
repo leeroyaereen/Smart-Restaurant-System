@@ -109,7 +109,9 @@ function GetAllOrderItemDetailsForTracking($userID){
             ON orderitem.OrderTray_ID = ordertray.OrderTray_ID
 
             
-            WHERE ordertray.User_ID = 1 && orderitem.OrderStatus <> 'Cancelled'  && orderitem.OrderStatus <> 'Closed'
+            WHERE ordertray.User_ID = 1 
+            -- Commented out for testing purposes
+            -- && orderitem.OrderStatus <> 'Cancelled'  && orderitem.OrderStatus <> 'Closed' 
             ORDER BY orderitem.OrderItem_ID"
             ;
     $res = mysqli_query($conn,$sql);

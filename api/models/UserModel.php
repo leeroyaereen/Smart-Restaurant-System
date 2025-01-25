@@ -18,26 +18,27 @@
 
         public static function registerUser($firstName, $lastName, $email, $phoneNumber, $password) {
             $query = "INSERT INTO User (FirstName, LastName, Email, PhoneNumber, Password) VALUES (?, ?, ?, ?, ?)";
-            $stmt = self::$connection->prepare($query); // Prepare the query
-        
+            $stmt = self::$connection->prepare($query);
+            
             if (!$stmt) {
-                // Handle preparation error
-                return false;
+                return ['success' => false, 'error' => 'Failed to prepare statement'];
             }
-
-            // Hash the password before storing it in the database
+    
+            // Hash the password before storing it
             $password = password_hash($password, PASSWORD_DEFAULT);
-        
-            // Bind the parameters to the placeholders in the query
+    
             $stmt->bind_param("sssss", $firstName, $lastName, $email, $phoneNumber, $password);
-        
-            // Execute the prepared statement
+            
             if ($stmt->execute()) {
-                return true;
+                $stmt->close();
+                return ['success' => true];
             } else {
-                return false;
+                $error = $stmt->error;
+                $stmt->close();
+                return ['success' => false, 'error' => $error];
             }
         }
+        
         public static function getUserDetailsWithPhoneNumber($phoneNumber){
         
             $query = "SELECT * FROM User WHERE phoneNumber = ?";
@@ -61,35 +62,32 @@
         }
 
         public static function loginUser($phoneNumber, $password) {
-            // Use prepared statements to prevent SQL injection
             $query = "SELECT * FROM User WHERE phoneNumber = ?";
             $stmt = self::$connection->prepare($query);
+
             if (!$stmt) {
-                return false; // Return false if the statement fails to prepare
+                return ['success' => false, 'error' => 'Failed to prepare statement'];
             }
-        
-            // Bind parameters and execute the query
+
             $stmt->bind_param("s", $phoneNumber);
             $stmt->execute();
-        
-            // Fetch the result
             $result = $stmt->get_result();
+
             if ($result && $result->num_rows > 0) {
                 $user = $result->fetch_assoc();
-        
-                // Verify the password
-                if ($password === $user['Password']) {
-                    $_SESSION['id'] = $user['User_ID'];
-                    return $user; // Return user data on successful login
+                $stmt->close();
+
+                if (password_verify($password, $user['Password'])) {
+                    return ['success' => true, 'user' => $user];
                 } else {
-                    return false; // Password mismatch
+                    return ['success' => false, 'error' => 'Invalid credentials'];
                 }
             } else {
-                return false; // No matching user found
+                $stmt->close();
+                return ['success' => false, 'error' => 'User not found'];
             }
         }
-
-
     }
+    
     UserModel::Initialize();
 ?>
