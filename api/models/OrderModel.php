@@ -2,6 +2,7 @@
 require_once __DIR__.'/../helper/OrderItemClass.php';
 require_once __DIR__.'/../../config/databaseConnector.php';
 
+use Src\Helpers\FoodItem;
 use Src\Helpers\OrderItem;
 use Src\Helpers\OrderTray;
 use Src\Helpers\OrderStatus;
@@ -248,5 +249,20 @@ function getOnlyStatusData(){
         }
         return $items;
     }
+}
+
+function getFoodItemIDBasedOnOrderID($orderID){
+    $conn = getConnection();
+    if(!$conn){
+        return "No Database connection";
+    }
+    $sql = "SELECT FoodItem_ID FROM orderitem WHERE OrderItem_ID =".$orderID;
+    $res = $conn->query($sql);
+    if(!$res){
+        return " Error Executing the query";
+    }
+    $foodItem = new FoodItem;
+    $foodItem->FoodItem_ID =  ($res->fetch_assoc())["FoodItem_ID"];
+    return $foodItem;
 }
 ?>
