@@ -115,6 +115,27 @@
 
     }
 
+    function CreateTriggerForRatingUpdate(){
+        $sql = "DELIMITER $$
+
+            CREATE TRIGGER onRating
+            AFTER INSERT ON review
+            FOR EACH ROW
+            BEGIN
+                DECLARE averageRating FLOAT;
+                
+                SELECT AVG(Rating) INTO averageRating
+                FROM review
+                WHERE FoodItem_ID = NEW.FoodItem_ID;
+                
+                UPDATE fooditems
+                SET FoodRating = averageRating
+                WHERE FoodItem_ID = NEW.FoodItem_ID;
+            END$$
+
+            DELIMITER ;
+        ";
+    }
     function CreateOrderItemTable(){
         $sql = 'CREATE TABLE ORDER (
             Order_ID INT PRIMARY KEY AUTO_INCREMENT,

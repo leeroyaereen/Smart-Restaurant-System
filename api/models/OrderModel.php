@@ -265,4 +265,19 @@ function getFoodItemIDBasedOnOrderID($orderID){
     $foodItem->FoodItem_ID =  ($res->fetch_assoc())["FoodItem_ID"];
     return $foodItem;
 }
+
+function AddReviewToOrder($order, $user) {
+    $conn = getConnection();
+    if(!$conn){
+        return "No Database connection";
+    }
+    $sql = "INSERT INTO review (OrderItem_ID, User_ID, Rating, Review) VALUES (?,?,?,?)";
+    $stmt = $conn->prepare($sql);
+    if(!$stmt){
+        return "Failed to prepare statement";
+    }
+    $stmt->bind_param("iiis", $order->orderId, $user, $order->rating, $order->review);
+    $res = $stmt->execute();
+    return true;
+}
 ?>

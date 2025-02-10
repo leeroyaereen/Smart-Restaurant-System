@@ -34,7 +34,8 @@
 							<option value="InQueue">InQueue</option>
 							<option value="Preparing">Preparing</option>
 							<option value="Ready">Ready</option>
-							<option value="Completed">Completed</option>
+							<option value="Served">Served</option>
+							<option value="Closed">Closed</option>
 							<option value="Cancelled">Cancelled</option>
 						</select>
 					</div>
