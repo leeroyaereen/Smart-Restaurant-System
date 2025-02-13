@@ -34,7 +34,7 @@ async function registerUser(userData) {
         alert("Registration Successful");
         window.location.href = "menu";
     } else {
-        alert(registrationStatus.message);
+        alert("Registration Failed: "+registrationStatus.message);
     }
 
 }

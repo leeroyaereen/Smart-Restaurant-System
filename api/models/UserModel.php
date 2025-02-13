@@ -17,6 +17,17 @@
         }
 
         public static function registerUser($firstName, $lastName, $email, $phoneNumber, $password) {
+            $sql = "SELECT COUNT(*) FROM User WHERE PhoneNumber = ".$phoneNumber;
+            $res = self::$connection->query($sql);
+            if($res->fetch_assoc()['COUNT(*)'] > 0){
+                return ['success' => false, 'error' => 'User with this phone number already exists'];
+            }
+            $sql = "SELECT COUNT(*) FROM User WHERE Email = '".$email."'";
+
+            $res = self::$connection->query($sql);
+            if($res->fetch_assoc()['COUNT(*)'] > 0){
+                return ['success' => false, 'error' => 'User with this email already exists'];
+            }
             $query = "INSERT INTO User (FirstName, LastName, Email, PhoneNumber, Password) VALUES (?, ?, ?, ?, ?)";
             $stmt = self::$connection->prepare($query);
             
@@ -26,9 +37,7 @@
     
             // Hash the password before storing it
             $password = password_hash($password, PASSWORD_DEFAULT);
-    
-            $stmt->bind_param("sssss", $firstName, $lastName, $email, $phoneNumber, $password);
-            
+            $stmt->bind_param("sssss", $firstName, $lastName, $email, $phoneNumber, $password);    
             if ($stmt->execute()) {
                 $stmt->close();
                 return ['success' => true];
@@ -71,8 +80,11 @@
 
             $stmt->bind_param("s", $phoneNumber);
             $stmt->execute();
+
+            //stores the result to the variable
             $result = $stmt->get_result();
 
+            
             if ($result && $result->num_rows > 0) {
                 $user = $result->fetch_assoc();
                 $stmt->close();

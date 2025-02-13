@@ -17,15 +17,15 @@
 
         $result = UserModel::registerUser($firstName, $lastName, $email, $phoneNumber, $password);
 
-        if($result===true){
+        if($result['success']===true){
             // session_start();//starts session just in case
 
             $_SESSION['phoneNumber'] = $phoneNumber;
             $_SESSION['firstName'] = $firstName;
             $_SESSION['lastName'] = $lastName;
-            echo json_encode(['success'=>true, 'message'=>'User registered successfully']);
+            echo json_encode(['success'=>true, 'message' => 'User registered successfully']);
         }else{
-            echo json_encode(['success'=>false, 'message'=>'User registration failed']);
+            echo json_encode(['success'=>false, 'message' =>'User registration failed ' . $result['error']]);
         }
     }
 
@@ -43,14 +43,15 @@
 
         $result = UserModel::loginUser($phoneNumber, $password);
 
-        if($result){
+        if($result['success']===true){
             // session_start(); //starts session just in case
             $_SESSION['phoneNumber'] = $phoneNumber;
-            $_SESSION['firstName'] = $result['FirstName'];
-            $_SESSION['lastName'] = $result['LastName'];
-            echo json_encode(['success'=>true, 'message'=>'User logged in successfully']);
+            $_SESSION['firstName'] = $result['user']['FirstName'];
+            $_SESSION['lastName'] = $result['user']['LastName'];
+            $_SESSION['email'] = $result['user']['Email'];
+            echo json_encode(['success'=>true, 'message'=>'User logged in successfully', 'user'=>$result]);
         }else{
-            echo json_encode(['success'=>false, 'message'=>'User login failed', 'error'=>$result]);
+            echo json_encode(['success'=>false, 'message'=>'User login failed: '.$result['error']]);
         }
     }
 
