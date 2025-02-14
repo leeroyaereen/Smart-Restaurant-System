@@ -19,7 +19,7 @@
 
         if($result['success']===true){
             // session_start();//starts session just in case
-
+            $_SESSION['User_ID'] = $result['user'];
             $_SESSION['phoneNumber'] = $phoneNumber;
             $_SESSION['firstName'] = $firstName;
             $_SESSION['lastName'] = $lastName;
@@ -45,7 +45,9 @@
 
         if($result['success']===true){
             // session_start(); //starts session just in case
+            
             $_SESSION['phoneNumber'] = $phoneNumber;
+            $_SESSION['User_ID'] = $result['user']['User_ID'];
             $_SESSION['firstName'] = $result['user']['FirstName'];
             $_SESSION['lastName'] = $result['user']['LastName'];
             $_SESSION['email'] = $result['user']['Email'];

@@ -39,8 +39,9 @@
             $password = password_hash($password, PASSWORD_DEFAULT);
             $stmt->bind_param("sssss", $firstName, $lastName, $email, $phoneNumber, $password);    
             if ($stmt->execute()) {
+                $res = $stmt->insert_id;
                 $stmt->close();
-                return ['success' => true];
+                return ['success' => true, 'user'=>$res];
             } else {
                 $error = $stmt->error;
                 $stmt->close();

@@ -110,7 +110,7 @@ function GetAllOrderItemDetailsForTracking($userID){
             ON orderitem.OrderTray_ID = ordertray.OrderTray_ID
 
             
-            WHERE ordertray.User_ID = 1 
+            WHERE ordertray.User_ID = '".$userID."'
             -- Commented out for testing purposes
             -- && orderitem.OrderStatus <> 'Cancelled'  && orderitem.OrderStatus <> 'Closed' 
             ORDER BY orderitem.OrderItem_ID"
@@ -238,9 +238,9 @@ function GetAllOrderDetailsForMonitoring(){
     }
 }
 
-function getOnlyStatusData(){
+function getOnlyStatusData($userID){
     $con = getConnection();
-    $sql = "SELECT orderitem.OrderItem_ID, orderitem.OrderStatus FROM orderitem";
+    $sql = "SELECT orderitem.OrderItem_ID, orderitem.OrderStatus FROM orderitem WHERE orderitem.OrderTray_ID IN (SELECT ordertray.OrderTray_ID FROM ordertray WHERE ordertray.User_ID = ".$userID.")";
     $res = $con->query($sql);
     $items = [];
     if($res->num_rows>0){

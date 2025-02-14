@@ -19,7 +19,7 @@ use Src\Helpers\OrderTray;
             //Requires user authentication 
             //!!!!!!!!!!!!!!!!!!
 
-            $user = 1;
+            $user = $_SESSION['User_ID'];
             $newOrderTray = new OrderTray;
             $newOrderTray->userID = $user;
             $newOrderTray->kitchenOrderTime = date("Y-m-d H:i:s");//current time stamp
