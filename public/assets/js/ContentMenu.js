@@ -50,6 +50,7 @@ function fillMenu(data) {
 		menuItem.querySelector("#MenuItemSubCategory").innerText = item.FoodType;
 		menuItem.querySelector("#MenuItemPrice span").innerText = Math.floor(item.FoodPrice);
 		menuItem.querySelector("#MenuItemDuration span").innerText = item.FoodPreparationTime+" min";
+		menuItem.querySelector("#MenuItemRating span").innerText = item.FoodRating;
 		addQuantityCounter(menuItem.querySelector(".ItemQuantity"));
 		observer.observe(menuItem.querySelector(".ItemQuantity span"), {childList: true});
 		menuItemList.appendChild(menuItem);
