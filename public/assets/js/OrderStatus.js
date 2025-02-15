@@ -24,6 +24,9 @@ async function fillOrders() {
         orderStatusItem.querySelector("#StatusItemNote").innerText = orderItem.Note;
         orderStatusItem.querySelector("#StatusItemStatus").innerText = orderItem.OrderStatus;
         orderStatusItem.querySelector("#StatusItemStatus").classList.add("OrderStatus-" + orderItem.OrderStatus);
+        if (orderItem.FoodImage) {
+            orderStatusItem.querySelector("#StatusItemImage img").src = orderItem.FoodImage;
+        }
 
         document.querySelector("#OrderStatusList").appendChild(orderStatusItem);
     });

@@ -31,11 +31,11 @@
                 $file = $_FILES['foodImage'];
                 
                 // Generate unique filename
-                $fileName = $foodItem->FoodName. basename($file['name']);
+                $fileName = $foodItem->FoodName . '_' . basename($file['name']);
                 $targetPath = $uploadDir . $fileName;
                 
-                // Validate file type
-                $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+                // Allowed Validate file type array
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
                 if (!in_array($file['type'], $allowedTypes)) {
                     echo json_encode(['success' => false, 'message' => 'Invalid file type. Only JPG, JPEG & PNG files are allowed.']);
                     return;
@@ -44,7 +44,7 @@
                 // Move uploaded file
                 if (move_uploaded_file($file['tmp_name'], $targetPath)) {
                     // Store relative path in database
-                    $foodItem->FoodImage = __DIR__. '/../public/assets/images/' . $fileName;
+                    $foodItem->FoodImage = BASE_PATH.'/public/assets/images/'.$fileName;
                 } else {
                     echo json_encode(['success' => false, 'message' => 'Failed to upload image']);
                     return;

@@ -16,6 +16,14 @@ function isValidPhoneNumber(phoneNumber){
     return res;
 }
 
+function isValidName(name){
+    var regex = /^[a-zA-Z]+$/;
+    name = name.trim();
+    var res = regex.test(name);
+    if(!res) alert("Name is not valid");
+    return res;
+}
+
 function isValidPassword(password){
     var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{6,15}$/;
     password = password.trim();

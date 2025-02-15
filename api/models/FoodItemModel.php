@@ -237,7 +237,7 @@
             }
     
             $newFood->FoodItem_ID = $connection->insert_id;
-            $newFood->SetImageAddress();
+            //$newFood->SetImageAddress();
     
             $sql = "UPDATE FoodItems SET FoodImage = ? WHERE FoodItem_ID = ?";
             $statement = $connection->prepare($sql);
@@ -500,4 +500,6 @@
     function onReview($userid, $foodItem, $rating, $reviewNote){
         $sql = "INSERT INTO review (FoodItem_ID, User_ID, Rating, ReviewText, ReviewDate) VALUES(?,?,?,?,?)";
     }
+
+    
 ?> 

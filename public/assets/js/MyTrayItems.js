@@ -44,6 +44,9 @@ function fillTrayItems(data) {
             trayItem.querySelector("#TrayItemName").innerText = itemDetails.FoodName;
             trayItem.querySelector("#TrayItemSubCategory").innerText = itemDetails.FoodType;
             trayItem.querySelector("#TrayItemPrice span").innerText = Math.floor(itemDetails.FoodPrice);
+            if(itemDetails.FoodImage){
+                trayItem.querySelector("#TrayItemImage img").src = itemDetails.FoodImage;
+            }
 
             let trayItemQuantity = trayItem.querySelector(".ItemQuantity");
             trayItemQuantity.querySelector("span").innerText = formatNumber(item.Quantity);

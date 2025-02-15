@@ -17,8 +17,8 @@
 				<div class="HeaderSubTitle">Customer ID</div>
 				<div class="HeaderTitle">
 					<?php 
-						if(isset($_SESSION["id"])){
-							echo $_SESSION["id"]; 
+						if(isset($_SESSION["firstName"])){
+							echo $_SESSION["firstName"] .':'.$_SESSION["User_ID"]; 
 						}else{
 							echo "Guest";
 						}

@@ -118,10 +118,8 @@
     function CreateTriggerForRatingUpdate(){
         $sql = "DELIMITER $$
 
-            CREATE TRIGGER onRating
-            AFTER INSERT ON review
-            FOR EACH ROW
-            BEGIN
+            CREATE TRIGGER `onRating` AFTER INSERT ON `review`
+            FOR EACH ROW BEGIN 
                 DECLARE averageRating FLOAT;
                 
                 SELECT AVG(Rating) INTO averageRating
