@@ -134,6 +134,40 @@
             DELIMITER ;
         ";
     }
+
+    function CreateCategoryDeletionTrigger(){
+        $sql = "DELIMITER $$
+
+            CREATE TRIGGER `onCategoryDelete` 
+            BEFORE 
+            DELETE ON `foodcategory`
+            FOR EACH ROW BEGIN
+                DECLARE categoryID INT;
+                DECLARE defaultCategoryID INT;
+                
+                SELECT Category_ID INTO categoryID
+                FROM foodcategory
+                WHERE CategoryName = 'Others';
+                
+                SELECT Category_ID INTO defaultCategoryID
+                FROM fooditems
+                WHERE Category_ID = OLD.Category_ID
+                LIMIT 1;
+                
+                IF defaultCategoryID IS NULL THEN
+                    UPDATE fooditems
+                    SET Category_ID = categoryID
+                    WHERE Category_ID = OLD.Category_ID;
+                ELSE
+                    UPDATE fooditems
+                    SET Category_ID = categoryID
+                    WHERE Category_ID = OLD.Category_ID;
+                END IF;
+            END$$
+
+            DELIMITER ;
+        ";
+    }
     function CreateOrderItemTable(){
         $sql = 'CREATE TABLE ORDER (
             Order_ID INT PRIMARY KEY AUTO_INCREMENT,
