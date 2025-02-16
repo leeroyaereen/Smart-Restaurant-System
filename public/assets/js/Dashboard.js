@@ -155,7 +155,7 @@ addFoodItemFormImage.addEventListener("input", () => {
 async function submitFoodItemForm(form){
 	const formData = new FormData();
 	formData.append("foodName", form.querySelector("#FoodName").value);
-	formData.append("foodCategory", selectCategory.value);
+	formData.append("foodCategory", form.querySelector(".selectCategory").value);
 	formData.append("foodType", form.querySelector("#FoodType").value);
 	formData.append(
 		"foodPreparationTime",
@@ -175,7 +175,9 @@ async function submitFoodItemForm(form){
 	if (imageFile) {
 		formData.append("foodImage", imageFile);
 	}
-
+	for (let [key, value] of formData.entries()) {
+		console.log(key, value);
+	}
 	const addFoodResponse = await fetchFormDataPost("/api/addFoodItem", formData);
 	console.log(addFoodResponse);
 
@@ -233,7 +235,6 @@ EditFoodItemForm.onsubmit = async (e) => {
 	formData.append("FoodDescription", EditFoodItemForm.querySelector("#EditFoodDescription").value);
 	formData.append("FoodPrice", EditFoodItemForm.querySelector("#FoodPrice").value);
 	formData.append("FoodPreparationTime", EditFoodItemForm.querySelector("#FoodPreparationTime").value);
-
 	const editFoodItemResponse = await fetchFormDataPost("/api/editFoodItem", formData);
 	console.log(editFoodItemResponse);
 
