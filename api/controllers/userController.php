@@ -31,7 +31,12 @@
 
     function loginUser(){
         $rawData = file_get_contents("php://input");
-        $userData = json_decode($rawData, true);
+        try{
+            $userData = json_decode($rawData, true);
+        }catch(Exception $e){
+            echo json_encode(['success'=>false, 'message'=>'Invalid data']);
+            return;
+        }
 
         if(!$userData){
             echo json_encode(['success'=>false, 'message'=>'Invalid data']);
@@ -42,12 +47,12 @@
         $password = $userData['password'];
 
         $result = UserModel::loginUser($phoneNumber, $password);
-
-        if($result){
+        if($result['success']){
+            $user = $result['user'];
             // session_start(); //starts session just in case
             $_SESSION['phoneNumber'] = $phoneNumber;
-            $_SESSION['firstName'] = $result['FirstName'];
-            $_SESSION['lastName'] = $result['LastName'];
+            $_SESSION['firstName'] = $user['FirstName'];
+            $_SESSION['lastName'] = $user['LastName'];
             echo json_encode(['success'=>true, 'message'=>'User logged in successfully']);
         }else{
             echo json_encode(['success'=>false, 'message'=>'User login failed', 'error'=>$result]);

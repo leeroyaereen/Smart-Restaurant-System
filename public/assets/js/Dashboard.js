@@ -1,5 +1,6 @@
 const addFoodItemForm = document.querySelector("#AddFoodItemForm");
 const addFoodItemFormButton = document.querySelector("#CreateFoodItem");
+const addFoodItemFormImage = document.querySelector("#FoodImageContainer input[type='file']");
 const addCategoryForm = document.querySelector("#AddCategoryForm");
 const addCategoryFormButton = document.querySelector("#CreateCategory");
 
@@ -14,7 +15,13 @@ const categorizedFoodItems = document.querySelector(
 );
 const editCategoryItems = document.querySelector("#EditCategorySectionItems");
 
-const selectCategory = document.querySelector("#selectCategory");
+const selectCategory = document.querySelectorAll(".selectCategory");
+
+const editFoodItemFormContainer = document.querySelector("#EditFoodItemFormContainer");
+const EditFoodItemForm = editFoodItemFormContainer.querySelector("#EditFoodItemForm");
+
+const editCategoryFormContainer = document.querySelector("#EditCategoryFormContainer");
+const EditCategoryForm = editCategoryFormContainer.querySelector("#EditCategoryForm");
 
 window.onload = function () {
 	fillCategories();
@@ -48,11 +55,12 @@ async function fillCategories() {
 	}
 
 	Object.entries(categoriesData.foodCategories).forEach(([id, category]) => {
-		const option = document.createElement("option");
-		option.value = id;
-		option.innerText = category;
-		selectCategory.append(option);
-
+		selectCategory.forEach((e) =>{
+			const option = document.createElement("option");
+			option.value = id;
+			option.innerText = category;
+			e.append(option);
+		});
 		let EditCategoryTemplateClone = document
 			.querySelector("#EditCategoryTemplate")
 			.content.cloneNode(true);
@@ -60,6 +68,14 @@ async function fillCategories() {
 		EditCategory.id = "EditCategory";
 		EditCategory.querySelector("#EditCategoryTitle").innerText =
 			categoriesData.foodCategories[id];
+		EditCategory.dataset.id = id;
+		EditCategory.querySelector("#EditCategoryButton").addEventListener('click', () => {
+			EditCategoryClicked(id);
+		});
+
+		EditCategory.querySelector("#DeleteCategoryButton").addEventListener('click', async () => {
+			DeleteCategoryClicked(id);
+		});
 		editCategoryItems.append(EditCategory);
 	});
 }
@@ -104,10 +120,17 @@ async function fillCategorizedFoodItems() {
 					item.FoodType;
 				EditFoodItem.querySelector("#EditFoodItemDescription").innerText =
 					item.FoodDescription;
-				EditFoodItem.querySelector("#EditFoodItemPreparationTime").innerText =
-					item.FoodPreparationTime + " mins";
-				EditFoodItem.querySelector("#EditFoodItemPrice").innerText =
-					"Rs " + item.FoodPrice;
+				EditFoodItem.querySelector("#EditFoodItemPreparationTime span").innerText =
+					item.FoodPreparationTime;
+				EditFoodItem.querySelector("#EditFoodItemPrice span").innerText =
+					item.FoodPrice;
+				EditFoodItem.querySelector("#EditFoodItemButton").addEventListener('click', () => {
+					EditFoodItemClicked(item.FoodItem_ID);
+				});
+
+				EditFoodItem.querySelector("#DeleteFoodItemButton").addEventListener('click', async () => {
+					DeleteFoodItemClicked(item.FoodItem_ID);
+				});
 				EditFoodItemCategoryContainer.append(EditFoodItem);
 			});
 			categorizedFoodItems.append(EditFoodItemCategoryContainer);
@@ -115,26 +138,39 @@ async function fillCategorizedFoodItems() {
 	);
 }
 
-addFoodItemFormButton.addEventListener("click", async (e) => {
+addFoodItemFormButton.addEventListener("click", (e) => {
 	e.preventDefault();
+	submitFoodItemForm(addFoodItemForm);
+});
 
+addFoodItemFormImage.addEventListener("input", () => {
+	const file = addFoodItemFormImage.files[0];
+	const reader = new FileReader();
+	reader.onload = function(e) {
+		addFoodItemForm.querySelector("#FoodImageContainer img").src = e.target.result;
+	};
+	reader.readAsDataURL(file);	
+});
+
+async function submitFoodItemForm(form){
 	const formData = new FormData();
-	formData.append("foodName", addFoodItemForm.querySelector("#FoodName").value);
+	formData.append("foodName", form.querySelector("#FoodName").value);
 	formData.append("foodCategory", selectCategory.value);
+	formData.append("foodType", form.querySelector("#FoodType").value);
 	formData.append(
 		"foodPreparationTime",
-		addFoodItemForm.querySelector("#FoodPreparationTime").value
+		form.querySelector("#FoodPreparationTime").value
 	);
 	formData.append(
 		"foodPrice",
-		addFoodItemForm.querySelector("#FoodPrice").value
+		form.querySelector("#FoodPrice").value
 	);
 	formData.append(
 		"foodDescription",
-		addFoodItemForm.querySelector("#FoodDescription").value
+		form.querySelector("#FoodDescription").value
 	);
 
-	const imageFile = addFoodItemForm.querySelector("#FoodImage").files[0];
+	const imageFile = form.querySelector("#FoodImage").files[0];
 
 	if (imageFile) {
 		formData.append("foodImage", imageFile);
@@ -149,9 +185,9 @@ addFoodItemFormButton.addEventListener("click", async (e) => {
 	}
 
 	alert("Food Item Added Successfully");
-	addFoodItemForm.reset();
+	form.reset();
 	await fillCategorizedFoodItems();
-});
+}
 
 addCategoryFormButton.addEventListener("click", async (e) => {
 	e.preventDefault();
@@ -169,4 +205,86 @@ addCategoryFormButton.addEventListener("click", async (e) => {
 	alert("Category Added Successfully");
 	addCategoryForm.reset();
 	fillCategories();
+});
+
+function EditFoodItemClicked(FoodItem_ID) {
+	document.querySelector(".Body").classList.add("noInteractions");
+
+	editFoodItemFormContainer.classList.remove("hidden");
+
+	const FoodItem = categorizedFoodItems.querySelector(`#EditFoodItem[data-id="${FoodItem_ID}"]`);
+	console.log(FoodItem);
+	EditFoodItemForm.querySelector("#EditFoodName").value = FoodItem.querySelector("#EditFoodItemTitle").innerText;
+	EditFoodItemForm.querySelector("#EditFoodCategory").value = FoodItem.closest("#EditFoodItemCategoryContainer").querySelector("#EditFoodItemCategory").dataset.id;
+	EditFoodItemForm.querySelector("#EditFoodType").value = FoodItem.querySelector("#EditFoodItemType").innerText;
+	EditFoodItemForm.querySelector("#EditFoodDescription").value = FoodItem.querySelector("#EditFoodItemDescription").innerText;
+	console.log(FoodItem.querySelector("#EditFoodItemPrice").innerText);
+	EditFoodItemForm.querySelector("#FoodPrice").value = parseFloat(FoodItem.querySelector("#EditFoodItemPrice span").innerText); 
+	EditFoodItemForm.querySelector("#FoodPreparationTime").value = FoodItem.querySelector("#EditFoodItemPreparationTime span").innerText;
+}
+
+EditFoodItemForm.onsubmit = async (e) => {
+	e.preventDefault();
+	const formData = new FormData();
+	formData.append("FoodItem_ID", categorizedFoodItems.querySelector("#EditFoodItem").dataset.id);
+	formData.append("FoodName", EditFoodItemForm.querySelector("#EditFoodName").value);
+	formData.append("FoodCategory", EditFoodItemForm.querySelector("#EditFoodCategory").value);
+	formData.append("FoodType", EditFoodItemForm.querySelector("#EditFoodType").value);
+	formData.append("FoodDescription", EditFoodItemForm.querySelector("#EditFoodDescription").value);
+	formData.append("FoodPrice", EditFoodItemForm.querySelector("#FoodPrice").value);
+	formData.append("FoodPreparationTime", EditFoodItemForm.querySelector("#FoodPreparationTime").value);
+
+	const editFoodItemResponse = await fetchFormDataPost("/api/editFoodItem", formData);
+	console.log(editFoodItemResponse);
+
+	if (!editFoodItemResponse.success) {
+		alert("couldn't edit food item");
+		return;
+	}
+
+	alert("Food Item Edited Successfully");
+	editFoodItemFormContainer.classList.add("hidden");
+	document.querySelector(".Body").classList.remove("noInteractions");
+	fillCategorizedFoodItems();
+};
+
+document.querySelector("#CancelFoodItemChanges").addEventListener("click", async () => {
+	document.querySelector(".Body").classList.remove("noInteractions");
+	editFoodItemFormContainer.classList.add("hidden");
+});
+
+function EditCategoryClicked(Category_ID) {
+	document.querySelector(".Body").classList.add("noInteractions");
+
+	editCategoryFormContainer.classList.remove("hidden");
+
+	const Category = editCategoryItems.querySelector(`#EditCategory[data-id="${Category_ID}"]`);
+	console.log(Category);
+	EditCategoryForm.querySelector("#CategoryName").value = Category.querySelector("#EditCategoryTitle").innerText;
+}
+
+EditCategoryForm.onsubmit = async (e) => {
+	e.preventDefault();
+	const formData = {
+		categoryName: EditCategoryForm.querySelector("#CategoryName").value,
+		categoryID: editCategoryItems.querySelector("#EditCategory").dataset.id,
+	};
+
+	const editCategoryResponse = await fetchDataPost("/api/editCategory", formData);
+	console.log(editCategoryResponse);
+
+	if (!editCategoryResponse.success) {
+		alert("couldn't edit category");
+		return;
+	}
+
+	alert("Category Edited Successfully");
+	editCategoryFormContainer.classList.add("hidden");
+	document.querySelector(".Body").classList.remove("noInteractions");
+	fillCategories();
+}
+
+document.querySelector("#CancelCategoryChanges").addEventListener("click", async () => {
+	document.querySelector(".Body").classList.remove("noInteractions");
+	editCategoryFormContainer.classList.add("hidden");
 });

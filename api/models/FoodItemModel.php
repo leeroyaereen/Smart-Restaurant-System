@@ -200,8 +200,6 @@
         }
     }
     
-    
-
     function AddFoodItem(FoodItem $newFood) {
         global $connection;   
         if ($newFood instanceof FoodItem) {

@@ -20,7 +20,6 @@ form.addEventListener("submit", function (event) {
 
 async function loginUser(userData) {
     console.log(userData);
-
 	const loginStatus = await fetchDataPost("/api/loginUser", userData);
     console.log(loginStatus);
     if (loginStatus.success) {

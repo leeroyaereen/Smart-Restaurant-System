@@ -14,6 +14,7 @@
 			<span>Admin</span>
 			<span>Dashboard</span>
 		</div>
+
 		<div class="section Body">
 			<div id="AdminDashboardBody">
 				<div id="AdminDashboardToggler">
@@ -25,7 +26,7 @@
 						<div class="AdminDashboardTitle" id="AddFoodItemSectionTitle">
 							Add Food Item
 						</div>
-						<form id="AddFoodItemForm">
+						<form id="AddFoodItemForm" class="FoodItemForm">
 							<input
 								type="text"
 								name="FoodName"
@@ -34,13 +35,16 @@
 							/>
 							<select
 								name="FoodCategory"
-								id="selectCategory"
+								id="AddFoodItemCategory"
+								class="selectCategory"
 								placeholder="Category"
 							>
-								<optgroup>
-									<option selected>Choose a Category</option>
-								</optgroup>
+
+								<option selected disabled>Choose a Category</option>
+
 							</select>
+
+							<input type="text" name="Foodtype" id="FoodType" placeholder="Type" />
 
 							<textarea
 								name="FoodDescription"
@@ -67,12 +71,20 @@
 									/>
 									<path d="M9 13a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
 								</svg>
-								<input type="file" name="FoodImage" id="FoodImage" accept="image/*" />
+								<img src="" alt="" class="hidden">
+								<input
+									type="file"
+									name="FoodImage"
+									id="FoodImage"
+									accept="image/*"
+									class="hidden"
+								/>
 							</label>
 
 							<div id="PricePrepTimeContainer">
 								<input
 									type="number"
+									step="0.01"
 									name="FoodPrice"
 									id="FoodPrice"
 									placeholder="Price"
@@ -140,6 +152,90 @@
 				</div>
 			</div>
 		</div>
+
+		<div id="EditFoodItemFormContainer" class="hidden">
+			<form id="EditFoodItemForm" class="FoodItemForm">
+				<h2>Edit Food Item</h2>
+				<input
+					type="text"
+					name="FoodName"
+					id="EditFoodName"
+					placeholder="Name"
+				/>
+				<select
+					name="FoodCategory"
+					id="EditFoodCategory"
+					class="selectCategory"
+					placeholder="Category"
+				>
+					<option selected disabled>Choose a Category</option>
+				</select>
+
+				<input type="text" name="Foodtype" id="EditFoodType" placeholder="Type" />
+				
+				<textarea
+					name="FoodDescription"
+					id="EditFoodDescription"
+					placeholder="Description"
+				></textarea>
+
+				<label for="EditFoodImage" id="EditFoodImageContainer">
+					<div id="EditFoodItemImage">
+						<img
+							src="https://imgs.search.brave.com/Vc_LT_XtikkAbIBPyfReLh-bKN4ZBGo6kAigj8UxNlI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9lMS5w/eGZ1ZWwuY29tL2Rl/c2t0b3Atd2FsbHBh/cGVyLzMyNS8zNjgv/ZGVza3RvcC13YWxs/cGFwZXItcGl6emEt/bWFyZ2hlcml0YS5q/cGc"
+							alt=""
+							class="ItemImage"
+						/>
+					</div>
+					<input
+						type="file"
+						name="FoodImage"
+						id="EditFoodImage"
+						accept="image/*"
+						class="hidden"
+					/>
+				</label>
+				<div id="PricePrepTimeContainer">
+					<input
+						type="number"
+						step="0.01"
+						name="FoodPrice"
+						id="FoodPrice"
+						placeholder="Price"
+					/>
+
+					<input
+						type="number"
+						name="FoodPreparationTime"
+						id="FoodPreparationTime"
+						placeholder="Preparation Time"
+					/>
+				</div>
+				<div id="FormBtnGrp">
+					<button id="CancelFoodItemChanges" type="reset">Cancel</button>
+					<button id="SaveFoodItemChanges" type="submit">Save Changes</button>
+				</div>
+			</form>
+		</div>
+
+		<div id="EditCategoryFormContainer" class="hidden">
+			<form id="EditCategoryForm" class="FoodItemForm">
+				<h2>Edit Category</h2>
+				<input
+					type="text"
+					name="CategoryName"
+					id="CategoryName"
+					placeholder="Name"
+				/>
+				<div id="FormBtnGrp">
+					<button id="CancelCategoryChanges" type="reset">Cancel</button>
+					<button id="SaveCategoryChanges" type="submit">
+						Save Changes
+					</button>
+				</div>
+			</form>
+		</div>
+
 		<template id="EditFoodItemTemplate" class="hidden">
 			<div id="EditFoodItem">
 				<div id="EditFoodItemImage">
@@ -154,9 +250,9 @@
 				<div id="EditFoodItemDescription">
 					Classic pizza with tomato sauce, mozzarella, and basil
 				</div>
-				<b id="EditFoodItemPrice">Price: <span>Rs 12.99</span></b>
+				<b id="EditFoodItemPrice">Price: Rs <span>12.99</span></b>
 				<div id="EditFoodItemPreparationTime">
-					Prep Time: <span>10 mins</span>
+					Prep Time: <span>10</span> min
 				</div>
 				<div id="EditFoodItemBtnGrp">
 					<button id="EditFoodItemButton">
@@ -200,6 +296,7 @@
 				</div>
 			</div>
 		</template>
+
 		<template id="EditCategoryTemplate" class="hidden">
 			<div id="EditCategory">
 				<div id="EditCategoryTitle">Momo</div>

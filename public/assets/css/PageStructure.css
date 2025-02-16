@@ -157,3 +157,8 @@ body {
 	font-weight: 500;
 	cursor: pointer;
 }
+
+.noInteractions{
+	pointer-events: none;
+    user-select: none;
+}
