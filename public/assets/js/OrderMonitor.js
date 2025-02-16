@@ -1,8 +1,20 @@
 const orderContainerTemplate = document.querySelector("#OrderContainerTemplate");
 const orderItemTemplate = document.querySelector("#OrderItemTemplate");
 
-window.onload = fillOngoingOrders;
-
+window.onload = function () {
+    CheckIfUserIsAdmin();
+    
+}
+async function CheckIfUserIsAdmin(){
+    const response = await fetchDataGet("/api/isUserAdmin");
+    if (response.success && response.isAdmin) {
+        fillOngoingOrders();
+        console.log("Admin is logged in");
+    }else{
+        alert("You are not authorized to view this page");
+        window.location.href = "login";
+    }
+}
 async function fillOngoingOrders(){
     const ongoingOrdersData = await fetchDataGet("/api/getAllMonitorOrderDetail");
     console.log(ongoingOrdersData.data);

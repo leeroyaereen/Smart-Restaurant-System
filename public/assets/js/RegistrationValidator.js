@@ -11,7 +11,7 @@ form.addEventListener("submit", function (event) {
 	event.preventDefault(); //prevent Submission
 
 	//bool value to track if the form inpust is valid
-    let isValidForm = isValidWithConfirmPassowrd(password.value, confirmPassword.value) && isValidPhoneNumber(phoneNumber.value);
+    let isValidForm = isValidWithConfirmPassowrd(password.value, confirmPassword.value) && isValidPhoneNumber(phoneNumber.value) && isValidPassword(password.value) && isValidEmail(email.value) && isValidName(firstName.value) && isValidName(lastName.value);
 	// isValidForm = isValidEmail(email.value) && isValidPhoneNumber(phoneNumber.value) && isValidPassword(password.value) && isValidWithConfirmPassowrd(password.value, confirmPassword.value);
 
 	console.log(isValidForm);
@@ -34,7 +34,7 @@ async function registerUser(userData) {
         alert("Registration Successful");
         window.location.href = "menu";
     } else {
-        alert(registrationStatus.message);
+        alert("Registration Failed: "+registrationStatus.message);
     }
 
 }

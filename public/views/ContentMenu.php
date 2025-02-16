@@ -57,7 +57,7 @@
 				<div id="MenuItem">
 					<div id="MenuItemImage">
 						<img
-							src="https://t4.ftcdn.net/jpg/06/49/25/27/360_F_649252736_LK6ign50vHZicrNR6Fe2mSpmPDNupx6Y.jpg"
+							src="/Smart-Restaurant-System/public/assets/images/Fried CChowmei27"
 							alt=""
 							width="95"
 							height="95"

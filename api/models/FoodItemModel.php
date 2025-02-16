@@ -237,7 +237,7 @@
             }
     
             $newFood->FoodItem_ID = $connection->insert_id;
-            $newFood->SetImageAddress();
+            //$newFood->SetImageAddress();
     
             $sql = "UPDATE FoodItems SET FoodImage = ? WHERE FoodItem_ID = ?";
             $statement = $connection->prepare($sql);
@@ -258,7 +258,6 @@
         }
     }
     
-
     function RemoveFoodItemData($foodItem_ID) {
         global $connection;
     
@@ -308,7 +307,6 @@
         }
     }
     
-
     function getFoodItemByID($foodItem_ID){
         global $connection;
 
@@ -485,4 +483,23 @@
         return $res;
     }
 
+    function CountUpTheTotalOrdersOfFoodItem($foodItem_ID){
+        $sql = "UPDATE fooditems SET TotalOrders = TotalOrders + 1 WHERE FoodItem_ID =".$foodItem_ID;
+        $connection = getConnection();
+        if(!$connection){
+            return "No Database connection from FOodItem";
+        }
+
+        $res  = $connection->query($sql);
+        if(!$res ){
+            return "Failed to execute the query";
+        }
+       
+        return true;
+    }
+    function onReview($userid, $foodItem, $rating, $reviewNote){
+        $sql = "INSERT INTO review (FoodItem_ID, User_ID, Rating, ReviewText, ReviewDate) VALUES(?,?,?,?,?)";
+    }
+
+    
 ?> 

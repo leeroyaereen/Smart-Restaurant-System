@@ -100,6 +100,10 @@
                 require_once __DIR__ . '/controllers/AdminDashboardController.php';
                 AddCategory();
                 break;
+            case 'isUserAdmin':
+                require_once __DIR__ . '/controllers/userController.php';
+                isUserAdmin();
+                break;
                 
             default:
                 http_response_code(404);

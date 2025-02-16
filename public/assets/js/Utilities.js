@@ -1,6 +1,8 @@
 function isValidEmail(email){
  
     var regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    email = email.trim();
+    alert(email);
     let res = regex.test(email);
     if(!res) alert("Email is not valid");
     return res;
@@ -8,15 +10,23 @@ function isValidEmail(email){
 
 function isValidPhoneNumber(phoneNumber){
     var regex =  /^(\+?\d{1,3}[- ]?)?\d{10}$/;
-    phoneNumber.trim();
+    phoneNumber = phoneNumber.trim();
     var res = regex.test(phoneNumber);
     if(!res) alert("Phone Number is not valid");
     return res;
 }
 
+function isValidName(name){
+    var regex = /^[a-zA-Z]+$/;
+    name = name.trim();
+    var res = regex.test(name);
+    if(!res) alert("Name is not valid");
+    return res;
+}
+
 function isValidPassword(password){
-    var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{6,}$/;
-    password.trim();
+    var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{6,15}$/;
+    password = password.trim();
     var res = regex.test(password);
     if(!res) alert("Password is not valid");
     return res;
@@ -25,6 +35,14 @@ function isValidPassword(password){
 function isValidWithConfirmPassowrd(password, confirmPassword){
     var res = password===confirmPassword? true: false;
     if(!res) alert("Confirm password doesn't match with the password");
+    return res;
+}
+
+function isValidName(name){
+    var regex = /^[a-zA-Z]+$/;
+    name = name.trim();
+    var res = regex.test(name);
+    if(!res) alert("Name is not valid");
     return res;
 }
 

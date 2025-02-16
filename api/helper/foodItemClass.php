@@ -16,7 +16,7 @@
         public $TotalOrders = 0;
 
         public function SetImageAddress(){
-            $this->FoodImage = BASE_PATH . "/public/assets/images/". $this->FoodName.$this->FoodType.$this->FoodItem_ID;
+            $this->FoodImage = BASE_PATH . "/public/assets/images/". $this->FoodName.$this->FoodType;
         }
     }
 ?>

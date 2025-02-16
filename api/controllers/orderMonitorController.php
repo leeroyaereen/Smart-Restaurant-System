@@ -2,7 +2,9 @@
 <?php
     require_once __DIR__."/../models/OrderModel.php";
     require_once __DIR__."/../helper/orderItemClass.php";
+    require_once __DIR__."/../models/FoodItemModel.php";
 
+    use Src\Helpers\FoodItem;
     use Src\Helpers\OrderItem;
     use Src\Helpers\OrderStatus;
 
@@ -27,7 +29,18 @@
             $order = new OrderItem();
             $order->orderId = $data['OrderItem_ID'];
             $order->orderStatus = OrderStatus::from($data['OrderStatus']);
-
+            if($order->orderStatus == OrderStatus::Ready){
+                $foodItem = getFoodItemIDBasedOnOrderID($order->orderId);
+                if($foodItem instanceof FoodItem){
+                    $res = CountUpTheTotalOrdersOfFoodItem($foodItem->FoodItem_ID);
+                    if(!$res){
+                        return $res;
+                    }
+                }else if(is_string($foodItem)){
+                    echo json_encode(['success'=>true,'message'=>$foodItem]);
+                    return;
+                }
+            }
             //send to database about the modification
             $res = ChangeOrderStatus($order);
             if($res === true){

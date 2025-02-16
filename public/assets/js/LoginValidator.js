@@ -8,7 +8,7 @@ form.addEventListener("submit", function (event) {
 	//bool value to track if the form inpust is valid
 	let isValidForm = true;
 	isValidForm = isValidPhoneNumber(phoneNumber.value)
-
+        && isValidPassword(password.value);
 	if (isValidForm) {
         let userData = {
             phoneNumber: phoneNumber.value,

@@ -2,6 +2,7 @@
 require_once __DIR__.'/../helper/OrderItemClass.php';
 require_once __DIR__.'/../../config/databaseConnector.php';
 
+use Src\Helpers\FoodItem;
 use Src\Helpers\OrderItem;
 use Src\Helpers\OrderTray;
 use Src\Helpers\OrderStatus;
@@ -95,6 +96,7 @@ function GetAllOrderItemDetailsForTracking($userID){
                     fooditems.FoodItem_ID,
                     fooditems.FoodName,
                     fooditems.FoodType,
+                    fooditems.FoodImage,
                     orderitem.Quantity,
                     fooditems.FoodPrice,
                     orderitem.Note,
@@ -109,7 +111,7 @@ function GetAllOrderItemDetailsForTracking($userID){
             ON orderitem.OrderTray_ID = ordertray.OrderTray_ID
 
             
-            WHERE ordertray.User_ID = 1 
+            WHERE ordertray.User_ID = '".$userID."'
             -- Commented out for testing purposes
             -- && orderitem.OrderStatus <> 'Cancelled'  && orderitem.OrderStatus <> 'Closed' 
             ORDER BY orderitem.OrderItem_ID"
@@ -128,6 +130,7 @@ function GetAllOrderItemDetailsForTracking($userID){
                 "FoodItem_ID" => $data["FoodItem_ID"],
                 "FoodName" => $data["FoodName"],
                 "FoodType" => $data["FoodType"],
+                "FoodImage" => $data["FoodImage"],
                 "Quantity" => $data["Quantity"],
                 "FoodPrice" => $data["FoodPrice"],
                 "Note" => $data["Note"],
@@ -237,9 +240,9 @@ function GetAllOrderDetailsForMonitoring(){
     }
 }
 
-function getOnlyStatusData(){
+function getOnlyStatusData($userID){
     $con = getConnection();
-    $sql = "SELECT orderitem.OrderItem_ID, orderitem.OrderStatus FROM orderitem";
+    $sql = "SELECT orderitem.OrderItem_ID, orderitem.OrderStatus FROM orderitem WHERE orderitem.OrderTray_ID IN (SELECT ordertray.OrderTray_ID FROM ordertray WHERE ordertray.User_ID = ".$userID.")";
     $res = $con->query($sql);
     $items = [];
     if($res->num_rows>0){
@@ -248,5 +251,35 @@ function getOnlyStatusData(){
         }
         return $items;
     }
+}
+
+function getFoodItemIDBasedOnOrderID($orderID){
+    $conn = getConnection();
+    if(!$conn){
+        return "No Database connection";
+    }
+    $sql = "SELECT FoodItem_ID FROM orderitem WHERE OrderItem_ID =".$orderID;
+    $res = $conn->query($sql);
+    if(!$res){
+        return " Error Executing the query";
+    }
+    $foodItem = new FoodItem;
+    $foodItem->FoodItem_ID =  ($res->fetch_assoc())["FoodItem_ID"];
+    return $foodItem;
+}
+
+function AddReviewToOrder($order, $user) {
+    $conn = getConnection();
+    if(!$conn){
+        return "No Database connection";
+    }
+    $sql = "INSERT INTO review (OrderItem_ID, User_ID, Rating, Review) VALUES (?,?,?,?)";
+    $stmt = $conn->prepare($sql);
+    if(!$stmt){
+        return "Failed to prepare statement";
+    }
+    $stmt->bind_param("iiis", $order->orderId, $user, $order->rating, $order->review);
+    $res = $stmt->execute();
+    return true;
 }
 ?>

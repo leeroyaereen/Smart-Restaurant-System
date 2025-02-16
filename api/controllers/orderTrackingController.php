@@ -55,8 +55,8 @@
         // }else{
         //     $orderTrayId = $_SESSION['currentOrderTrayID'];
         // }
-
-        $res = GetAllOrderItemDetailsForTracking( 1);
+        $userID = $_SESSION['User_ID'];
+        $res = GetAllOrderItemDetailsForTracking($userID );
         if(is_string(value: $res) ){
             echo json_encode(['success'=>false,'message'=>$res]);
 
@@ -96,7 +96,7 @@
     }
     
     function getOnlyStatus(){
-        $res = getOnlyStatusData();
+        $res = getOnlyStatusData($_SESSION['User_ID']);
         if(is_string(value: $res) ){
             echo json_encode(['success'=>false,'message'=>$res]);
             return;

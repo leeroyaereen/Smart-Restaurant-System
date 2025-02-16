@@ -17,15 +17,15 @@
 
         $result = UserModel::registerUser($firstName, $lastName, $email, $phoneNumber, $password);
 
-        if($result===true){
+        if($result['success']===true){
             // session_start();//starts session just in case
-
+            $_SESSION['User_ID'] = $result['user'];
             $_SESSION['phoneNumber'] = $phoneNumber;
             $_SESSION['firstName'] = $firstName;
             $_SESSION['lastName'] = $lastName;
-            echo json_encode(['success'=>true, 'message'=>'User registered successfully']);
+            echo json_encode(['success'=>true, 'message' => 'User registered successfully']);
         }else{
-            echo json_encode(['success'=>false, 'message'=>'User registration failed']);
+            echo json_encode(['success'=>false, 'message' =>'User registration failed ' . $result['error']]);
         }
     }
 
@@ -47,20 +47,37 @@
         $password = $userData['password'];
 
         $result = UserModel::loginUser($phoneNumber, $password);
-        if($result['success']){
-            $user = $result['user'];
+
+        if($result['success']===true){
             // session_start(); //starts session just in case
+            
             $_SESSION['phoneNumber'] = $phoneNumber;
-            $_SESSION['firstName'] = $user['FirstName'];
-            $_SESSION['lastName'] = $user['LastName'];
-            echo json_encode(['success'=>true, 'message'=>'User logged in successfully']);
+            $_SESSION['User_ID'] = $result['user']['User_ID'];
+            $_SESSION['firstName'] = $result['user']['FirstName'];
+            $_SESSION['lastName'] = $result['user']['LastName'];
+            $_SESSION['email'] = $result['user']['Email'];
+            echo json_encode(['success'=>true, 'message'=>'User logged in successfully', 'user'=>$result]);
         }else{
-            echo json_encode(['success'=>false, 'message'=>'User login failed', 'error'=>$result]);
+            echo json_encode(['success'=>false, 'message'=>'User login failed: '.$result['error']]);
         }
     }
 
     function logoutUser(){
         session_unset();
         echo json_encode(['success'=>true, 'message'=>'User logged out successfully']);
+    }
+
+    function isUserAdmin(){
+        if(isset($_SESSION['User_ID'])){
+            $userID = $_SESSION['User_ID'];
+            $result = UserModel::isUserAdmin($userID);
+            if($result['success']===true){
+                echo json_encode(['success'=>true, 'message'=>'User is admin', 'isAdmin'=>$result['isAdmin']]);
+            }else{
+                echo json_encode(['success'=>false, 'message'=>'Failed to check if user is admin: '.$result['error']]);
+            }
+        }else{
+            echo json_encode(['success'=>false, 'message'=>'User not logged in']);
+        }
     }
 ?>
