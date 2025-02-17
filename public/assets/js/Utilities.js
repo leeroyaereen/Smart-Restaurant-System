@@ -39,14 +39,17 @@ function isValidWithConfirmPassowrd(password, confirmPassword){
 }
 
 function isValidName(name){
-    var regex = /^[a-zA-Z]+$/;
+    var regex = /^[a-zA-Z\s]+$/;
     name = name.trim();
     if(name.length < 2) {
         alert("Name should be atleast 2 characters long");
         return false;
     }
     var res = regex.test(name);
-    if(!res) alert("Name is not valid");
+    if(!res) {
+        alert("Name is not valid");
+        return res;
+    }
     return res;
 }
 

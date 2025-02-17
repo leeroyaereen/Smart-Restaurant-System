@@ -448,7 +448,7 @@
         }
 
         //checking if fooditem with the referenced id exists
-        $sql = "SELECT 1 FROM fooditems WHERE FoodItem_ID = ".$foodItem->FoodItem_ID;
+        $sql = "SELECT FoodImage FROM fooditems WHERE FoodItem_ID = ".$foodItem->FoodItem_ID;
         $res = $connection->query($sql);
         if(!$res){
             return 'Failed to execute query';
@@ -456,16 +456,15 @@
         if($res->num_rows<1){
             return "No Referenced Food Item Available";
         }
-
         //update foodItem
         $sql = "UPDATE fooditems 
-                SET FoodName = COALESCE(?,FoodName), 
-                    FoodType =  COALESCE(?,FoodType), 
-                    Category_ID =  COALESCE(?,Category_ID), 
-                    FoodPreparationTime = COALESCE(?,FoodPreparationTime), 
-                    FoodDescription = COALESCE(?,FoodDescription), 
-                    FoodImage = COALESCE(?,FoodImage), 
-                    FoodPrice = COALESCE(?,FoodPrice)
+                SET fooditems.FoodName = COALESCE(?,FoodName), 
+                    fooditems.FoodType =  COALESCE(?,FoodType), 
+                    fooditems.Category_ID =  COALESCE(?,Category_ID), 
+                    fooditems.FoodPreparationTime = COALESCE(?,FoodPreparationTime), 
+                    fooditems.FoodDescription = COALESCE(?,FoodDescription), 
+                    fooditems.FoodImage = COALESCE(?,FoodImage), 
+                    fooditems.FoodPrice = COALESCE(?,FoodPrice)
                 WHERE FoodItem_ID = ?";
         $stmt = $connection->prepare($sql);
         $stmt->bind_param("ssiissii", 

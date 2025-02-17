@@ -24,9 +24,21 @@ const editCategoryFormContainer = document.querySelector("#EditCategoryFormConta
 const EditCategoryForm = editCategoryFormContainer.querySelector("#EditCategoryForm");
 
 window.onload = function () {
+	CheckIfUserIsAdmin();
 	fillCategories();
 	fillCategorizedFoodItems();
 };
+
+async function CheckIfUserIsAdmin(){
+    const response = await fetchDataGet("/api/isUserAdmin");
+    if (response.success && response.isAdmin) {
+        
+        console.log("Admin is logged in");
+    }else{
+        alert("You are not authorized to view this page");
+        window.location.href = "login";
+    }
+}
 
 foodItemToggle.addEventListener("click", () => {
 	foodItemToggle.classList.add("active");
@@ -124,6 +136,7 @@ async function fillCategorizedFoodItems() {
 					item.FoodPreparationTime;
 				EditFoodItem.querySelector("#EditFoodItemPrice span").innerText =
 					item.FoodPrice;
+				EditFoodItem.querySelector("#EditFoodItemImage img").src = item.FoodImage;
 				EditFoodItem.querySelector("#EditFoodItemButton").addEventListener('click', () => {
 					EditFoodItemClicked(item.FoodItem_ID);
 				});
@@ -154,7 +167,16 @@ addFoodItemFormImage.addEventListener("input", () => {
 
 async function submitFoodItemForm(form){
 	const formData = new FormData();
-	formData.append("foodName", form.querySelector("#FoodName").value);
+	var foodName = form.querySelector("#FoodName").value;
+	if(!isValidName(foodName)){
+		return;
+	}
+
+	var foodPrice = form.querySelector("#FoodPrice").value;
+	if(!checkPrice(foodPrice)){
+		return;
+	}
+	formData.append("foodName", foodName);
 	formData.append("foodCategory", form.querySelector(".selectCategory").value);
 	formData.append("foodType", form.querySelector("#FoodType").value);
 	formData.append(
@@ -163,7 +185,7 @@ async function submitFoodItemForm(form){
 	);
 	formData.append(
 		"foodPrice",
-		form.querySelector("#FoodPrice").value
+		foodPrice
 	);
 	formData.append(
 		"foodDescription",
@@ -208,18 +230,19 @@ addCategoryFormButton.addEventListener("click", async (e) => {
 	addCategoryForm.reset();
 	fillCategories();
 });
-
+var selectedFoodItemId;
 function EditFoodItemClicked(FoodItem_ID) {
 	document.querySelector(".Body").classList.add("noInteractions");
 
 	editFoodItemFormContainer.classList.remove("hidden");
-
+	selectedFoodItemId = FoodItem_ID;
 	const FoodItem = categorizedFoodItems.querySelector(`#EditFoodItem[data-id="${FoodItem_ID}"]`);
-	console.log(FoodItem);
+	console.log(selectedFoodItemId);
 	EditFoodItemForm.querySelector("#EditFoodName").value = FoodItem.querySelector("#EditFoodItemTitle").innerText;
 	EditFoodItemForm.querySelector("#EditFoodCategory").value = FoodItem.closest("#EditFoodItemCategoryContainer").querySelector("#EditFoodItemCategory").dataset.id;
 	EditFoodItemForm.querySelector("#EditFoodType").value = FoodItem.querySelector("#EditFoodItemType").innerText;
 	EditFoodItemForm.querySelector("#EditFoodDescription").value = FoodItem.querySelector("#EditFoodItemDescription").innerText;
+	EditFoodItemForm.querySelector("#EditFoodItemImage img").src = FoodItem.querySelector("#EditFoodItemImage img").src;
 	console.log(FoodItem.querySelector("#EditFoodItemPrice").innerText);
 	EditFoodItemForm.querySelector("#FoodPrice").value = parseFloat(FoodItem.querySelector("#EditFoodItemPrice span").innerText); 
 	EditFoodItemForm.querySelector("#FoodPreparationTime").value = FoodItem.querySelector("#EditFoodItemPreparationTime span").innerText;
@@ -228,13 +251,23 @@ function EditFoodItemClicked(FoodItem_ID) {
 EditFoodItemForm.onsubmit = async (e) => {
 	e.preventDefault();
 	const formData = new FormData();
-	formData.append("FoodItem_ID", categorizedFoodItems.querySelector("#EditFoodItem").dataset.id);
-	formData.append("FoodName", EditFoodItemForm.querySelector("#EditFoodName").value);
+	formData.append("FoodItem_ID", selectedFoodItemId);
+	console.log(selectedFoodItemId);
+	var foodName =  EditFoodItemForm.querySelector("#EditFoodName").value;
+	if(!isValidName(foodName)){
+		return;
+	}
+	formData.append("FoodName",foodName);
 	formData.append("FoodCategory", EditFoodItemForm.querySelector("#EditFoodCategory").value);
 	formData.append("FoodType", EditFoodItemForm.querySelector("#EditFoodType").value);
 	formData.append("FoodDescription", EditFoodItemForm.querySelector("#EditFoodDescription").value);
-	formData.append("FoodPrice", EditFoodItemForm.querySelector("#FoodPrice").value);
+	var foodPrice = EditFoodItemForm.querySelector("#FoodPrice").value;
+	if(!checkPrice(foodPrice)){
+		return;
+	}
+	formData.append("FoodPrice", foodPrice);
 	formData.append("FoodPreparationTime", EditFoodItemForm.querySelector("#FoodPreparationTime").value);
+	formData.append("FoodImage", EditFoodItemForm.querySelector("#EditFoodImage").files[0]);
 	const editFoodItemResponse = await fetchFormDataPost("/api/editFoodItem", formData);
 	console.log(editFoodItemResponse);
 
@@ -266,8 +299,12 @@ function EditCategoryClicked(Category_ID) {
 
 EditCategoryForm.onsubmit = async (e) => {
 	e.preventDefault();
+	var catName = EditCategoryForm.querySelector("#CategoryName").value;
+	if(!isValidName(categoryName)){
+		return;
+	}
 	const formData = {
-		categoryName: EditCategoryForm.querySelector("#CategoryName").value,
+		categoryName: catName,
 		categoryID: editCategoryItems.querySelector("#EditCategory").dataset.id,
 	};
 
@@ -283,6 +320,32 @@ EditCategoryForm.onsubmit = async (e) => {
 	editCategoryFormContainer.classList.add("hidden");
 	document.querySelector(".Body").classList.remove("noInteractions");
 	fillCategories();
+}
+
+async function DeleteCategoryClicked(Category_ID) {
+	const deleteCategoryResponse = await fetchDataPost("/api/removeCategory", { Category_ID });
+	console.log(deleteCategoryResponse);
+
+	if (!deleteCategoryResponse.success) {
+		alert("couldn't delete category");
+		return;
+	}
+
+	alert("Category Deleted Successfully");
+	fillCategories();
+}
+
+async function DeleteFoodItemClicked(FoodItem_ID) {
+	const deleteFoodItemResponse = await fetchDataPost("/api/removeFoodItem", { FoodItem_ID });
+	console.log(deleteFoodItemResponse);
+
+	if (!deleteFoodItemResponse.success) {
+		alert("couldn't delete food item");
+		return;
+	}
+
+	alert("Food Item Deleted Successfully");
+	fillCategorizedFoodItems();
 }
 
 document.querySelector("#CancelCategoryChanges").addEventListener("click", async () => {

@@ -15,6 +15,7 @@ async function CheckIfUserIsAdmin(){
         window.location.href = "login";
     }
 }
+
 async function fillOngoingOrders(){
     const ongoingOrdersData = await fetchDataGet("/api/getAllMonitorOrderDetail");
     console.log(ongoingOrdersData.data);

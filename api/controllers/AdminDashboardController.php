@@ -18,6 +18,7 @@
             }
             $foodItem = new FoodItem();
             $foodItem->FoodName = $_POST['foodName'];
+            $foodItem->FoodType = $_POST['foodType'];
             $foodItem->FoodPrice = $_POST['foodPrice'];
             $foodItem->FoodPreparationTime = $_POST['foodPreparationTime'];
             $foodItem->FoodDescription = $_POST['foodDescription'];
@@ -74,7 +75,7 @@
             echo json_encode(['success'=>false, 'message'=>'Invalid data format']);
             return;
         }
-        $id = $data['foodItem_ID'];
+        $id = $data['FoodItem_ID'];
         $res = RemoveFoodItemData($id);
         if($res){
             echo json_encode(['success'=>true, 'message'=>'Removed Data Successfully']);
@@ -88,21 +89,77 @@
             echo json_encode(['success'=>false, 'message'=>'Failed to remove due to invalid request method']);
             return ;           
         }
-        $data =  json_decode(file_get_contents("php://input"), true);
-        if(!$data){
-            echo json_encode(['success'=>false, 'message'=>'Invalid data format']);
-            return;
-        }
-        $foodItem = new FoodItem();
-        $foodItem->FoodItem_ID = $data['foodItem_ID'];
-        $foodItem->FoodName = $data['foodName'];
-        $foodItem->FoodType = $data['foodType'];
-        $foodItem->FoodPrice = $data['foodPrice'];
-        $foodItem->FoodPreparationTime = $data['foodPreparationTime'];
-        $foodItem->FoodCategory = $data['foodCategory'];
-        $foodItem->FoodDescription = $data['foodDescription'];
-        $foodItem->FoodImage = $data['foodImage'];
 
+        ////////////////////////
+
+       
+            
+            if(!isset($_POST['FoodName'])){
+                echo json_encode(['success' => false, 'message' => 'Food Name Required!!']);
+                    return;
+            }
+
+            if(!isset($_POST['FoodPrice'])){
+                echo json_encode(['success' => false, 'message' => 'Food Price Required!!']);
+                    return;
+            }
+
+            if(!isset($_POST['FoodPreparationTime'])){
+                echo json_encode(['success' => false, 'message' => 'Food Preparation Time Required!!']);
+                    return;
+            }
+
+            if(!isset($_POST["FoodCategory"])){
+                echo json_encode(['success' => false, 'message' => 'Food Category Required!!']);
+                    return;
+            }
+
+            $foodItem = new FoodItem();
+            $foodItem->FoodItem_ID = $_POST['FoodItem_ID'];
+            $foodItem->FoodName = $_POST['FoodName'];
+            $foodItem->FoodType = $_POST['FoodType'];
+            $foodItem->FoodPrice = $_POST['FoodPrice'];
+            $foodItem->FoodPreparationTime = $_POST['FoodPreparationTime'];
+            $foodItem->FoodCategory = $_POST['FoodCategory'];
+            $foodItem->FoodDescription = $_POST['FoodDescription'];
+            
+            if(isset($_POST['foodCategory'])){
+                $foodItem->FoodCategory = $_POST['foodCategory'];
+            }
+            
+            // Handle image if uploaded
+            if ( isset($_FILES['FoodImage'])) {
+                $uploadDir = __DIR__ . '/../../public/assets/images/';
+            
+                // Create directory if it doesn't exist
+                if (!file_exists($uploadDir)) {
+                    mkdir($uploadDir, 0777, true);
+                }
+                $file = $_FILES['FoodImage'];
+                
+                // Generate unique filename
+                $fileName = $foodItem->FoodName . '_' . basename($file['name']);
+                $targetPath = $uploadDir . $fileName;
+                
+                // Allowed Validate file type array
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+                if (!in_array($file['type'], $allowedTypes)) {
+                    echo json_encode(['success' => false, 'message' => 'Invalid file type. Only JPG, JPEG & PNG files are allowed.']);
+                    return;
+                }
+                
+                // Move uploaded file
+                if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+                    // Store relative path in database
+                    $foodItem->FoodImage = BASE_PATH.'/public/assets/images/'.$fileName;
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Failed to upload image']);
+                    return;
+                }
+            }
+            
+            
+            
         $res = updateFoodItem($foodItem);
         if(is_string($res)){
             echo json_encode(['success'=>false, 'message'=>$res]);
@@ -110,6 +167,11 @@
             return ;
         }  
         echo json_encode(['success'=>true, 'message'=>'Edited Successfully']);
+
+        ////////////////////////
+        
+        
+
 
     }
 
@@ -123,7 +185,7 @@
             echo json_encode(['success'=>false, 'message'=>'Invalid data format']);
             return;
         }
-        $id = $data['category_ID'];
+        $id = $data['Category_ID'];
         $res = RemoveCategoryData($id);
         if($res){
             echo json_encode(['success'=>true, 'message'=>'Removed Data Successfully']);
