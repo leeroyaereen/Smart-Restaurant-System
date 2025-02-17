@@ -100,6 +100,11 @@
                 require_once __DIR__ . '/controllers/AdminDashboardController.php';
                 AddCategory();
                 break;
+            case 'editCategory':
+                require_once __DIR__ . '/controllers/AdminDashboardController.php';
+                EditCategory();
+                break;
+            
             case 'isUserAdmin':
                 require_once __DIR__ . '/controllers/userController.php';
                 isUserAdmin();

@@ -164,20 +164,6 @@
             }
         }
     
-        $updateSql = "UPDATE FoodItems SET Category_ID = NULL WHERE Category_ID = ?";
-        $updateStmt = $connection->prepare($updateSql);
-    
-        if (!$updateStmt) {
-            return "Error: Failed to prepare update query - " . $connection->error;
-        }
-    
-        $updateStmt->bind_param("i", $categoryId);
-        if (!$updateStmt->execute()) {
-            $updateStmt->close();
-            return "Error: Failed to update FoodItem dependencies - " . $updateStmt->error;
-        }
-        $updateStmt->close();
-    
         $deleteSql = "DELETE FROM FoodCategory WHERE Category_ID = ?";
         $deleteStmt = $connection->prepare($deleteSql);
     
@@ -307,6 +293,37 @@
         }
     }
     
+    function EditCategoryData($category_ID, $categoryName) {
+        global $connection;
+    
+        if (!$connection) {
+            $connection = getConnection();
+            if (!$connection) {
+                return "Unable to connect to the database.";
+            }
+        }
+    
+        $updateSql = "UPDATE FoodCategory SET CategoryName = ? WHERE Category_ID = ?";
+        $updateStmt = $connection->prepare($updateSql);
+    
+        if (!$updateStmt) {
+            return "Error: Failed to prepare update query - " . $connection->error;
+        }
+    
+        $updateStmt->bind_param("si", $categoryName, $category_ID);
+        if ($updateStmt->execute()) {
+            if ($updateStmt->affected_rows > 0) {
+                $updateStmt->close();
+                return true;
+            } else {
+                $updateStmt->close();
+                return "No category found with the provided ID.";
+            }
+        } else {
+            $updateStmt->close();
+            return "Error: Failed to update category - " . $updateStmt->error;
+        }
+    }
     function getFoodItemByID($foodItem_ID){
         global $connection;
 

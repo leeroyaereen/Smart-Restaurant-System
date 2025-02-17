@@ -286,13 +286,14 @@ document.querySelector("#CancelFoodItemChanges").addEventListener("click", async
 	document.querySelector(".Body").classList.remove("noInteractions");
 	editFoodItemFormContainer.classList.add("hidden");
 });
-
+let editCategoryID;
 function EditCategoryClicked(Category_ID) {
 	document.querySelector(".Body").classList.add("noInteractions");
 
 	editCategoryFormContainer.classList.remove("hidden");
 
 	const Category = editCategoryItems.querySelector(`#EditCategory[data-id="${Category_ID}"]`);
+	editCategoryID = Category_ID;
 	console.log(Category);
 	EditCategoryForm.querySelector("#CategoryName").value = Category.querySelector("#EditCategoryTitle").innerText;
 }
@@ -300,12 +301,12 @@ function EditCategoryClicked(Category_ID) {
 EditCategoryForm.onsubmit = async (e) => {
 	e.preventDefault();
 	var catName = EditCategoryForm.querySelector("#CategoryName").value;
-	if(!isValidName(categoryName)){
+	if(!isValidName(catName)){
 		return;
 	}
 	const formData = {
 		categoryName: catName,
-		categoryID: editCategoryItems.querySelector("#EditCategory").dataset.id,
+		categoryID: editCategoryID,
 	};
 
 	const editCategoryResponse = await fetchDataPost("/api/editCategory", formData);
