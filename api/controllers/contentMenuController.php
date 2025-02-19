@@ -87,6 +87,34 @@
         }
     }
 
+    function getFoodItemsByCategory(){
+        if (isset($_GET['category'])) {
+            $categoryID = $_GET['category'];
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Category ID not provided']);
+            return;
+        }
+
+        $itemJson = getFoodItemsByCategoryID($categoryID);
+
+        //if the object is null then it is regarded as failure
+        if($itemJson==null){
+            echo json_encode(["success"=>false, "message" => "Can't get any object"]);
+            return;
+        }
+        $message = 'no message';
+   
+        //incase the return value is message instead it is regarded as failure of the function
+        if(is_string($itemJson)){
+            $message = $itemJson;
+            echo json_encode(["success"=>false, "message" => $message]);
+            return;
+        }
+   
+        //if there is no problem then the final output is sent with status, message, and fooditem
+        echo json_encode(['success'=>true,'message'=>$message,'foodItems'=>$itemJson]);
+    }
+
     // function getFoodItemAndCategoriesJSON(){
     //     if($_SERVER['REQUEST_METHOD']==='POST'){           
     //         $foodItems = GetFoodCategories();

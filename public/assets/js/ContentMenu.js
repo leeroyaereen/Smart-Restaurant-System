@@ -11,38 +11,71 @@ window.onload = loadPage;
 
 async function loadPage() {
     try {
-        // Fetch categories
-        const categoriesData = await fetchDataGet("/api/getFoodCategories");
-		console.log(categoriesData);
-        fillCategory(categoriesData.foodCategories);
-        
-        // Fetch food items
-        const foodItemsData = await fetchDataGet("/api/getFoodItems");
-        console.log(foodItemsData);
-
-        if (!foodItemsData.success) {
-            alert(foodItemsData.message);
-            return;
-        }
-
-        fillMenu(foodItemsData.foodItems);
+        await fillCategory();
+        await fillMenu(null);
     } catch (error) {
         console.error("Error fetching data:", error);
-        alert("An error occurred while loading the page."+ error);
+        alert("An error occurred while loading the page: " + error);
     }
 }
 
-function fillCategory(data) {
-	Object.entries(data).forEach(([id, category]) => {
+async function fillCategory() {
+	const categoriesData = await fetchDataGet("/api/getFoodCategories");
+	console.log(categoriesData);
+
+	if (!categoriesData.success) {
+		alert(categoriesData.message);
+		return;
+	}
+
+	Object.entries(categoriesData.foodCategories).forEach(([id, category]) => {
 		let templateClone = categoryTemplate.content.cloneNode(true);
 		let foodCategory = templateClone.querySelector("#foodCategory");
+		foodCategory.dataset.id = id;
 		foodCategory.innerText = category;
 		categoryList.appendChild(foodCategory);
 	});
+
+	categoryList.querySelectorAll("#foodCategory").forEach((element) => {
+		element.addEventListener("click", () => performFilter(element));
+	});
 }
 
-function fillMenu(data) {
-	data.forEach((item) => {
+
+
+async function performFilter(category) {
+	if (category.classList.contains("selectedCategory")) {
+		return;
+	}
+
+	categoryList.querySelectorAll("#foodCategory").forEach((element) => {
+		element.classList.remove("selectedCategory");
+	});
+
+	category.classList.add("selectedCategory");
+
+	await fillMenu(category.dataset.id);
+}
+
+async function fillMenu(categoryID) {
+	let foodItemsData;
+	menuItemList.innerHTML = "";
+
+	if (!categoryID) {
+		foodItemsData = await fetchDataGet("/api/getFoodItems");
+		console.log(foodItemsData);
+	}
+	else {
+		foodItemsData = await fetchDataGet(`/api/getFoodItemsByCategory?category=${categoryID}`);
+		console.log(foodItemsData);
+	}
+
+	if (!foodItemsData.success) {
+		alert(foodItemsData.message);
+		return;
+	}
+
+	foodItemsData.foodItems.forEach((item) => {
 		let templateClone = menuItemTemplate.content.cloneNode(true);
 		let menuItem = templateClone.querySelector("#MenuItem");
 		menuItem.dataset.id = item.FoodItem_ID;

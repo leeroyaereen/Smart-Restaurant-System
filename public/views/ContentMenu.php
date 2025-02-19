@@ -24,7 +24,7 @@
 					}
 				?>
 			</div>
-			<div id="searchBoxContainer">
+			<!-- <div id="searchBoxContainer">
 				<form action="">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -45,10 +45,11 @@
 					<input type="text" name="" id="" />
 				</form>
 				<i class="fa fa-search"></i>
-			</div>
+			</div> -->
 			<div id="foodCategoryList">
+				<div id="foodCategory" class="selectedCategory">All</div>
 				<template id="foodCategoryTemplate" class="hidden-template">
-					<div id="foodCategory"></div>
+					<div id="foodCategory" class=""></div>
 				</template>
 			</div>
 		</div>

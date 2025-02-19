@@ -27,7 +27,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	gap: 0.5rem ;
+	gap: 5px;
 	align-items: center;
 	padding: 1rem;
 }
@@ -58,10 +58,6 @@ body {
 	font-size: 1.5rem;
 	font-weight: 600;
 	letter-spacing: 1px;
-}
-
-.HeaderSubTitle {
-	font-size: 0.9rem;
 }
 
 .ItemImage{

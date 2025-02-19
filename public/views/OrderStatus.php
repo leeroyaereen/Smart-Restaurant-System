@@ -27,7 +27,7 @@
 			</div>
 		</div>
 		<div id="OrderStatusBody" class="section Body">
-			<div id="OrderProgress">
+			<!-- <div id="OrderProgress">
 				<div class="EstimatedTimeContainer">
 					<div>Estimated Time</div>
 					<div class="EstimatedTime">1hr 12min</div>
@@ -38,7 +38,7 @@
 						<div id="Progress"></div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 
 			<div id="OrderStatusList">
 				<div id="OrderStatusListTitle">Your Orders</div>

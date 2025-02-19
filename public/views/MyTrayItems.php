@@ -26,7 +26,7 @@
                             <div id="TrayItem" class="ItemContainer">
                                 <div id="TrayItemInformation">
                                     <div id="TrayItemImage">
-                                        <label id="TrayItemCheckBox">
+                                        <!-- <label id="TrayItemCheckBox">
                                             <div id="CheckBoxIcon">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#fe724c" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -34,7 +34,7 @@
                                                 </svg>
                                             </div>
                                             <input type="checkbox" hidden/>
-                                        </label>
+                                        </label> -->
                                         <img
                                             src="https://t4.ftcdn.net/jpg/06/49/25/27/360_F_649252736_LK6ign50vHZicrNR6Fe2mSpmPDNupx6Y.jpg"
                                             alt=""

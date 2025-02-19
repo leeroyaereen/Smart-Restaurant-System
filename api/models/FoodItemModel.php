@@ -324,6 +324,7 @@
             return "Error: Failed to update category - " . $updateStmt->error;
         }
     }
+
     function getFoodItemByID($foodItem_ID){
         global $connection;
 
@@ -380,7 +381,7 @@
         }
     }
     
-    function getFoodItemsByCategory($category_ID){
+    function getFoodItemsByCategoryID($category_ID){
         global $connection;
         $foodItems = [];
 

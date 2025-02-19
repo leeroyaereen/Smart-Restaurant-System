@@ -1,6 +1,7 @@
 <?php
     function route($request) {
-        switch ($request) {
+        $parsedRequest = strtok($request, '?');
+        switch ($parsedRequest) {
             // case 'getFoodItems':
             //     require_once __DIR__ . '/controllers/getFoodItemList.php';
             //     retrieveFoodItems($connection); // Example function in UserController.php
@@ -19,6 +20,11 @@
             case 'getFoodItems':
                 require_once __DIR__ . '/controllers/contentMenuController.php';
                 getFoodItemsJSON();
+                break;
+            
+            case 'getFoodItemsByCategory':
+                require_once __DIR__ . '/controllers/contentMenuController.php';
+                getFoodItemsByCategory();
                 break;
 
             case 'getFoodCategories':
