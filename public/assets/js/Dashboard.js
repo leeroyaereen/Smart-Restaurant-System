@@ -1,6 +1,8 @@
 const addFoodItemForm = document.querySelector("#AddFoodItemForm");
 const addFoodItemFormButton = document.querySelector("#CreateFoodItem");
-const addFoodItemFormImage = document.querySelector("#FoodImageContainer input[type='file']");
+const addFoodItemFormImage = document.querySelector(
+	"#FoodImageContainer input[type='file']"
+);
 const addCategoryForm = document.querySelector("#AddCategoryForm");
 const addCategoryFormButton = document.querySelector("#CreateCategory");
 
@@ -17,11 +19,77 @@ const editCategoryItems = document.querySelector("#EditCategorySectionItems");
 
 const selectCategory = document.querySelectorAll(".selectCategory");
 
-const editFoodItemFormContainer = document.querySelector("#EditFoodItemFormContainer");
-const EditFoodItemForm = editFoodItemFormContainer.querySelector("#EditFoodItemForm");
+const editFoodItemFormContainer = document.querySelector(
+	"#EditFoodItemFormContainer"
+);
+const EditFoodItemForm =
+	editFoodItemFormContainer.querySelector("#EditFoodItemForm");
 
-const editCategoryFormContainer = document.querySelector("#EditCategoryFormContainer");
-const EditCategoryForm = editCategoryFormContainer.querySelector("#EditCategoryForm");
+const editCategoryFormContainer = document.querySelector(
+	"#EditCategoryFormContainer"
+);
+const EditCategoryForm =
+	editCategoryFormContainer.querySelector("#EditCategoryForm");
+
+// Live Image Preview
+const editItemImgInput = EditFoodItemForm.querySelector("#EditFoodImage");
+const addItemImgInput = addFoodItemForm.querySelector("#FoodImage");
+
+const editItemImgPreview = EditFoodItemForm.querySelector(
+	"#EditFoodItemImage img"
+);
+const addItemImgPreview = addFoodItemForm.querySelector(
+	"#FoodImageContainer img"
+);
+
+addItemImgInput.addEventListener("change", changeAddImgPreview);
+
+function changeAddImgPreview() {
+	const file = addItemImgInput.files[0];
+	if (file) {
+		addFoodItemForm.querySelector("#FoodImageContainer").style.border = "none";
+		addFoodItemForm
+			.querySelector("#FoodImageContainer #AddFoodItemImage")
+			.classList.remove("hidden");
+		addFoodItemForm
+			.querySelector("#FoodImageContainer svg")
+			.classList.add("hidden");
+		addFoodItemForm.querySelector("#FoodImageContainer").style.padding = "0";
+
+		console.log("change");
+		const reader = new FileReader();
+		reader.onload = function (e) {
+			addItemImgPreview.src = e.target.result;
+		};
+		reader.readAsDataURL(file);
+	} else {
+		addFoodItemForm
+			.querySelector("#FoodImageContainer #AddFoodItemImage")
+			.classList.add("hidden");
+		addFoodItemForm
+			.querySelector("#FoodImageContainer svg")
+			.classList.remove("hidden");
+		addFoodItemForm.querySelector("#FoodImageContainer").style.border =
+			"2px dashed #fed7aa";
+		addFoodItemForm.querySelector("#FoodImageContainer").style.padding =
+			"4rem 0";
+	}
+}
+
+editItemImgInput.addEventListener("change", changeEditImgPreview);
+
+function changeEditImgPreview() {
+	const file = editItemImgInput.files[0];
+	if (file) {
+		const reader = new FileReader();
+		reader.onload = function (e) {
+			editItemImgPreview.src = e.target.result;
+		};
+		reader.readAsDataURL(file);
+	}
+}
+
+////////////////////////
 
 window.onload = function () {
 	CheckIfUserIsAdmin();
@@ -29,15 +97,14 @@ window.onload = function () {
 	fillCategorizedFoodItems();
 };
 
-async function CheckIfUserIsAdmin(){
-    const response = await fetchDataGet("/api/isUserAdmin");
-    if (response.success && response.isAdmin) {
-        
-        console.log("Admin is logged in");
-    }else{
-        alert("You are not authorized to view this page");
-        window.location.href = "login";
-    }
+async function CheckIfUserIsAdmin() {
+	const response = await fetchDataGet("/api/isUserAdmin");
+	if (response.success && response.isAdmin) {
+		console.log("Admin is logged in");
+	} else {
+		alert("You are not authorized to view this page");
+		window.location.href = "login";
+	}
 }
 
 foodItemToggle.addEventListener("click", () => {
@@ -67,7 +134,7 @@ async function fillCategories() {
 	}
 
 	Object.entries(categoriesData.foodCategories).forEach(([id, category]) => {
-		selectCategory.forEach((e) =>{
+		selectCategory.forEach((e) => {
 			const option = document.createElement("option");
 			option.value = id;
 			option.innerText = category;
@@ -81,13 +148,19 @@ async function fillCategories() {
 		EditCategory.querySelector("#EditCategoryTitle").innerText =
 			categoriesData.foodCategories[id];
 		EditCategory.dataset.id = id;
-		EditCategory.querySelector("#EditCategoryButton").addEventListener('click', () => {
-			EditCategoryClicked(id);
-		});
+		EditCategory.querySelector("#EditCategoryButton").addEventListener(
+			"click",
+			() => {
+				EditCategoryClicked(id);
+			}
+		);
 
-		EditCategory.querySelector("#DeleteCategoryButton").addEventListener('click', async () => {
-			DeleteCategoryClicked(id);
-		});
+		EditCategory.querySelector("#DeleteCategoryButton").addEventListener(
+			"click",
+			async () => {
+				DeleteCategoryClicked(id);
+			}
+		);
 		editCategoryItems.append(EditCategory);
 	});
 }
@@ -132,18 +205,26 @@ async function fillCategorizedFoodItems() {
 					item.FoodType;
 				EditFoodItem.querySelector("#EditFoodItemDescription").innerText =
 					item.FoodDescription;
-				EditFoodItem.querySelector("#EditFoodItemPreparationTime span").innerText =
-					item.FoodPreparationTime;
+				EditFoodItem.querySelector(
+					"#EditFoodItemPreparationTime span"
+				).innerText = item.FoodPreparationTime;
 				EditFoodItem.querySelector("#EditFoodItemPrice span").innerText =
 					item.FoodPrice;
-				EditFoodItem.querySelector("#EditFoodItemImage img").src = item.FoodImage;
-				EditFoodItem.querySelector("#EditFoodItemButton").addEventListener('click', () => {
-					EditFoodItemClicked(item.FoodItem_ID);
-				});
+				EditFoodItem.querySelector("#EditFoodItemImage img").src =
+					item.FoodImage;
+				EditFoodItem.querySelector("#EditFoodItemButton").addEventListener(
+					"click",
+					() => {
+						EditFoodItemClicked(item.FoodItem_ID);
+					}
+				);
 
-				EditFoodItem.querySelector("#DeleteFoodItemButton").addEventListener('click', async () => {
-					DeleteFoodItemClicked(item.FoodItem_ID);
-				});
+				EditFoodItem.querySelector("#DeleteFoodItemButton").addEventListener(
+					"click",
+					async () => {
+						DeleteFoodItemClicked(item.FoodItem_ID);
+					}
+				);
 				EditFoodItemCategoryContainer.append(EditFoodItem);
 			});
 			categorizedFoodItems.append(EditFoodItemCategoryContainer);
@@ -156,24 +237,15 @@ addFoodItemFormButton.addEventListener("click", (e) => {
 	submitFoodItemForm(addFoodItemForm);
 });
 
-addFoodItemFormImage.addEventListener("input", () => {
-	const file = addFoodItemFormImage.files[0];
-	const reader = new FileReader();
-	reader.onload = function(e) {
-		addFoodItemForm.querySelector("#FoodImageContainer img").src = e.target.result;
-	};
-	reader.readAsDataURL(file);	
-});
-
-async function submitFoodItemForm(form){
+async function submitFoodItemForm(form) {
 	const formData = new FormData();
 	var foodName = form.querySelector("#FoodName").value;
-	if(!isValidName(foodName)){
+	if (!isValidName(foodName)) {
 		return;
 	}
 
 	var foodPrice = form.querySelector("#FoodPrice").value;
-	if(!checkPrice(foodPrice)){
+	if (!checkPrice(foodPrice)) {
 		return;
 	}
 	formData.append("foodName", foodName);
@@ -183,10 +255,7 @@ async function submitFoodItemForm(form){
 		"foodPreparationTime",
 		form.querySelector("#FoodPreparationTime").value
 	);
-	formData.append(
-		"foodPrice",
-		foodPrice
-	);
+	formData.append("foodPrice", foodPrice);
 	formData.append(
 		"foodDescription",
 		form.querySelector("#FoodDescription").value
@@ -210,6 +279,7 @@ async function submitFoodItemForm(form){
 
 	alert("Food Item Added Successfully");
 	form.reset();
+	changeAddImgPreview();
 	await fillCategorizedFoodItems();
 }
 
@@ -230,22 +300,35 @@ addCategoryFormButton.addEventListener("click", async (e) => {
 	addCategoryForm.reset();
 	fillCategories();
 });
+
 var selectedFoodItemId;
+
 function EditFoodItemClicked(FoodItem_ID) {
 	document.querySelector(".Body").classList.add("noInteractions");
 
 	editFoodItemFormContainer.classList.remove("hidden");
 	selectedFoodItemId = FoodItem_ID;
-	const FoodItem = categorizedFoodItems.querySelector(`#EditFoodItem[data-id="${FoodItem_ID}"]`);
+	const FoodItem = categorizedFoodItems.querySelector(
+		`#EditFoodItem[data-id="${FoodItem_ID}"]`
+	);
 	console.log(selectedFoodItemId);
-	EditFoodItemForm.querySelector("#EditFoodName").value = FoodItem.querySelector("#EditFoodItemTitle").innerText;
-	EditFoodItemForm.querySelector("#EditFoodCategory").value = FoodItem.closest("#EditFoodItemCategoryContainer").querySelector("#EditFoodItemCategory").dataset.id;
-	EditFoodItemForm.querySelector("#EditFoodType").value = FoodItem.querySelector("#EditFoodItemType").innerText;
-	EditFoodItemForm.querySelector("#EditFoodDescription").value = FoodItem.querySelector("#EditFoodItemDescription").innerText;
-	EditFoodItemForm.querySelector("#EditFoodItemImage img").src = FoodItem.querySelector("#EditFoodItemImage img").src;
+	EditFoodItemForm.querySelector("#EditFoodName").value =
+		FoodItem.querySelector("#EditFoodItemTitle").innerText;
+	EditFoodItemForm.querySelector("#EditFoodCategory").value = FoodItem.closest(
+		"#EditFoodItemCategoryContainer"
+	).querySelector("#EditFoodItemCategory").dataset.id;
+	EditFoodItemForm.querySelector("#EditFoodType").value =
+		FoodItem.querySelector("#EditFoodItemType").innerText;
+	EditFoodItemForm.querySelector("#EditFoodDescription").value =
+		FoodItem.querySelector("#EditFoodItemDescription").innerText;
+	EditFoodItemForm.querySelector("#EditFoodItemImage img").src =
+		FoodItem.querySelector("#EditFoodItemImage img").src;
 	console.log(FoodItem.querySelector("#EditFoodItemPrice").innerText);
-	EditFoodItemForm.querySelector("#FoodPrice").value = parseFloat(FoodItem.querySelector("#EditFoodItemPrice span").innerText); 
-	EditFoodItemForm.querySelector("#FoodPreparationTime").value = FoodItem.querySelector("#EditFoodItemPreparationTime span").innerText;
+	EditFoodItemForm.querySelector("#FoodPrice").value = parseFloat(
+		FoodItem.querySelector("#EditFoodItemPrice span").innerText
+	);
+	EditFoodItemForm.querySelector("#FoodPreparationTime").value =
+		FoodItem.querySelector("#EditFoodItemPreparationTime span").innerText;
 }
 
 EditFoodItemForm.onsubmit = async (e) => {
@@ -253,22 +336,41 @@ EditFoodItemForm.onsubmit = async (e) => {
 	const formData = new FormData();
 	formData.append("FoodItem_ID", selectedFoodItemId);
 	console.log(selectedFoodItemId);
-	var foodName =  EditFoodItemForm.querySelector("#EditFoodName").value;
-	if(!isValidName(foodName)){
+	var foodName = EditFoodItemForm.querySelector("#EditFoodName").value;
+	if (!isValidName(foodName)) {
 		return;
 	}
-	formData.append("FoodName",foodName);
-	formData.append("FoodCategory", EditFoodItemForm.querySelector("#EditFoodCategory").value);
-	formData.append("FoodType", EditFoodItemForm.querySelector("#EditFoodType").value);
-	formData.append("FoodDescription", EditFoodItemForm.querySelector("#EditFoodDescription").value);
+	formData.append("FoodName", foodName);
+	formData.append(
+		"FoodCategory",
+		EditFoodItemForm.querySelector("#EditFoodCategory").value
+	);
+	formData.append(
+		"FoodType",
+		EditFoodItemForm.querySelector("#EditFoodType").value
+	);
+	formData.append(
+		"FoodDescription",
+		EditFoodItemForm.querySelector("#EditFoodDescription").value
+	);
 	var foodPrice = EditFoodItemForm.querySelector("#FoodPrice").value;
-	if(!checkPrice(foodPrice)){
+	if (!checkPrice(foodPrice)) {
 		return;
 	}
 	formData.append("FoodPrice", foodPrice);
-	formData.append("FoodPreparationTime", EditFoodItemForm.querySelector("#FoodPreparationTime").value);
-	formData.append("FoodImage", EditFoodItemForm.querySelector("#EditFoodImage").files[0]);
-	const editFoodItemResponse = await fetchFormDataPost("/api/editFoodItem", formData);
+	formData.append(
+		"FoodPreparationTime",
+		EditFoodItemForm.querySelector("#FoodPreparationTime").value
+	);
+
+	if (editItemImgInput.files.length > 0) {
+		formData.append("FoodImage", editItemImgInput.files[0]);
+	}
+
+	const editFoodItemResponse = await fetchFormDataPost(
+		"/api/editFoodItem",
+		formData
+	);
 	console.log(editFoodItemResponse);
 
 	if (!editFoodItemResponse.success) {
@@ -282,26 +384,33 @@ EditFoodItemForm.onsubmit = async (e) => {
 	fillCategorizedFoodItems();
 };
 
-document.querySelector("#CancelFoodItemChanges").addEventListener("click", async () => {
-	document.querySelector(".Body").classList.remove("noInteractions");
-	editFoodItemFormContainer.classList.add("hidden");
-});
+document
+	.querySelector("#CancelFoodItemChanges")
+	.addEventListener("click", async () => {
+		document.querySelector(".Body").classList.remove("noInteractions");
+		editFoodItemFormContainer.classList.add("hidden");
+	});
+
 let editCategoryID;
+
 function EditCategoryClicked(Category_ID) {
 	document.querySelector(".Body").classList.add("noInteractions");
 
 	editCategoryFormContainer.classList.remove("hidden");
 
-	const Category = editCategoryItems.querySelector(`#EditCategory[data-id="${Category_ID}"]`);
+	const Category = editCategoryItems.querySelector(
+		`#EditCategory[data-id="${Category_ID}"]`
+	);
 	editCategoryID = Category_ID;
 	console.log(Category);
-	EditCategoryForm.querySelector("#CategoryName").value = Category.querySelector("#EditCategoryTitle").innerText;
+	EditCategoryForm.querySelector("#CategoryName").value =
+		Category.querySelector("#EditCategoryTitle").innerText;
 }
 
 EditCategoryForm.onsubmit = async (e) => {
 	e.preventDefault();
 	var catName = EditCategoryForm.querySelector("#CategoryName").value;
-	if(!isValidName(catName)){
+	if (!isValidName(catName)) {
 		return;
 	}
 	const formData = {
@@ -309,7 +418,10 @@ EditCategoryForm.onsubmit = async (e) => {
 		categoryID: editCategoryID,
 	};
 
-	const editCategoryResponse = await fetchDataPost("/api/editCategory", formData);
+	const editCategoryResponse = await fetchDataPost(
+		"/api/editCategory",
+		formData
+	);
 	console.log(editCategoryResponse);
 
 	if (!editCategoryResponse.success) {
@@ -321,10 +433,12 @@ EditCategoryForm.onsubmit = async (e) => {
 	editCategoryFormContainer.classList.add("hidden");
 	document.querySelector(".Body").classList.remove("noInteractions");
 	fillCategories();
-}
+};
 
 async function DeleteCategoryClicked(Category_ID) {
-	const deleteCategoryResponse = await fetchDataPost("/api/removeCategory", { Category_ID });
+	const deleteCategoryResponse = await fetchDataPost("/api/removeCategory", {
+		Category_ID,
+	});
 	console.log(deleteCategoryResponse);
 
 	if (!deleteCategoryResponse.success) {
@@ -337,7 +451,9 @@ async function DeleteCategoryClicked(Category_ID) {
 }
 
 async function DeleteFoodItemClicked(FoodItem_ID) {
-	const deleteFoodItemResponse = await fetchDataPost("/api/removeFoodItem", { FoodItem_ID });
+	const deleteFoodItemResponse = await fetchDataPost("/api/removeFoodItem", {
+		FoodItem_ID,
+	});
 	console.log(deleteFoodItemResponse);
 
 	if (!deleteFoodItemResponse.success) {
@@ -349,7 +465,9 @@ async function DeleteFoodItemClicked(FoodItem_ID) {
 	fillCategorizedFoodItems();
 }
 
-document.querySelector("#CancelCategoryChanges").addEventListener("click", async () => {
-	document.querySelector(".Body").classList.remove("noInteractions");
-	editCategoryFormContainer.classList.add("hidden");
-});
+document
+	.querySelector("#CancelCategoryChanges")
+	.addEventListener("click", async () => {
+		document.querySelector(".Body").classList.remove("noInteractions");
+		editCategoryFormContainer.classList.add("hidden");
+	});

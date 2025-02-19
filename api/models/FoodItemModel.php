@@ -480,20 +480,41 @@
                     fooditems.Category_ID =  COALESCE(?,Category_ID), 
                     fooditems.FoodPreparationTime = COALESCE(?,FoodPreparationTime), 
                     fooditems.FoodDescription = COALESCE(?,FoodDescription), 
-                    fooditems.FoodImage = COALESCE(?,FoodImage), 
-                    fooditems.FoodPrice = COALESCE(?,FoodPrice)
-                WHERE FoodItem_ID = ?";
+                    fooditems.FoodPrice = COALESCE(?,FoodPrice)";
+
+/////////////// Updated by shovit
+        if (!empty($foodItem->FoodImage)) {
+            $sql .= ", fooditems.FoodImage = ?";
+        }
+        $sql .= " WHERE FoodItem_ID = ?";
         $stmt = $connection->prepare($sql);
-        $stmt->bind_param("ssiissii", 
-            $foodItem->FoodName, 
-            $foodItem->FoodType, 
-            $foodItem->FoodCategory, 
-            $foodItem->FoodPreparationTime, 
-            $foodItem->FoodDescription, 
-            $foodItem->FoodImage, 
-            $foodItem->FoodPrice, 
-            $foodItem->FoodItem_ID
-        );
+
+        if (!empty($foodItem->FoodImage)) {
+            $stmt->bind_param(
+                "ssiisisi", 
+                $foodItem->FoodName, 
+                $foodItem->FoodType, 
+                $foodItem->FoodCategory, 
+                $foodItem->FoodPreparationTime, 
+                $foodItem->FoodDescription, 
+                $foodItem->FoodPrice, 
+                $foodItem->FoodImage,  // Image included only if provided
+                $foodItem->FoodItem_ID
+            );
+        } else {
+            $stmt->bind_param(
+                "ssiisii", 
+                $foodItem->FoodName, 
+                $foodItem->FoodType, 
+                $foodItem->FoodCategory, 
+                $foodItem->FoodPreparationTime, 
+                $foodItem->FoodDescription, 
+                $foodItem->FoodPrice, 
+                $foodItem->FoodItem_ID
+            );
+        }
+/////////////////////
+
         $res = $stmt->execute();
         $stmt->close();
         return $res;

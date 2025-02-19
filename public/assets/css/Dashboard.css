@@ -172,10 +172,12 @@ button{
     width: 100%;
 }
 
-#EditFoodItemImage img{
+#EditFoodItemImage img, #AddFoodItemImage img{
     width: 100%;
     max-width: 400px;
     min-width: 100px;
+    height: auto;
+    aspect-ratio: 3/2;
     border-radius: 10px;
 }
 
