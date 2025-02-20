@@ -127,3 +127,9 @@ async function fetchFormDataPost(endpoint, body) {
         return error;
     }
 }
+
+function showDescription(fetch) {
+    const descriptionElement = document.createElement("p");
+    descriptionElement.textContent = description;
+    return descriptionElement;
+}

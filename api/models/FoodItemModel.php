@@ -381,7 +381,7 @@
         }
     }
     
-    function getFoodItemsByCategoryID($category_ID){
+    function getFoodItemsByCategory($category_ID){
         global $connection;
         $foodItems = [];
 

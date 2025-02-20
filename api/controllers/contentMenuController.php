@@ -87,7 +87,7 @@
         }
     }
 
-    function getFoodItemsByCategory(){
+    function getFoodItemsByCategoryParameter(){
         if (isset($_GET['category'])) {
             $categoryID = $_GET['category'];
         } else {
@@ -95,7 +95,7 @@
             return;
         }
 
-        $itemJson = getFoodItemsByCategoryID($categoryID);
+        $itemJson = getFoodItemsByCategory($categoryID);
 
         //if the object is null then it is regarded as failure
         if($itemJson==null){

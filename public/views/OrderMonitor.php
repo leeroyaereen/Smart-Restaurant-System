@@ -50,7 +50,7 @@
 						</div>
 						<div>
 							<span id="OrderCID">CID:124123</span>
-							<span>|</span>
+							<!-- <span>|</span>
 							<span id="OrderTable">Table: 12</span>
 							<span id="OrderCollapse">
 								<svg
@@ -68,7 +68,7 @@
 									<path stroke="none" d="M0 0h24v24H0z" fill="none" />
 									<path d="M6 15l6 -6l6 6" />
 								</svg>
-							</span>
+							</span> -->
 						</div>
 					</div>
 					<div id="OrderItemsList">

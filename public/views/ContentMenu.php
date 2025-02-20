@@ -64,7 +64,7 @@
 							height="95"
 							class="ItemImage"
 						/>
-						<div>
+						<div id="descriptionContainer" class="tooltipContainer">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								width="24"
@@ -83,6 +83,7 @@
 								<path d="M11 12h1v4h1" />
 							</svg>
 							<span>More info</span>
+							<div id="descriptionTooltip" class="tooltip">asd</div>
 						</div>
 					</div>
 					<div id="MenuItemDetails">
@@ -169,7 +170,7 @@
 				<div id="OrderCostBlock">
 					Total: <span id="OrderCost">Rs 0</span>
 				</div>
-				<div id="OrderTimeBlock">
+				<!-- <div id="OrderTimeBlock">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="24"
@@ -187,7 +188,7 @@
 						<path d="M12 7v5l3 3" />
 					</svg>
 					<span id="OrderTime">30 min</span>
-				</div>
+				</div> -->
 			</div>
 			<div id="OrderButton" class="DefaultOrderButton" style="background-color: green;">
 				<button style="background-color:green;">

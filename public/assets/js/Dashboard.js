@@ -167,7 +167,7 @@ async function fillCategories() {
 
 async function fillCategorizedFoodItems() {
 	categorizedFoodItems.innerHTML = "";
-
+	
 	const categorizedFoodItemsData = await fetchDataGet(
 		"/api/getCategorizedFoodItems"
 	);

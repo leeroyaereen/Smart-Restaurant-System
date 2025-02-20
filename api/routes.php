@@ -24,7 +24,7 @@
             
             case 'getFoodItemsByCategory':
                 require_once __DIR__ . '/controllers/contentMenuController.php';
-                getFoodItemsByCategory();
+                getFoodItemsByCategoryParameter();
                 break;
 
             case 'getFoodCategories':

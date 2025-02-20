@@ -20,7 +20,7 @@
 						if(isset($_SESSION["firstName"])){
 							echo $_SESSION["firstName"] .':'.$_SESSION["User_ID"]; 
 						}else{
-							echo "Guest";
+							echo "Guest (Not Logged In)";
 						}
 					?>
 				</div>
