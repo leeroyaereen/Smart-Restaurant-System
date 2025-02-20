@@ -5,7 +5,33 @@ window.onload = fillOrders;
 setInterval(refreshStatus, 5000);
 
 async function fillOrders() {
-    const OrderStatusData = await fetchDataGet("/api/getAllOrderForTracking");
+    // const OrderStatusData = await fetchDataGet("/api/getAllOrderForTracking");
+    // console.log(OrderStatusData);
+
+    // if (!OrderStatusData.success) {
+    //     alert("couldn't fetch ongoing orders");
+    //     return;
+    // }
+
+    // OrderStatusData.OrderedItems.forEach((orderItem) => {
+    //     const orderStatusItemClone = orderStatusItemTemplate.content.cloneNode(true);
+    //     const orderStatusItem = orderStatusItemClone.querySelector("#OrderStatusItem");
+    //     orderStatusItem.dataset.id = orderItem.OrderItem_ID;
+    //     orderStatusItem.querySelector("#StatusItemName").innerText = orderItem.FoodName;
+    //     orderStatusItem.querySelector("#StatusItemType").innerText = orderItem.FoodType;
+    //     orderStatusItem.querySelector("#StatusItemPrice").innerText = "Rs " + orderItem.FoodPrice;
+    //     orderStatusItem.querySelector("#StatusItemQuantity").innerText = "Qty: " + orderItem.Quantity;
+    //     orderStatusItem.querySelector("#StatusItemNote").innerText = orderItem.Note;
+    //     orderStatusItem.querySelector("#StatusItemStatus").innerText = orderItem.OrderStatus;
+    //     orderStatusItem.querySelector("#StatusItemStatus").classList.add("OrderStatus-" + orderItem.OrderStatus);
+    //     if (orderItem.FoodImage) {
+    //         orderStatusItem.querySelector("#StatusItemImage img").src = orderItem.FoodImage;
+    //     }
+
+    //     document.querySelector("#OrderStatusList").appendChild(orderStatusItem);
+    // });
+
+    const OrderStatusData = await fetchDataGet("/api/getUserActiveOrderStatus");
     console.log(OrderStatusData);
 
     if (!OrderStatusData.success) {
@@ -13,22 +39,24 @@ async function fillOrders() {
         return;
     }
 
-    OrderStatusData.OrderedItems.forEach((orderItem) => {
-        const orderStatusItemClone = orderStatusItemTemplate.content.cloneNode(true);
-        const orderStatusItem = orderStatusItemClone.querySelector("#OrderStatusItem");
-        orderStatusItem.dataset.id = orderItem.OrderItem_ID;
-        orderStatusItem.querySelector("#StatusItemName").innerText = orderItem.FoodName;
-        orderStatusItem.querySelector("#StatusItemType").innerText = orderItem.FoodType;
-        orderStatusItem.querySelector("#StatusItemPrice").innerText = "Rs " + orderItem.FoodPrice;
-        orderStatusItem.querySelector("#StatusItemQuantity").innerText = "Qty: " + orderItem.Quantity;
-        orderStatusItem.querySelector("#StatusItemNote").innerText = orderItem.Note;
-        orderStatusItem.querySelector("#StatusItemStatus").innerText = orderItem.OrderStatus;
-        orderStatusItem.querySelector("#StatusItemStatus").classList.add("OrderStatus-" + orderItem.OrderStatus);
-        if (orderItem.FoodImage) {
-            orderStatusItem.querySelector("#StatusItemImage img").src = orderItem.FoodImage;
-        }
+    OrderStatusData.OrderTrays.forEach((orderTray) => {
+        orderTray.OrderItems.forEach((orderItem) => {
+            const orderStatusItemClone = orderStatusItemTemplate.content.cloneNode(true);
+            const orderStatusItem = orderStatusItemClone.querySelector("#OrderStatusItem");
+            orderStatusItem.dataset.id = orderItem.OrderItem_ID;
+            orderStatusItem.querySelector("#StatusItemName").innerText = orderItem.FoodName;
+            orderStatusItem.querySelector("#StatusItemType").innerText = orderItem.FoodTypes;
+            orderStatusItem.querySelector("#StatusItemPrice").innerText = "Rs " + orderItem.Price;
+            orderStatusItem.querySelector("#StatusItemQuantity").innerText = "Qty: " + orderItem.Quantity;
+            orderStatusItem.querySelector("#StatusItemNote").innerText = orderItem.Notes;
+            orderStatusItem.querySelector("#StatusItemStatus").innerText = orderItem.OrderStatus;
+            orderStatusItem.querySelector("#StatusItemStatus").classList.add("OrderStatus-" + orderItem.OrderStatus);
+            if (orderItem.FoodImage) {
+                orderStatusItem.querySelector("#StatusItemImage img").src = orderItem.FoodImage;
+            }
 
-        document.querySelector("#OrderStatusList").appendChild(orderStatusItem);
+            document.querySelector("#OrderStatusList").appendChild(orderStatusItem);
+        });
     });
 }
 

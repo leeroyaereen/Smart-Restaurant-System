@@ -23,6 +23,8 @@ async function loadTrayItems(){
 }
 
 function fillTrayItems(data) {
+    let trayItemTotalTime = 0;
+    let trayItemCount = 0;
     Object.entries(data).forEach(([id, category]) => {
         let categoryTemplateClone = trayCategoryTemplate.content.cloneNode(true);
         let trayCategory = categoryTemplateClone.querySelector("#TrayCategory");
@@ -41,6 +43,10 @@ function fillTrayItems(data) {
             console.log(item.Quantity);
             trayItem.dataset.id = itemDetails.FoodItem_ID;
 
+            //for time estimation
+            trayItemTotalTime += parseInt(itemDetails.FoodPreparationTime);
+            trayItemCount++;
+
             trayItem.querySelector("#TrayItemName").innerText = itemDetails.FoodName;
             trayItem.querySelector("#TrayItemSubCategory").innerText = itemDetails.FoodType;
             trayItem.querySelector("#TrayItemPrice span").innerText = Math.floor(itemDetails.FoodPrice);
@@ -58,10 +64,24 @@ function fillTrayItems(data) {
 
         trayItemsList.appendChild(trayCategory);
     });
+    document.querySelector("#EstimatedTimeLabel").innerText = estimateTime(trayItemTotalTime, trayItemCount);
     FoodItemList = document.querySelectorAll('#TrayItem');
+
     calculateTotal();
 }
 
+function estimateTime(totalTime, itemCount){
+    let averageTime = parseInt(totalTime / itemCount);
+    let message;
+    let min = averageTime % 60;
+    let hr = Math.floor((averageTime-min) / 60);
+    if(hr > 0){
+        message = `${hr} hr ${min} min`;
+    }else{
+        message = `${min} min`;
+    }
+    return message;
+}
 function calculateTotal(){
     let subTotalPrice = calculateOrderCost(FoodItemList);
     subTotal.innerText = subTotalPrice;

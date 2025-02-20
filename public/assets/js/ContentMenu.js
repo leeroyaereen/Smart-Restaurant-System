@@ -56,7 +56,6 @@ async function performFilter(category) {
 
 	await fillMenu(category.dataset.id);
 }
-
 async function fillMenu(categoryID) {
 	let foodItemsData;
 	menuItemList.innerHTML = "";
@@ -81,7 +80,16 @@ async function fillMenu(categoryID) {
 		menuItem.dataset.id = item.FoodItem_ID;
 		menuItem.querySelector("#MenuItemName").innerText = item.FoodName;
 		menuItem.querySelector("#MenuItemSubCategory").innerText = item.FoodType;
-		menuItem.querySelector("#descriptionTooltip").innerText = item.FoodDescription;
+		const descriptionButton = menuItem.querySelector("#descriptionContainer");
+		if (descriptionButton) {
+			descriptionButton.addEventListener("click", () => {
+				if(item.FoodDescription){
+					alert(item.FoodDescription);
+				}else{
+					alert("No Description Available");
+				}
+			});
+		}
 		menuItem.querySelector("#MenuItemPrice span").innerText = Math.floor(item.FoodPrice);
 		menuItem.querySelector("#MenuItemDuration span").innerText = item.FoodPreparationTime+" min";
 		menuItem.querySelector("#MenuItemRating span").innerText = item.FoodRating;

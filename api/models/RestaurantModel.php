@@ -181,6 +181,24 @@
         );';
     }
 
+    function EnableDayBasedOrderClosingSystem(){
+        $sql = "SET GLOBAL event_scheduler = ON;";
+
+        $sql = "DELIMITER $$
+
+                CREATE EVENT CloseDailyOrders
+                ON SCHEDULE EVERY 1 DAY
+                STARTS TIMESTAMP(CURRENT_DATE + INTERVAL 1 DAY) -- Starts at midnight
+                DO
+                BEGIN
+                    UPDATE orderitem 
+                    SET OrderStatus = 'Closed' 
+                    WHERE OrderStatus != 'Closed';
+                END $$
+
+                DELIMITER ;
+            ";
+    }
 
     function CreateOrderTrayTable(){
         $sql = 'CREATE TABLE OrderTray (

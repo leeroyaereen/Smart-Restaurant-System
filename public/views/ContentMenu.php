@@ -65,7 +65,7 @@
 							class="ItemImage"
 						/>
 						<div id="descriptionContainer" class="tooltipContainer">
-							<svg
+							<svg 
 								xmlns="http://www.w3.org/2000/svg"
 								width="24"
 								height="24"
@@ -83,7 +83,7 @@
 								<path d="M11 12h1v4h1" />
 							</svg>
 							<span>More info</span>
-							<div id="descriptionTooltip" class="tooltip">asd</div>
+							<div id="descriptionTooltip" class="tooltip"></div>
 						</div>
 					</div>
 					<div id="MenuItemDetails">

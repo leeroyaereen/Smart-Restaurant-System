@@ -115,7 +115,14 @@
                 require_once __DIR__ . '/controllers/userController.php';
                 isUserAdmin();
                 break;
-                
+            case 'getUserActiveOrderStatus':
+                require_once __DIR__ . '/controllers/orderTrackingController.php';
+                getAllUserActiveOrderStatus();
+                break;
+            case 'getTotalRevenueOfDay':
+                require_once __DIR__ . '/controllers/orderMonitorController.php';
+                GetTotalRevenueOfDay();
+                break;
             default:
                 http_response_code(404);
                 echo json_encode(['error' => 'Endpoint not found']);

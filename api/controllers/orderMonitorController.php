@@ -52,4 +52,13 @@
             echo json_encode(['success'=>false,'message'=>'Tray Items Not Set because of empty data']);
         }
     }
+
+    function GetTotalRevenueOfDay(){
+        $res = GetTotalRevenue();
+        if(is_string($res)){
+            echo json_encode(["success"=>false,"message"=>$res]);
+            return;
+        }
+        echo json_encode(["success"=>true,"revenue"=>$res]);
+    }
 ?>

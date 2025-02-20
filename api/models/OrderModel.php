@@ -104,14 +104,14 @@ function GetAllOrderItemDetailsForTracking($userID){
                     orderitem.OrderStatus 
             FROM orderitem
             
+            WHERE ordertray.User_ID = '".$userID."'
+            
             INNER JOIN fooditems
             ON orderitem.FoodItem_ID = fooditems.FoodItem_ID 
 
             INNER JOIN ordertray
             ON orderitem.OrderTray_ID = ordertray.OrderTray_ID
 
-            
-            WHERE ordertray.User_ID = '".$userID."'
             -- Commented out for testing purposes
             -- && orderitem.OrderStatus <> 'Cancelled'  && orderitem.OrderStatus <> 'Closed' 
             ORDER BY orderitem.OrderItem_ID"
@@ -240,6 +240,88 @@ function GetAllOrderDetailsForMonitoring(){
     }
 }
 
+function GetAllOrderDetailsForStatusOfUser($userID){
+    $conn = getConnection();
+    // $sql = "SELECT ordertray.OrderTray_ID, ordertray.KitchenOrderTime, ordertray.User_ID, 
+    //                 orderitem.OrderItem_ID,fooditems.FoodName, fooditems.FoodType, orderitem.Note, fooditems.FoodPrice, orderitem.OrderStatus
+    //         FROM orderitem
+    //         INNER JOIN fooditems
+    //         ON orderitem.FoodItem_ID = fooditems.FoodItem_ID
+    //         INNER JOIN ordertray
+    //         ON  orderitem.OrderTray_ID = ordertray.OrderTray_ID
+    //         GROUP BY ordertray.OrderTray_ID";
+
+    $sql = "SELECT 
+                ordertray.OrderTray_ID, 
+                ordertray.KitchenOrderTime, 
+                GROUP_CONCAT(orderitem.OrderItem_ID) AS OrderID,
+                GROUP_CONCAT(fooditems.FoodItem_ID) AS FoodID,
+                GROUP_CONCAT(fooditems.FoodName) AS FoodNames,
+                GROUP_CONCAT(fooditems.FoodType) AS FoodTypes,
+                GROUP_CONCAT(orderitem.Note) AS Notes,
+                GROUP_CONCAT(fooditems.FoodPrice) AS Prices,
+                GROUP_CONCAT(fooditems.FoodImage) AS FoodImages,
+                GROUP_CONCAT(orderitem.OrderStatus) AS OrderStatuses,
+                GROUP_CONCAT(orderitem.Quantity) AS Quantity,
+                GROUP_CONCAT(fooditems.FoodPreparationTime) AS FoodPreparationTime,
+                COUNT(*) AS TotalItems
+            FROM orderitem
+
+            -- Correct order: JOIN first, THEN WHERE
+            INNER JOIN fooditems ON orderitem.FoodItem_ID = fooditems.FoodItem_ID
+            INNER JOIN ordertray ON orderitem.OrderTray_ID = ordertray.OrderTray_ID
+
+            WHERE ordertray.User_ID = ".$userID."
+
+            GROUP BY ordertray.OrderTray_ID;
+
+        ";
+    $res = $conn->query($sql);
+    $items = [];
+    if($res->num_rows>0){
+        while($item = $res->fetch_assoc()){
+            $c =$item['TotalItems'];
+            $arrangedData = [];
+
+            $orderIDs = explode(",",$item['OrderID'],$c);
+            $foodIDs = explode(",",$item['FoodID'],$c);
+            $foodNames = explode(",",$item['FoodNames'],$c);
+            $foodTypes = explode(",",$item['FoodTypes'],$c);
+            $foodImages = explode(",",$item['FoodImages'],$c);
+            $notes = explode(",",$item['Notes'],$c);
+            $prices = explode(",",$item['Prices'],$c);
+            $orderStatuses = explode(",",$item['OrderStatuses'],$c);
+            $quantity = explode(",",$item['Quantity'],$c);
+            $prepTime = explode(",",$item['FoodPreparationTime'],$c);
+            for($i = 0 ; $i < $c; $i++){
+                if(OrderStatus::fromString($orderStatuses[$i])!=OrderStatus::Closed) {
+                    $arrangedData[] = [
+                        "OrderItem_ID"=>$orderIDs[$i], 
+                        "FoodItem_ID"=>$foodIDs[$i],
+                        "FoodName"=>$foodNames[$i], 
+                        "FoodTypes" => $foodTypes[$i], 
+                        "Notes" => $notes[$i], 
+                        "FoodImage" => $foodImages[$i],
+                        "Price" => $prices[$i], 
+                        "OrderStatus" => $orderStatuses[$i], 
+                        "Quantity" => $quantity[$i], 
+                        "FoodPreparationTime" => $prepTime[$i]
+                    ];
+            
+                }
+            }
+            if(count($arrangedData)<1) continue;
+            $obj = ["OrderTray_ID" => $item['OrderTray_ID'], "OrderItems"=> $arrangedData];
+            $items[] = $obj;
+        }
+        if(sizeof($items)<1){
+            return "No orders pending";
+        }
+        return $items;
+    }else{
+        return "No data available";
+    }
+}
 function getOnlyStatusData($userID){
     $con = getConnection();
     $sql = "SELECT orderitem.OrderItem_ID, orderitem.OrderStatus FROM orderitem WHERE orderitem.OrderTray_ID IN (SELECT ordertray.OrderTray_ID FROM ordertray WHERE ordertray.User_ID = ".$userID.")";
@@ -281,5 +363,25 @@ function AddReviewToOrder($order, $user) {
     $stmt->bind_param("iiis", $order->orderId, $user, $order->rating, $order->review);
     $res = $stmt->execute();
     return true;
+}
+
+function GetTotalRevenue(){
+    $conn = getConnection();
+    if(!$conn){
+        return "No Database connection";
+    }
+    $sql = "SELECT SUM(fooditems.FoodPrice * orderitem.Quantity) AS 'Total Revenue'
+        FROM orderitem
+        INNER JOIN fooditems ON orderitem.FoodItem_ID = fooditems.FoodItem_ID
+        INNER JOIN ordertray ON orderitem.OrderTray_ID = ordertray.OrderTray_ID
+        WHERE orderitem.OrderStatus != 'Cancelled' 
+        AND DATE(ordertray.KitchenOrderTime) = CURDATE();
+    ";
+    $res = $conn->query($sql);
+    if(!$res){
+        return " Error Executing the query";
+    }
+    $totalRevenue = ($res->fetch_assoc())["Total Revenue"];
+    return (Float)$totalRevenue;
 }
 ?>

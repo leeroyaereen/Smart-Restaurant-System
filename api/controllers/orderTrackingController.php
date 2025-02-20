@@ -65,6 +65,18 @@
         echo json_encode(['success'=>true,'message'=>'', "OrderedItems"=>$res]);
     }
 
+    function getAllUserActiveOrderStatus(){
+       
+        $userID = $_SESSION['User_ID'];
+        $res = GetAllOrderDetailsForStatusOfUser($userID );
+        if(is_string(value: $res) ){
+            echo json_encode(['success'=>false,'message'=>$res]);
+
+            return;
+        }
+        echo json_encode(['success'=>true,'message'=>'', "OrderTrays"=>$res]);
+    }
+
     function getAllOrderStatusFromOrderTray(){
         function getOrderTrayIDFromClientInput(){
             $data = json_decode(file_get_contents('php://input'), true);

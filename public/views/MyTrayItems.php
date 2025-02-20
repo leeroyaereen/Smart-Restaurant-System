@@ -14,7 +14,7 @@
 	<body>
 		<div id="TrayItemsHeader" class="section Header">
 			<div id="TrayItemsTitle" class="HeaderTitle">My Tray</div>
-			<div id="TrayItemsTable" class="HeaderSubTitle">Table Number: 12</div>
+			<!-- <div id="TrayItemsTable" class="HeaderSubTitle">Table Number: 12</div> -->
 		</div>
 
 		<div id="TrayItemsList" class="section Body">
@@ -141,7 +141,7 @@
             <div id="OrderConfirmation" class="section Footer">
                 <div class="EstimatedTimeContainer">
                     <div>Estimated Time:</div>
-                    <div class="EstimatedTime">1hr 2min</div>
+                    <div class="EstimatedTime" id="EstimatedTimeLabel">1hr 2min</div>
                 </div>
                 <div id="ConfirmationButton" class="DefaultOrderButton">
                     <button>
