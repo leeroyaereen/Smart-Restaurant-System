@@ -123,6 +123,15 @@
                 require_once __DIR__ . '/controllers/orderMonitorController.php';
                 GetTotalRevenueOfDay();
                 break;
+
+            case 'checkIfUserIsLoggedIn':
+                require_once __DIR__ . '/controllers/userController.php';
+                checkIfUserIsLoggedIn();
+                break;
+            case 'checkIfUserIsCustomer':
+                require_once __DIR__ . '/controllers/userController.php';
+                checkIfUserIsCustomer();
+                break;
             default:
                 http_response_code(404);
                 echo json_encode(['error' => 'Endpoint not found']);

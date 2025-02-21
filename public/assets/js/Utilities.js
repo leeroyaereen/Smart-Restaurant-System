@@ -128,8 +128,39 @@ async function fetchFormDataPost(endpoint, body) {
     }
 }
 
+async function isUserAdmin(){
+    const response = await fetchDataGet("/api/isUserAdmin");
+    if (response.success && response.isAdmin) {
+        return response.isAdmin;
+    }else{
+       return response.success;
+    }
+}
+async function isUserCustomer(){
+    const response = await fetchDataGet("/api/checkIfUserIsCustomer");
+    return response.isCustomer;
+}
+
+async function CheckIfUserIsLoggedIn(){
+    const response = await fetchDataGet("/api/checkIfUserIsLoggedIn");
+    return response.success;
+}
 function showDescription(fetch) {
     const descriptionElement = document.createElement("p");
     descriptionElement.textContent = description;
     return descriptionElement;
+}
+
+async function updateOrderStatus(itemId, status){
+    console.log(itemId, status);
+    const response = await fetchDataPost("/api/changeOrderItemStatus", {
+        OrderItem_ID: itemId,
+        OrderStatus: status
+    });
+
+    if (!response.success) {
+        console.log(response);
+        return false;
+    }
+    return true;
 }

@@ -122,6 +122,26 @@
             }
         
         }
+
+        public static function isUserCustomer($userID) {
+            $query = "SELECT Role_ID FROM User WHERE User_ID = ?";
+            $stmt = self::$connection->prepare($query);
+            if (!$stmt) {
+                return ['success' => false, 'error' => 'Failed to prepare statement'];
+            }
+            $stmt->bind_param("i", $userID);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($result && $result->num_rows > 0) {
+                $user = $result->fetch_assoc();
+                $stmt->close();
+                $isCustomer = $user['Role_ID'] != 1;
+                return ['success' => true, 'isCustomer' => $isCustomer];
+            } else {
+                $stmt->close();
+                return ['success' => false, 'error' => 'User not found'];
+            }
+        }
     }
     
     UserModel::Initialize();

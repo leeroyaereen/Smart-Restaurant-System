@@ -11,6 +11,14 @@ window.onload = loadPage;
 
 async function loadPage() {
     try {
+		if (!CheckIfUserIsLoggedIn()) {
+			window.location.href = "login";
+			return;
+		}
+		if(!isUserCustomer()){
+			alert("You are not authorized to view this page");
+			window.location.href = "login";
+		}
         await fillCategory();
         await fillMenu(null);
     } catch (error) {

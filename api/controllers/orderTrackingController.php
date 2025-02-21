@@ -19,7 +19,7 @@
             //set values in the order item instance.
             $order = new OrderItem();
             $order->orderId = $data['OrderItem_ID'];
-            $order->orderStatus = $data['OrderItemStatus'];
+            $order->orderStatus = OrderStatus::fromString('Cancelled');
 
             //send to database about the modification
             $res = ChangeOrderStatus($order);

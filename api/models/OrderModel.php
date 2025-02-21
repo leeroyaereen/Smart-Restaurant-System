@@ -59,6 +59,8 @@ function ChangeOrderStatus($orderItem) {
         }
         $orderStatusValue = $orderStatus->value;
         $conn = getConnection();
+
+        //check if the order has already been cancelled
         $checkSql = "SELECT * FROM orderitem WHERE OrderItem_ID = ".$orderItemID." AND OrderStatus = 'Cancelled'";
         $res = $conn->query($checkSql);
         if(!$res){
@@ -67,6 +69,16 @@ function ChangeOrderStatus($orderItem) {
         if($res->num_rows>0){
             return "The order item is cancelled already";
         }
+
+        $checkSql = "SELECT * FROM orderitem WHERE OrderItem_ID = ".$orderItemID." AND OrderStatus != 'InQueue'";
+        $res = $conn->query($checkSql);
+        if(!$res){
+            return "Failed to execute query";
+        }
+        if($res->num_rows>0){
+            return "The order item is already in preparation or delivered";
+        }
+        //update if no errors occured
         $sql = "UPDATE orderitem
                 SET OrderStatus = ?
                 WHERE OrderItem_ID = ?";

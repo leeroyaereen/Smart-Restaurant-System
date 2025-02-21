@@ -30,7 +30,14 @@ async function fillOrders() {
 
     //     document.querySelector("#OrderStatusList").appendChild(orderStatusItem);
     // });
-
+    if(!CheckIfUserIsLoggedIn()){
+        alert("You are not logged in to view this page");
+        window.location.href = "login";
+    }
+    if(!isUserCustomer()){
+        alert("You are not authorized to view this page");
+        window.location.href = "login";
+    }
     const OrderStatusData = await fetchDataGet("/api/getUserActiveOrderStatus");
     console.log(OrderStatusData);
 
@@ -49,7 +56,22 @@ async function fillOrders() {
             orderStatusItem.querySelector("#StatusItemPrice").innerText = "Rs " + orderItem.Price;
             orderStatusItem.querySelector("#StatusItemQuantity").innerText = "Qty: " + orderItem.Quantity;
             orderStatusItem.querySelector("#StatusItemNote").innerText = orderItem.Notes;
-            orderStatusItem.querySelector("#StatusItemStatus").innerText = orderItem.OrderStatus;
+            let status = orderStatusItem.querySelector("#StatusItemStatus");
+            status.innerText = orderItem.OrderStatus;
+            status.addEventListener("click", async (e) => {
+                let res = confirm("Are you sure you want to cancel this order?");
+                if (res) {
+                    e.disabled = true;
+                    if (await cancelOrder(orderItem.OrderItem_ID)) {
+                        status.innerText = "Cancelled";
+                        status.classList = `OrderStatusDesign OrderStatus-Cancelled`;
+                    } else {
+                        alert("couldn't update order status");
+                    }
+                    e.disabled = false;
+                }
+            });
+            orderStatusItem.querySelector("#StatusItemDuration span").innerText = orderItem.OrderItem_ID + "mins";
             orderStatusItem.querySelector("#StatusItemStatus").classList.add("OrderStatus-" + orderItem.OrderStatus);
             if (orderItem.FoodImage) {
                 orderStatusItem.querySelector("#StatusItemImage img").src = orderItem.FoodImage;
@@ -75,4 +97,12 @@ async function refreshStatus() {
         orderStatusItem.querySelector("#StatusItemStatus").classList = `OrderStatusDesign OrderStatus-${orderItem.OrderItemStatus}`;
     });
 
+}
+
+async function cancelOrder(OrderItem_ID) {
+    const response = await fetchDataPost(`/api/cancelOrder`, { 'OrderItem_ID': OrderItem_ID });
+    if(!response.success){
+        alert(response.message);
+    }
+    return response.success;
 }

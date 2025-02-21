@@ -11,6 +11,10 @@ let FoodItemList;
 let discountPercentage = 10;
 
 async function loadTrayItems(){
+    if(! isUserCustomer()){
+        alert("You are not authorized to view this page");
+        window.location.href = "login";
+    }
     const TrayItemsData = await fetchDataGet("/api/getTrayItems");
     console.log(TrayItemsData);
 

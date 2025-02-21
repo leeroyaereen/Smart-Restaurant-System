@@ -28,9 +28,9 @@
           <!-- <span class="show-password">&#128065;</span> -->
         </div>
 
-        <div class="forgot-password">
+        <!-- <div class="forgot-password">
           <a href="#">Forgot password?</a>
-        </div>
+        </div> -->
 
         <button type="submit" class="login-button">LOGIN</button>
 
@@ -40,7 +40,7 @@
 
         <div class="action-buttons">
           <button type="button" class="sign-up" onclick="window.location.href='register'">Sign Up</button>
-          <button type="button" class="skip" onclick="window.location.href='menu'">Skip</button>
+          <!-- <button type="button" class="skip" onclick="window.location.href='menu'">Skip</button> -->
         </div>
       </form>
     </div>

@@ -1,7 +1,17 @@
+
 const form = document.querySelector("#loginForm");
 const phoneNumber = document.querySelector("#phoneNumber");
 const password = document.querySelector("#password");
 
+document.onload = function(){
+    if(CheckIfUserIsLoggedIn()){
+        if(!isUserCustomer()){
+            window.location.href = "order-monitor";
+            return;
+        }
+        window.location.href = "menu";
+    }
+}
 form.addEventListener("submit", function (event) {
 	event.preventDefault(); //prevent Submission
 
@@ -24,6 +34,11 @@ async function loginUser(userData) {
     console.log(loginStatus);
     if (loginStatus.success) {
         console.log("Login Successful");
+
+        if(!isUserCustomer()){
+            window.location.href = "order-monitor";
+            return;
+        }
         window.location.href = "menu";
     } else {
         alert(loginStatus.message);

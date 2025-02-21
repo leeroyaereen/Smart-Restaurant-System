@@ -32,6 +32,10 @@ async function registerUser(userData) {
 	const registrationStatus = await fetchDataPost("/api/registerUser", userData);
     if (registrationStatus.success) {
         alert("Registration Successful");
+        if(await CheckIfUserIsAdmin()){
+            window.location.href = "order-monitor";
+            return;
+        }
         window.location.href = "menu";
     } else {
         alert("Registration Failed: "+registrationStatus.message);

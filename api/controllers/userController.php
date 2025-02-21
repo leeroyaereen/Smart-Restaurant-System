@@ -80,4 +80,26 @@
             echo json_encode(['success'=>false, 'message'=>'User not logged in']);
         }
     }
+
+    function checkIfUserIsLoggedIn(){
+        if(isset($_SESSION['User_ID'])){
+            echo json_encode(['success'=>true, 'message'=>'User is logged in']);
+        }else{
+            echo json_encode(['success'=>false, 'message'=>'User is not logged in']);
+        }
+    }
+
+    function checkIfUserIsCustomer(){
+        if(isset($_SESSION['User_ID'])){
+            $userID = $_SESSION['User_ID'];
+            $result = UserModel::isUserCustomer($userID);
+            if($result['success']===true){
+                echo json_encode(['success'=>true, 'message'=>'User is customer', 'isCustomer'=>$result['isCustomer']]);
+            }else{
+                echo json_encode(['success'=>false, 'message'=>'Failed to check if user is customer: '.$result['error']]);
+            }
+        }else{
+            echo json_encode(['success'=>false, 'message'=>'User not logged in']);
+        }
+    }
 ?>
