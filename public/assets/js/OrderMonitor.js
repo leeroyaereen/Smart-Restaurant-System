@@ -1,25 +1,21 @@
 const orderContainerTemplate = document.querySelector("#OrderContainerTemplate");
 const orderItemTemplate = document.querySelector("#OrderItemTemplate");
+
 window.onload = function () {
-    if(CheckIfUserIsAdmin()){
+    CheckIfUserIsAdmin();
+    
+}
+async function CheckIfUserIsAdmin(){
+    const response = await fetchDataGet("/api/isUserAdmin");
+    if (response.success && response.isAdmin) {
         fillOngoingOrders();
-        setInterval(updateOrderStatus, 5000);
+        console.log("Admin is logged in");
     }else{
         alert("You are not authorized to view this page");
         window.location.href = "login";
     }
-    
 }
 
-async function CheckIfUserIsAdmin() {
-	const response = await fetchDataGet("/api/isUserAdmin");
-	if (response.success && response.isAdmin) {
-		console.log("Admin is logged in");
-	} else {
-		alert("You are not authorized to view this page");
-		window.location.href = "login";
-	}
-}
 async function fillOngoingOrders(){
     const ongoingOrdersData = await fetchDataGet("/api/getAllMonitorOrderDetail");
     console.log(ongoingOrdersData.data);
@@ -64,21 +60,9 @@ async function fillOngoingOrders(){
 
     })
 
-    await fetchTotalRevenue();
-
     document.querySelector("#ActiveOrdersCount").innerText = ongoingOrdersData.data.length;
 }
-async function fetchTotalRevenue(){
-    const response = await fetchDataGet("/api/getTotalRevenueOfDay");
-    if (response.success) {
-        if(response.revenue == null){
-            response.revenue = 0;
-        }
-        document.querySelector("#DayRevenue").innerText = "Rs "+response.revenue;
-    }else{
-        alert("couldn't fetch total revenue");
-    }
-}
+
 async function updateOrderStatus(itemId, status){
     console.log(itemId, status);
     const response = await fetchDataPost("/api/changeOrderItemStatus", {

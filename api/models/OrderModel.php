@@ -70,7 +70,7 @@ function ChangeOrderStatus($orderItem) {
             return "The order item is cancelled already";
         }
 
-        $checkSql = "SELECT * FROM orderitem WHERE OrderItem_ID = ".$orderItemID." AND OrderStatus != 'InQueue'";
+        $checkSql = "SELECT * FROM orderitem WHERE OrderItem_ID = ".$orderItemID." AND OrderStatus != 'InQueue' AND OrderStatus != 'Ready' AND OrderStatus != 'Preparing'";
         $res = $conn->query($checkSql);
         if(!$res){
             return "Failed to execute query";
