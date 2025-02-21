@@ -63,22 +63,67 @@
     border-radius: 5px;
 }
 
-#OrderStatusBody > #OrderStatusList{
+#OrderStatusBody #OrderStatusList{
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    margin-top: 1.5rem;
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    gap: 1rem;
+    margin: 1.5rem 0;
 }
 
 #OrderStatusList > #OrderStatusListTitle{
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-weight: 700;
+    color: #ea580c;
 }
 
-#OrderStatusList > #OrderStatusItem{
+#OrderStatusList #OrderStatusOrderNumberContainer{
     display: flex;
     flex-direction: column;
-    gap: 9px;
+    gap: 10px;
+    border-bottom: 1px solid #d3d3d37a;
+}
+
+#OrderStatusList #OrderStatusOrderNumber{
+    font-size: 1.3rem;
+    margin: 10px 0;
+    font-weight: 600;
+    color: #f77f29;
+}
+
+#OrderStatusOrderItemListAndTotal{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#OrderStatusList #OrderStatusOrderItemList{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+#OrderStatusOrderTotal{
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #f97316;
+}
+
+#OrderStatusOrderTotal div{
+    color: black;
+    font-size: 1.1rem;
+}
+
+
+#OrderStatusList #OrderStatusItem{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 #OrderStatusItem > #StatusItemInformation{

@@ -95,7 +95,12 @@ body {
 	background-color: #bbf7d0;
 }
 
-.OrderStatus-Completed{
+.OrderStatus-Served {
+    color: #064e3b;
+    background-color: #a7f3d0;
+}
+
+.OrderStatus-Closed{
 	color: #4b5563;
 	background-color: #e2e8f0;
 }
@@ -104,6 +109,7 @@ body {
 	color: #991b1b;
 	background-color: #f9c3c3;
 }
+
 
 .ItemFooter {
 	display: flex;

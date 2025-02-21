@@ -40,8 +40,20 @@
 				</div>
 			</div> -->
 
-			<div id="OrderStatusList">
-				<div id="OrderStatusListTitle">Your Orders</div>
+			<div id="OrderStatusList" class="OngoingOrdersList">
+				<div id="OrderStatusListTitle">Ongoing Orders</div>
+				<template id="OrderStatusOrderNumberContainerTemplate" class="hidden">
+					<div id="OrderStatusOrderNumberContainer">
+						<div id="OrderStatusOrderNumber">Order 1</div>
+						<div id="OrderStatusOrderItemListAndTotal">
+							<div id="OrderStatusOrderItemList">
+							
+							</div>
+							<div id="OrderStatusOrderTotal">Total: Rs 256</div>
+						</div>
+						
+					</div>
+				</template>
 				<template id="OrderStatusItemTemplate" class="hidden">
 					<div id="OrderStatusItem">
 						<div id="StatusItemInformation">
@@ -94,6 +106,9 @@
 						</div>
 					</div>
 				</template>
+			</div>
+			<div id="OrderStatusList" class="PreviousOrdersList">
+				<div id="OrderStatusListTitle">Previous Orders</div>
 			</div>
 		</div>
 	</body>

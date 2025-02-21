@@ -1,3 +1,4 @@
+const orderStatusOrderTemplate = document.querySelector("#OrderStatusOrderNumberContainerTemplate");
 const orderStatusItemTemplate = document.querySelector("#OrderStatusItemTemplate");
 
 window.onload = fillOrders;
@@ -47,7 +48,17 @@ async function fillOrders() {
     }
 
     OrderStatusData.OrderTrays.forEach((orderTray) => {
+        let TotalPrice = 0;
+        let ongoingOrder = false;
+        const orderStatusOrderClone = orderStatusOrderTemplate.content.cloneNode(true);
+        const orderStatusOrder = orderStatusOrderClone.querySelector("#OrderStatusOrderNumberContainer");
+        orderStatusOrder.querySelector("#OrderStatusOrderNumber").innerText = "Order " + orderTray.OrderTray_ID;
+        // orderStatusOrder.querySelector("#OrderStatusOrderTotal").innerText = "Total: Rs " + orderTray.TotalPrice;
         orderTray.OrderItems.forEach((orderItem) => {
+            if (orderItem.OrderStatus == "InQueue" || orderItem.OrderStatus == "Preparing" || orderItem.OrderStatus == "Ready" || orderItem.OrderStatus == "Served") {
+                ongoingOrder = true;
+            }
+            TotalPrice += orderItem.Price * orderItem.Quantity;
             const orderStatusItemClone = orderStatusItemTemplate.content.cloneNode(true);
             const orderStatusItem = orderStatusItemClone.querySelector("#OrderStatusItem");
             orderStatusItem.dataset.id = orderItem.OrderItem_ID;
@@ -77,8 +88,16 @@ async function fillOrders() {
                 orderStatusItem.querySelector("#StatusItemImage img").src = orderItem.FoodImage;
             }
 
-            document.querySelector("#OrderStatusList").appendChild(orderStatusItem);
+            orderStatusOrder.querySelector("#OrderStatusOrderItemList").appendChild(orderStatusItem);
         });
+        orderStatusOrder.querySelector("#OrderStatusOrderTotal").innerHTML = "<div>Total:</div> Rs " + TotalPrice;
+        if (ongoingOrder) {
+            document.querySelector(".OngoingOrdersList").appendChild(orderStatusOrder);
+        }
+        else{
+            document.querySelector(".PreviousOrdersList").appendChild(orderStatusOrder);
+
+        }
     });
 }
 
