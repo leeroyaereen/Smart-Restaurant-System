@@ -119,7 +119,7 @@
   
   .action-buttons {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
   }
   
   .sign-up, .skip {

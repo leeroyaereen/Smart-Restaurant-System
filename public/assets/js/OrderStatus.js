@@ -93,6 +93,9 @@ async function refreshStatus() {
 
     UpdatedOrderStatusData.OrderedItems.forEach((orderItem) => {
         const orderStatusItem = document.querySelector(`[data-id="${orderItem.OrderItem_ID}"]`);
+        if (!orderStatusItem) {
+            return;
+        }
         orderStatusItem.querySelector("#StatusItemStatus").innerText = orderItem.OrderItemStatus;
         orderStatusItem.querySelector("#StatusItemStatus").classList = `OrderStatusDesign OrderStatus-${orderItem.OrderItemStatus}`;
     });
