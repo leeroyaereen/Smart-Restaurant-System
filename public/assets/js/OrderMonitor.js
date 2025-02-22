@@ -59,7 +59,7 @@ async function fillOngoingOrders(){
         document.querySelector("#OrderMonitorBody").appendChild(orderContainer);
 
     })
-
+    await fetchTotalRevenue();
     document.querySelector("#ActiveOrdersCount").innerText = ongoingOrdersData.data.length;
 }
 
@@ -75,4 +75,16 @@ async function updateOrderStatus(itemId, status){
         return false;
     }
     return true;
+}
+
+async function fetchTotalRevenue(){
+    const response = await fetchDataGet("/api/getTotalRevenueOfDay");
+    if (response.success) {
+        if(response.revenue == null){
+            response.revenue = 0;
+        }
+        document.querySelector("#DayRevenue").innerText = "Rs "+response.revenue;
+    }else{
+        alert("couldn't fetch total revenue");
+    }
 }
