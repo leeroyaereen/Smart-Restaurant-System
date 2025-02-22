@@ -189,7 +189,10 @@ async function fillCategorizedFoodItems() {
 			EditFoodItemCategory.id = "EditFoodItemCategory";
 			EditFoodItemCategory.dataset.id = id;
 			EditFoodItemCategory.innerText = category["CategoryName"];
+			const EditFoodItemCategoryItems = document.createElement("div");
+			EditFoodItemCategoryItems.id = "EditFoodItemCategoryItems";
 			EditFoodItemCategoryContainer.append(EditFoodItemCategory);
+			EditFoodItemCategoryContainer.append(EditFoodItemCategoryItems);
 
 			category["foodItems"].forEach((item) => {
 				let EditFoodItemTemplateClone = document
@@ -225,7 +228,7 @@ async function fillCategorizedFoodItems() {
 						DeleteFoodItemClicked(item.FoodItem_ID);
 					}
 				);
-				EditFoodItemCategoryContainer.append(EditFoodItem);
+				EditFoodItemCategoryItems.append(EditFoodItem);
 			});
 			categorizedFoodItems.append(EditFoodItemCategoryContainer);
 		}

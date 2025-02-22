@@ -55,7 +55,7 @@ async function fillOrders() {
         orderStatusOrder.querySelector("#OrderStatusOrderNumber").innerText = "Order " + orderTray.OrderTray_ID;
         // orderStatusOrder.querySelector("#OrderStatusOrderTotal").innerText = "Total: Rs " + orderTray.TotalPrice;
         orderTray.OrderItems.forEach((orderItem) => {
-            if (orderItem.OrderStatus == "InQueue" || orderItem.OrderStatus == "Preparing" || orderItem.OrderStatus == "Ready" || orderItem.OrderStatus == "Served") {
+            if (orderItem.OrderStatus == "InQueue" || orderItem.OrderStatus == "Preparing" || orderItem.OrderStatus == "Ready") {
                 ongoingOrder = true;
             }
             TotalPrice += orderItem.Price * orderItem.Quantity;
