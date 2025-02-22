@@ -56,6 +56,17 @@
                 require_once __DIR__ . '/controllers/userController.php';
                 loginUser();
                 break;
+
+            case 'logoutUser':
+                require_once __DIR__ . '/controllers/userController.php';
+                echo json_encode(
+                    [
+                        'success' => false,
+                        'message' => 'User logged out successfully'
+                    ]
+                );
+                logoutUser();
+                break;
                 
             case 'placeOrder':
                 require_once __DIR__ . '/controllers/orderPlacementController.php';

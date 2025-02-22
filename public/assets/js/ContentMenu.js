@@ -9,21 +9,28 @@ let TrayItems = [];
 
 window.onload = loadPage;
 
+document.querySelector("#logoutButton").onclick = () => {	
+	window.location.href = "logout";
+};
+
+
 async function loadPage() {
     try {
 		if (!CheckIfUserIsLoggedIn()) {
 			window.location.href = "login";
 			return;
 		}
-		if(!isUserCustomer()){
-			alert("You are not authorized to view this page");
-			window.location.href = "login";
-		}
+		// if(!isUserCustomer()){
+		// 	alert("You are not authorized to view this page");
+		// 	window.location.href = "login";
+		// }
+
         await fillCategory();
         await fillMenu(null);
     } catch (error) {
-        console.error("Error fetching data:", error);
-        alert("An error occurred while loading the page: " + error);
+		window.location.href = "login";
+        // console.error("Error fetching data:", error);
+        // alert("An error occurred while loading the page: " + error);
     }
 }
 
@@ -48,8 +55,6 @@ async function fillCategory() {
 		element.addEventListener("click", () => performFilter(element));
 	});
 }
-
-
 
 async function performFilter(category) {
 	if (category.classList.contains("selectedCategory")) {
@@ -78,7 +83,7 @@ async function fillMenu(categoryID) {
 	}
 
 	if (!foodItemsData.success) {
-		alert(foodItemsData.message);
+		// alert(foodItemsData.message);
 		return;
 	}
 
@@ -124,6 +129,10 @@ const observer = new MutationObserver(() => {
 
 
 document.querySelector("#OrderButton Button").onclick = () => {
+	if (menuItems.length === 0) {
+		alert("No items in the tray");
+		return;
+	}
 	menuItems.forEach((element) => {
 		let quantity = parseInt(element.querySelector('.ItemQuantity span').innerText);
 		if (quantity > 0) {
@@ -135,6 +144,10 @@ document.querySelector("#OrderButton Button").onclick = () => {
 			TrayItems.push(item);
 		}
 	});
+	if (TrayItems.length <= 0){
+		alert("No Food Items Selected!")
+		return
+	}
 	setTray();
 };
 
