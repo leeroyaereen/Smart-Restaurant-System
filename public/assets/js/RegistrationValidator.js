@@ -32,7 +32,7 @@ async function registerUser(userData) {
 	const registrationStatus = await fetchDataPost("/api/registerUser", userData);
     if (registrationStatus.success) {
         alert("Registration Successful");
-        if(await CheckIfUserIsAdmin()){
+        if(await isUserAdmin()){
             window.location.href = "order-monitor";
             return;
         }

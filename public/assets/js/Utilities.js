@@ -2,7 +2,6 @@ function isValidEmail(email){
  
     var regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     email = email.trim();
-    alert(email);
     let res = regex.test(email);
     if(!res) alert("Email is not valid");
     return res;
@@ -130,7 +129,7 @@ async function fetchFormDataPost(endpoint, body) {
 
 async function isUserAdmin(){
     const response = await fetchDataGet("/api/isUserAdmin");
-    if (response.success && response.isAdmin) {
+    if (response.success) {
         return response.isAdmin;
     }else{
        return response.success;
@@ -145,6 +144,7 @@ async function CheckIfUserIsLoggedIn(){
     const response = await fetchDataGet("/api/checkIfUserIsLoggedIn");
     return response.success;
 }
+
 function showDescription(fetch) {
     const descriptionElement = document.createElement("p");
     descriptionElement.textContent = description;
