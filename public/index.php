@@ -26,10 +26,14 @@ $routes = [
     '/order-status' => 'views/OrderStatus.php',
     '/register' => 'views/RegisterPage.php',
     '/login' => 'views/LoginPage.php',
+    '/' => 'views/.php',
     '/logout' => 'views/Logout.php',
     '/order-monitor' => 'views/OrderMonitor.php',
     '/orders' => 'views/OrderStatus.php',
     '/contact' => 'views/contact.php',
+    '/payment' => 'views/Payment.php',
+    '/review'=> 'views/Review.php',
+    '/paymentConfirm'=> 'views/PaymentConfirm.php',
     '/error' => 'views/404.php'
 ];
 

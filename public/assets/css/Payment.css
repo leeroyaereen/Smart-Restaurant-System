@@ -59,25 +59,7 @@
     color: #bbb;
   }
   
-  .show-password {
-    position: absolute;
-    right: 12px;
-    top: 42px;
-    cursor: pointer;
-  }
-  
-  .forgot-password {
-    text-align: right;
-    margin-bottom: 20px;
-  }
-  
-  .forgot-password a {
-    font-size: 14px;
-    color: #FF6347;
-    text-decoration: none;
-  }
-  
-  .login-button {
+  .payment-button,.otp-button, .confirm-button {
     background-color: #FF6347;
     color: white;
     border: none;
@@ -89,7 +71,7 @@
     margin-bottom: 0px;
   }
   
-  .login-button:hover {
+  .payment-button:hover,.otp-button:hover, .confirm-button:hover {
     background-color: #ff4525;
   }
   
@@ -122,22 +104,28 @@
     justify-content: center;
   }
   
-  .sign-up, .skip {
+   .back {
     background-color: white;
     color: #545F71;
     border: 1px solid #545F71;
-    width: 48%;
+    width: 100%;
     padding: 14px;
     font-size: 16px;
     font-weight: 550;
     border-radius: 8px;
     cursor: pointer;
+    margin: 10px 0px;
+    
   }
   
   .sign-up:hover, .skip:hover {
     border-color: #aaa;
   }
   
+  .tableRow > tr{
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
   /* Responsive Design */
   @media (max-width: 768px) {
     .login-box {
