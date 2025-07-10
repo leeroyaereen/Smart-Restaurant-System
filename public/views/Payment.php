@@ -27,7 +27,7 @@
                     </div>
                     
                     <div class="input-group" >
-                        <button type="submit" class="payment-button"> Pay Rs <span id='priceAmount'></span></button>
+                        <button type="submit" class="payment-button"> Pay Rs <b id='priceAmount'></b></button>
                         <button class="back" onclick="CancelPaymentAndReturn()">Cancel</button>
                     </div>
                     
@@ -51,7 +51,7 @@
                     </tr>
                     <tr class="tableRow">
                         <td>Amount :</td>
-                        <td> <span id="priceAmount">00000</span></td>
+                        <td> <span id="c_amount">00000</span></td>
                     </tr>
                 </table>
                 <button class="confirm-button" id="confirmPayment">Confirm</button>

@@ -396,4 +396,70 @@ function GetTotalRevenue(){
     $totalRevenue = ($res->fetch_assoc())["Total Revenue"];
     return (Float)$totalRevenue;
 }
+
+function getTotalPriceOfOrderTray($currentOrderTrayID){
+    $conn = getConnection();
+    if(!$conn){
+        return "No Database connection";
+    }
+    $sql = "SELECT SUM(fooditems.FoodPrice * orderitem.Quantity) AS 'Total Price'
+            FROM orderitem
+            INNER JOIN fooditems ON orderitem.FoodItem_ID = fooditems.FoodItem_ID
+            WHERE orderitem.OrderTray_ID = ".$currentOrderTrayID."
+            AND orderitem.OrderStatus != 'Cancelled'";
+    $res = $conn->query($sql);
+    if(!$res){
+        return " Error Executing the query";
+    }
+    $totalPrice = ($res->fetch_assoc())["Total Price"];
+    if($totalPrice === null) {
+        return 0.0; // If no items, return 0.0
+    }
+    return (Float)$totalPrice;
+}
+
+function getUniqueProductId($currentOrderTrayID){
+    $conn = getConnection();
+    if(!$conn){
+        return "No Database connection";
+    }
+
+    $sql = "SELECT GROUP_CONCAT(fooditems.FoodItem_ID,'_'".$currentOrderTrayID."'_'".$_SESSION["User_Id"].") AS 'FoodItem_IDs'
+            FROM orderitem
+            INNER JOIN fooditems ON orderitem.FoodItem_ID = fooditems.FoodItem_ID
+            WHERE orderitem.OrderTray_ID = ".$currentOrderTrayID."
+            AND orderitem.OrderStatus != 'Cancelled'";
+    $res = $conn->query($sql);
+    if(!$res){
+        return " Error Executing the query";
+    }
+    $foodItemIds = ($res->fetch_assoc())["FoodItem_IDs"];
+    if($foodItemIds === null) {
+        return "No Food Items"; // If no items, return a message
+    }
+    return $foodItemIds;
+}
+
+function getUniqueProductName($currentOrderTrayID){
+    $conn = getConnection();
+    if(!$conn){
+        return "No Database connection";
+    }
+
+    $sql = "SELECT GROUP_CONCAT(fooditems.FoodName, '_', '".$currentOrderTrayID."', '_', (SELECT username FROM users WHERE users.User_ID = ordertray.User_ID)) AS FoodNames
+            FROM orderitem
+            INNER JOIN fooditems ON orderitem.FoodItem_ID = fooditems.FoodItem_ID
+            INNER JOIN ordertray ON orderitem.OrderTray_ID = ordertray.OrderTray_ID
+            WHERE orderitem.OrderTray_ID = ".$currentOrderTrayID."
+            AND orderitem.OrderStatus != 'Cancelled'";
+    $res = $conn->query($sql);
+    if(!$res){
+        return " Error Executing the query";
+    }
+    $foodNames = ($res->fetch_assoc())["FoodNames"];
+    if($foodNames === null) {
+        return "No Food Items"; // If no items, return a message
+    }
+    return $foodNames;
+}
 ?>

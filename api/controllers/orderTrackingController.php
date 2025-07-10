@@ -34,7 +34,8 @@
     }
 
     function getAllOrderStatus(){
-//Requires Fetching userid from session
+        
+        //Requires Fetching userid from session
 
         // function getOrderTrayIDFromClientInput(){
         //     $data = json_decode(file_get_contents('php://input'), true);
@@ -114,5 +115,14 @@
             return;
         }
         echo json_encode(['success'=>true,'message'=>'', "OrderedItems"=>$res]);
+    }
+
+    function getTotalAmount(){
+        $res = getTotalPriceOfOrderTray($_SESSION['currentOrderTrayID']);
+        if(is_string(value: $res) ){
+            echo json_encode(['success'=>false,'message'=>$res]);
+            return;
+        }
+        echo json_encode(['success'=>true,'message'=>'', "TotalAmount"=>$res]);
     }
 ?>

@@ -3,7 +3,6 @@
     padding: 0;
     box-sizing: border-box;
     color: #545F71;
-    font-family: Poppins;
   }
   
   body {
@@ -47,7 +46,7 @@
     display: block;
   }
   
-  input[type="tel"],input[type="number"], input[type="password"],input[type="text"],input[type="email"] {
+  input[type="tel"], input[type="password"],input[type="text"],input[type="email"] {
     width: 100%;
     padding: 12px;
     border-radius: 8px;
@@ -56,7 +55,7 @@
     font-size: 16px;
   }
   
-  input[type="tel"]::placeholder,input[type="number"]::placeholder, input[type="password"]::placeholder,input[type="text"]::placeholder,input[type="email"]::placeholder {
+  input[type="tel"]::placeholder, input[type="password"]::placeholder,input[type="text"]::placeholder,input[type="email"]::placeholder {
     color: #bbb;
   }
   

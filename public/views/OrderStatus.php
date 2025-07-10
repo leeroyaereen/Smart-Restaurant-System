@@ -114,7 +114,7 @@
 		<div id="OrderOverview" class="section Footer">
 			<div id="OrderDetails">
 				<div id="OrderCostBlock">
-					Total: <span id="OrderCost">Rs 0</span>
+					Total: Rs<span id="OrderCost"> 0</span>
 				</div>
 			</div>
 			<div id="OrderButton" class="DefaultOrderButton">

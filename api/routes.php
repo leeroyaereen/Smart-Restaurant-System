@@ -143,6 +143,16 @@
                 require_once __DIR__ . '/controllers/userController.php';
                 checkIfUserIsCustomer();
                 break;
+
+            case 'getTotalPriceOfOrderTray':
+                require_once __DIR__ . '/controllers/orderTrackingController.php';
+                getTotalAmount();
+                break;
+
+            case 'sendPaymentDetails':
+                require_once __DIR__ . '/controllers/PaymentController.php';
+                sendPaymentDetails();
+                break;
             default:
                 http_response_code(404);
                 echo json_encode(['error' => 'Endpoint not found']);

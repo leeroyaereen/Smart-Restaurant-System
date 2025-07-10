@@ -99,6 +99,14 @@ async function fillOrders() {
 
         }
     });
+    const totalAmount = await fetchDataGet("/api/getTotalPriceOfOrderTray");
+    if (!totalAmount.success) {
+        alert("Couldn't fetch total amount");
+        return;
+    }
+    const orderCostElement = document.querySelector("#OrderCost");
+    orderCostElement.innerText = totalAmount.TotalAmount; // Example price, replace with actual
+
 }
 
 async function refreshStatus() {
