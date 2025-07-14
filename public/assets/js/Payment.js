@@ -46,63 +46,99 @@ async function LoadPaymentForm() {
 
 function CancelPaymentAndReturn(){
     window.location.href = "Review";
-
 }
 
 function OnSubmit(event){
     event.preventDefault();
-    alert("PaymentSuccess");
     let khaltiID = document.querySelector("#khaltiID");
     let mpin = document.querySelector("#MPIN");
     let isValidForm = true;
     isValidForm = isValidPhoneNumber(khaltiID.value) && isValidMPIN(mpin.value);
     if(!isValidForm){
+        alert("Invalid Khalti ID or MPIN");
+
         return;
     }   
     let userData = {
         mobile: khaltiID.value,
         mpin: mpin.value,
     }
+    userData = JSON.stringify(userData);
     fetchFormDataPost("/api/sendPaymentDetails", userData).then((response) => {
         if (response.success) {
-            LoadConfirmPaymentBox();
-            otpBox.style.display = "block";
-            confirmPaymentBoxDiv.style.display = "none";
-            confirmOTP.addEventListener("click", () => {
-                sendOTP(khaltiID.value, response.token, mpin.value);
-            });
-           
+            alert("PaymentSuccess");
+            LoadConfirmPaymentBox();        
         } else {
             alert(response.message);
         }
-        });
+    });
 
-    }
+}
 
-    function LoadConfirmPaymentBox() {
-        confirmPaymentBoxDiv.style.display = "block";
-        
-        confirmPaymentButton = document.querySelector("#confirmPayment");
-        confirmUsername = document.querySelector("c_username");
-        confirmKhaltiID = document.querySelector("c_khaltiID");
-        confirmRestaurantName = document.querySelector("c_restaurantName");
-        confirmPaymentButton.addEventListener("click", () => {
-            confirmPaymentBoxDiv.style.display = "none";
-            otpBox.style.display = "block";
-        });
+async function LoadConfirmPaymentBox() {
+    //enable the confirm box div
+    confirmPaymentBoxDiv.style.display = "block";
 
-        confirmKhaltiID.innerText = khaltiID.value;
-        confirmUsername.innerText = "User"; // Replace with actual username logic
-        confirmRestaurantName.innerText = "Smart Restaurant"; // Replace with actual restaurant name logic
-        priceAmount.innerText = "1000"; // Example price, replace with actual logic to fetch price
-        
+    //find the payment box div and disble it
+    let paymentFormBoxDiv = document.querySelector("#paymentForm-box");
+    paymentFormBoxDiv.style.display = "none";
+
+    //get reference to 
+    //confirm button,
+    //Username text html
+    //khalti text html
+    //restaurantName text Html
+    confirmPaymentButton = document.querySelector("#confirmPayment");
+    confirmUsername = document.querySelector("c_username");
+    confirmKhaltiID = document.querySelector("c_khaltiID");
+    confirmRestaurantName = document.querySelector("c_restaurantName");
+
+    const response = await fetchDataGet("/api/getNeccessaryConfimrationDetails");
     
-    }
+    confirmKhaltiID.innerText = khaltiID.value;
 
-    function LoadOtpBox(){
-        otpBox.style.display = "block";
-        confirmPaymentBoxDiv.style.display = "none";
-        confirmOTP.addEventListener("click", () => {
-            sendOTP(khaltiID.value, response.token, mpin.value);
+    confirmUsername.innerText = "User"; // Replace with actual username logic
+    confirmRestaurantName.innerText = "Smart Restaurant"; // Replace with actual restaurant name logic
+    priceAmount.innerText = "1000"; // Example price, replace with actual logic to fetch price
+
+    confirmPaymentButton.addEventListener("click", () => {
+        
+        fetchFormDataPost("/api/confirmPayment", userData).then((response) => {
+            if (response.success) {
+                LoadOtpBox();
+            } else {
+                alert(response.message);
+            }
         });
-    }
+    });
+
+    
+}
+
+function LoadOtpBox() {
+    otpBox.style.display = "block";
+    confirmPaymentBoxDiv.style.display = "none";
+
+    let token = document.querySelector("#khaltiToken");
+    let mpin = document.querySelector("#khaltiMpin");
+    let otp = document.querySelector("#otpCode");
+    confirmOTP = document.querySelector("#confirmOTP");
+    userData = {
+        otp: otp.value,
+        token: token.value,
+        mpin: mpin.value,
+    };
+
+
+    confirmOTP.addEventListener("click", () => {
+        fetchFormDataPost("/api/sendOTPCode", userData).then((response) => {
+            if (response.success) {
+                window.location.href = response.reDirectURL;
+            
+            } else {
+                alert(response.message);
+            }
+        });
+
+    });
+}

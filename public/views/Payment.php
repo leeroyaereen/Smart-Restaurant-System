@@ -16,6 +16,9 @@
                 <h2>Payment</h2>
 
                 <form id="paymentForm"  method="POST">
+                    <center>
+                        <div><img src="/Smart-Restaurant-System/public/assets/images/khalti.png" alt="khalti" width="200"></div>
+                    </center>
                     <div class="input-group">
                         <label for="khaltiID"> Khalti ID </label>
                         <input type="tel" id="khaltiID" placeholder="Your Khalti Id" required>
@@ -60,12 +63,12 @@
             <div class="payment-box" id="OTP-box">
                 <form action="pay.php" method="post">
                     <!-- Requires value from backend -->
-                    <input type="hidden" name="token">
+                    <input type="hidden" name="token" id="khaltiToken">
                     <!-- Requires value from backend -->
-                    <input type="hidden" name="mpin">
+                    <input type="hidden" name="mpin" id ="khaltiMpin">
                     <h2>OTP </h2>
                     <div class="input-group">                    
-                        <input type="number" value="" name="otp" placeholder="xxxx">
+                        <input type="number" value="" name="otp" id="otpCode" placeholder="xxxx">
                     </div>
                     <button id="confirmOTP" class="confirm-button">Confirm OTP</button>
                 </form>

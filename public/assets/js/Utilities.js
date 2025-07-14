@@ -167,8 +167,8 @@ async function updateOrderStatus(itemId, status){
 
 function isValidMPIN(mpin){
     var regex =  /^\d{4,6}$/;
-    phoneNumber = phoneNumber.trim();
-    var res = regex.test(phoneNumber);
+    mpin = mpin.trim();
+    var res = regex.test(mpin);
     if(!res) alert("Phone Number is not valid");
     return res;
 }

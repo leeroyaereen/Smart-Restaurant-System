@@ -423,11 +423,12 @@ function getUniqueProductId($currentOrderTrayID){
     if(!$conn){
         return "No Database connection";
     }
-
-    $sql = "SELECT GROUP_CONCAT(fooditems.FoodItem_ID,'_'".$currentOrderTrayID."'_'".$_SESSION["User_Id"].") AS 'FoodItem_IDs'
+    //////////////////////////////////////////////////////////////////////////////
+    $userID = 88;//$_SESSION['User_ID'];
+    $sql = "SELECT GROUP_CONCAT(fooditems.FoodItem_ID,'_',$currentOrderTrayID,'_',".$userID.") AS 'FoodItem_IDs'
             FROM orderitem
             INNER JOIN fooditems ON orderitem.FoodItem_ID = fooditems.FoodItem_ID
-            WHERE orderitem.OrderTray_ID = ".$currentOrderTrayID."
+            WHERE orderitem.OrderTray_ID = $currentOrderTrayID
             AND orderitem.OrderStatus != 'Cancelled'";
     $res = $conn->query($sql);
     if(!$res){
@@ -446,7 +447,7 @@ function getUniqueProductName($currentOrderTrayID){
         return "No Database connection";
     }
 
-    $sql = "SELECT GROUP_CONCAT(fooditems.FoodName, '_', '".$currentOrderTrayID."', '_', (SELECT username FROM users WHERE users.User_ID = ordertray.User_ID)) AS FoodNames
+    $sql = "SELECT GROUP_CONCAT(fooditems.FoodName, '_', '".$currentOrderTrayID."', '_', (SELECT GROUP_CONCAT(firstName,' ',LastName) FROM user WHERE user.User_ID = ordertray.User_ID)) AS FoodNames
             FROM orderitem
             INNER JOIN fooditems ON orderitem.FoodItem_ID = fooditems.FoodItem_ID
             INNER JOIN ordertray ON orderitem.OrderTray_ID = ordertray.OrderTray_ID

@@ -153,6 +153,15 @@
                 require_once __DIR__ . '/controllers/PaymentController.php';
                 sendPaymentDetails();
                 break;
+
+            case 'getConfirmationToken':
+                break;
+            case 'sendOTP':
+                require_once __DIR__ . '/controllers/PaymentController.php';
+                sendOTP();
+                break;
+
+            
             default:
                 http_response_code(404);
                 echo json_encode(['error' => 'Endpoint not found']);
