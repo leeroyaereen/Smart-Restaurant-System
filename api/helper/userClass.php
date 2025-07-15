@@ -31,7 +31,8 @@ namespace Src\Helpers;
 
         public function getFullName(){
             return $this->firstName . " " . $this->lastName;
-        }   
+        }
+           
         
         function __construct($firstName,$lastName,$email,$phoneNumber,$password,$userType = 1){
             $this->$phoneNumber = $phoneNumber; 
