@@ -5,13 +5,9 @@
     require_once __DIR__."/../models/UserModel.php";
     require_once __DIR__."/../helper/userClass.php";
 
-    use Src\Helpers\FoodItem;
-    use Src\Helpers\OrderItem;
-    use Src\Helpers\OrderStatus;
-    use Src\Helpers\UserClass;
-    
     $error_message = "";
-    $khalti_public_key = "cf985e5dadfb45de8b5a6601027e61b5";
+    define("KHALTI_PUBLIC_KEY", "key 1b45741c745244a09eee5d86f7764a47");
+    $khalti_public_key = KHALTI_PUBLIC_KEY;
 
     $amount = 0;
     $uniqueProductId = "";
@@ -20,10 +16,14 @@
     $successRedirect = "/review";
 
 
+    // declaring some global variables
+    $token = "";
+    $price = $amount;
+    $mpin = "";
     // ------------------------------------------------------------------------
     // HINT : just change price above and redirect user to this page. It will handel everything automatically.
     // ------------------------------------------------------------------------
-
+    
     function checkValid($data)
     {
         if((bool)$data["success"] === false){
@@ -60,111 +60,109 @@
 
 
 
-    // declaring some global variables
-    $token = "";
-    $price = $amount;
-    $mpin = "";
 
-function sendPaymentDetails() {
-    global $price, $amount, $khalti_public_key, $successRedirect;
+    function sendPaymentDetails() {
+        global $price, $amount, $successRedirect;
+        global $khalti_public_key;
+        //$khalti_public_key = "key 1b45741c745244a09eee5d86f7764a47";
 
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        echo json_encode(['success' => false, 'message' => 'Invalid Request Method']);
-        return;
-    }
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            echo json_encode(['success' => false, 'message' => 'Invalid Request Method']);
+            return;
+        }
 
-    $orderTrayId = 36; // TODO: use $_SESSION['currentOrderTrayID'] in production
-    $phno = 9863591369; // TODO: use $_SESSION['phoneNumber'] in production
+        $orderTrayId = 36; // TODO: use $_SESSION['currentOrderTrayID'] in production
+        $phno = 9863591369; // TODO: use $_SESSION['phoneNumber'] in production
 
-    $user = UserModel::getUserDetailsWithPhoneNumber($phno);
-    
-    if (!$user) {
-        echo json_encode(['success' => false, 'message' => 'User not found']);
-        return;
-    }
+        $user = UserModel::getUserDetailsWithPhoneNumber($phno);
+        
+        if (!$user) {
+            echo json_encode(['success' => false, 'message' => 'User not found']);
+            return;
+        }
 
-    $data = json_decode(file_get_contents('php://input'), true);
-    if (!isset($data["mobile"]) || !isset($data["mpin"])) {
-        echo json_encode(['success' => false, 'message' => 'Required fields missing']);
-        return;
-    }
+        $data = json_decode(file_get_contents('php://input'), true);
+        if (!isset($data["mobile"]) || !isset($data["mpin"])) {
+            echo json_encode(['success' => false, 'message' => 'Required fields missing']);
+            return;
+        }
 
-    $mobile = $data["mobile"];
-    $mpin = $data["mpin"];
-    $price = getTotalPriceOfOrderTray($orderTrayId);
-    $amount = $price * 100; // Convert to paisa
-    $vat = $amount * 0.3;
-    $mp = $amount - $vat;
-
-    $payload = [
-        "return_url" => "http://localhost/Smartserve.com/api/confirm", // Must be a valid route
-        "website_url" => "http://localhost/Smartserve.com/",
-        "amount" => $amount,
-        "purchase_order_id" => $orderTrayId,
-        "purchase_order_name" => "Food Order",
-        "customer_info" => [
-            "name" => $user->getFullName(),
-            "email" => $user->getEmail(),
-            "phone" => $mobile
-        ],
-        "amount_breakdown" => [
-            [
-                "label" => "Mark Price",
-                "amount" => $mp
+        $mobile = $data["mobile"];
+        $mpin = $data["mpin"];
+        $price = getTotalPriceOfOrderTray($orderTrayId);
+        $amount = $price * 100; // Convert to paisa
+        $vat = $amount * 0.3;
+        $mp = $amount - $vat;
+        var_dump($khalti_public_key);
+        $payload = [
+            "return_url" => "http://localhost/Smartserve.com/api/confirm", // Must be a valid route
+            "website_url" => "http://localhost/Smartserve.com/",
+            "amount" => $amount,
+            "purchase_order_id" => $orderTrayId,
+            "purchase_order_name" => "Food Order",
+            "customer_info" => [
+                "name" => $user->getFullName(),
+                "email" => $user->getEmail(),
+                "phone" => $mobile
             ],
-            [
-                "label" => "VAT",
-                "amount" => $vat
+            "amount_breakdown" => [
+                [
+                    "label" => "Mark Price",
+                    "amount" => $mp
+                ],
+                [
+                    "label" => "VAT",
+                    "amount" => $vat
+                ]
+            ],
+            "product_details" => [
+                [
+                    "identity" => "foodorder-$orderTrayId",
+                    "name" => "Order Tray #$orderTrayId",
+                    "total_price" => $amount,
+                    "quantity" => 1,
+                    "unit_price" => $amount
+                ]
+            ],
+            "merchant_username" => "SmartServe",
+            "merchant_extra" => "optional-meta-data",
+            "public_key" => KHALTI_PUBLIC_KEY
+        ];
+        echo json_encode($payload);
+        $ch = curl_init();
+        curl_setopt_array($ch, [
+            CURLOPT_URL => 'https://dev.khalti.com/api/v2/epayment/initiate/',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => json_encode($payload),
+            CURLOPT_HTTPHEADER => [
+                'Authorization: key 410b2202e0b24404aaaec11386c84b75',
+                'Content-Type: application/json'
             ]
-        ],
-        "product_details" => [
-            [
-                "identity" => "foodorder-$orderTrayId",
-                "name" => "Order Tray #$orderTrayId",
-                "total_price" => $amount,
-                "quantity" => 1,
-                "unit_price" => $amount
-            ]
-        ],
-        "merchant_username" => "SmartServe",
-        "merchant_extra" => "optional-meta-data",
-        "public_key" => $khalti_public_key
-    ];
-
-    $ch = curl_init();
-    curl_setopt_array($ch, [
-        CURLOPT_URL => 'https://dev.khalti.com/api/v2/epayment/initiate/',
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_POST => true,
-        CURLOPT_POSTFIELDS => json_encode($payload),
-        CURLOPT_HTTPHEADER => [
-            'Authorization: key live_secret_key_410b2202e0b24404aaaec11386c84b75',
-            'Content-Type: application/json'
-        ]
-    ]);
-    $response = curl_exec($ch);
-    $err = curl_error($ch);
-    curl_close($ch);
-
-    if ($err) {
-        echo json_encode(["success" => false, "message" => "cURL Error: $err"]);
-        return;
-    }
-
-    $parsed = json_decode($response, true);
-
-    if (isset($parsed["token"])) {
-        echo json_encode([
-            "success" => true,
-            "message" => "Initiated successfully",
-            "token" => $parsed["token"],
-            "pidx" => $parsed["pidx"],
-            "payment_url" => $parsed["payment_url"]
         ]);
-    } else {
-        echo json_encode(["success" => false, "message" => "Khalti initiation failed", "error" => $parsed]);
+        $response = curl_exec($ch);
+        $err = curl_error($ch);
+        curl_close($ch);
+
+        if ($err) {
+            echo json_encode(["success" => false, "message" => "cURL Error: $err"]);
+            return;
+        }
+
+        $parsed = json_decode($response, true);
+        if (isset($parsed["pidx"]) && isset($parsed["payment_url"])) {
+            echo json_encode([
+                "success" => true,
+                "message" => "Initiated successfully",
+                "pidx" => $parsed["pidx"],
+                "payment_url" => $parsed["payment_url"],
+                "expires_at" => $parsed["expires_at"],
+                "expires_in" => $parsed["expires_in"]
+            ]);
+        } else {
+            echo json_encode(["success" => false, "message" => "Khalti initiation failed", "error" => $parsed]);
+        }
     }
-}
 
 
 
