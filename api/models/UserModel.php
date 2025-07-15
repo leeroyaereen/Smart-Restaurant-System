@@ -65,7 +65,6 @@
             $result = $stmt->get_result();
             if ($result && $result->num_rows > 0){
                 $user = $result->fetch_assoc();
-                echo json_encode(new UserClass($user['FirstName'],$user['LastName'],$user['Email'],$user['PhoneNumber'],$user['Password'],$user['Role_ID']));
                 return new UserClass($user['FirstName'],$user['LastName'],$user['Email'],$user['PhoneNumber'],$user['Password'],$user['Password']);
             }else{
                 return null;

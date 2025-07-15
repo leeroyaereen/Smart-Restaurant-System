@@ -77,6 +77,7 @@ function sendPaymentDetails() {
     $phno = 9863591369; // TODO: use $_SESSION['phoneNumber'] in production
 
     $user = UserModel::getUserDetailsWithPhoneNumber($phno);
+    
     if (!$user) {
         echo json_encode(['success' => false, 'message' => 'User not found']);
         return;
@@ -102,8 +103,8 @@ function sendPaymentDetails() {
         "purchase_order_id" => $orderTrayId,
         "purchase_order_name" => "Food Order",
         "customer_info" => [
-            "name" => $user->firstName . " " . $user->lastName,
-            "email" => $user->email,
+            "name" => $user->getFullName(),
+            "email" => $user->getEmail(),
             "phone" => $mobile
         ],
         "amount_breakdown" => [
@@ -141,7 +142,6 @@ function sendPaymentDetails() {
             'Content-Type: application/json'
         ]
     ]);
-
     $response = curl_exec($ch);
     $err = curl_error($ch);
     curl_close($ch);
