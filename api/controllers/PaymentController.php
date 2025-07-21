@@ -6,6 +6,7 @@ require_once __DIR__ . "/../models/UserModel.php";
 require_once __DIR__ . "/../helper/userClass.php";
 
 define("KHALTI_PUBLIC_KEY", "key 1b45741c745244a09eee5d86f7764a47");
+define("KHALTI_SECRET_KEY", "key 410b2202e0b24404aaaec11386c84b75");
 
 class KhaltiPaymentHandler {
     private $error_message = "";
@@ -13,12 +14,12 @@ class KhaltiPaymentHandler {
     private $uniqueProductId = "";
     private $uniqueUrl = "";
     private $uniqueProductName = "";
-    private $successRedirect = "/review";
+    private $successRedirect = "https://smartserve.com/success";
     private $token = "";
     private $price = 0;
     private $mpin = "";
 
-    public function sendPaymentDetails() {
+    public function getPaymentID() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             echo json_encode(['success' => false, 'message' => 'Invalid Request Method']);
             return;
@@ -34,29 +35,27 @@ class KhaltiPaymentHandler {
             return;
         }
 
-        $data = json_decode(file_get_contents('php://input'), true);
-        if (!isset($data["mobile"]) || !isset($data["mpin"])) {
-            echo json_encode(['success' => false, 'message' => 'Required fields missing']);
-            return;
-        }
+        // $data = json_decode(file_get_contents('php://input'), true);
+        // if (!isset($data["mobile"]) || !isset($data["mpin"])) {
+        //     echo json_encode(['success' => false, 'message' => 'Required fields missing']);
+        //     return;
+        // }
 
-        $mobile = $data["mobile"];
-        $this->mpin = $data["mpin"];
         $this->price = getTotalPriceOfOrderTray($orderTrayId);
         $this->amount = $this->price * 100;
         $vat = $this->amount * 0.3;
         $mp = $this->amount - $vat;
 
         $payload = [
-            "return_url" => "http://localhost/Smartserve.com/api/confirm",
-            "website_url" => "http://localhost/Smartserve.com/",
+            "return_url" => $this->successRedirect,
+            "website_url" => "https://smartserve.com",
             "amount" => $this->amount,
             "purchase_order_id" => $orderTrayId,
             "purchase_order_name" => "Food Order",
             "customer_info" => [
                 "name" => $user->getFullName(),
                 "email" => $user->getEmail(),
-                "phone" => $mobile
+                "phone" => $phno,
             ],
             "amount_breakdown" => [
                 ["label" => "Mark Price", "amount" => $mp],
@@ -76,7 +75,7 @@ class KhaltiPaymentHandler {
             "public_key" => KHALTI_PUBLIC_KEY
         ];
 
-        echo json_encode($payload); // Debug purpose
+        //echo json_encode($payload); // Debug purpose
 
         $ch = curl_init();
         curl_setopt_array($ch, [
@@ -99,7 +98,9 @@ class KhaltiPaymentHandler {
         }
 
         $parsed = json_decode($response, true);
+
         if (isset($parsed["pidx"]) && isset($parsed["payment_url"])) {
+            $_SESSION['pidx'] = $parsed["pidx"];
             echo json_encode([
                 "success" => true,
                 "message" => "Initiated successfully",
@@ -113,60 +114,8 @@ class KhaltiPaymentHandler {
         }
     }
 
-    public function sendOTP() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            echo json_encode(['success' => false, 'message' => 'Invalid Request Method']);
-            return;
-        }
-
-        $data = json_decode(file_get_contents('php://input'), true);
-
-        if (isset($data["otp"]) && isset($data["token"]) && isset($data["mpin"])) {
-            try {
-                $otp = $data["otp"];
-                $this->token = $data["token"];
-                $this->mpin = $data["mpin"];
-
-                $payload = [
-                    "public_key" => KHALTI_PUBLIC_KEY,
-                    "transaction_pin" => $this->mpin,
-                    "confirmation_code" => $otp,
-                    "token" => $this->token
-                ];
-
-                $ch = curl_init();
-                curl_setopt_array($ch, [
-                    CURLOPT_URL => 'https://khalti.com/api/v2/payment/confirm/',
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_POST => true,
-                    CURLOPT_POSTFIELDS => json_encode($payload),
-                    CURLOPT_HTTPHEADER => [
-                        'Content-Type: application/json'
-                    ]
-                ]);
-                $response = curl_exec($ch);
-                curl_close($ch);
-                $parsed = json_decode($response, true);
-
-                if (isset($parsed["token"]) && isset($parsed["amount"]) && isset($parsed["success"])) {
-                    if ($this->checkValid($parsed)) {
-                        echo json_encode(['success' => true, 'message' => "Payment Successful", 'redirect' => $this->successRedirect]);
-                    }
-                } else {
-                    echo json_encode([
-                        'success' => false,
-                        'message' => "Could not process the transaction at the moment.",
-                        'errors' => $parsed
-                    ]);
-                }
-
-            } catch (Exception $e) {
-                echo json_encode(['success' => false, 'message' => "Could not process the transaction at the moment."]);
-            }
-        }
-    }
-
-    public function confirmPayment() {
+    public function confirmPayment()
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
             echo json_encode(['success' => false, 'message' => 'Invalid Request Method']);
             return;
@@ -178,70 +127,65 @@ class KhaltiPaymentHandler {
         }
 
         $pidx = $_GET['pidx'];
-
-        $lookupPayload = json_encode(['pidx' => $pidx]);
+        $payload = json_encode(['pidx' => $pidx]);
 
         $ch = curl_init('https://dev.khalti.com/api/v2/epayment/lookup/');
         curl_setopt_array($ch, [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => $lookupPayload,
+            CURLOPT_POSTFIELDS => $payload,
             CURLOPT_HTTPHEADER => [
-                'Authorization: key 410b2202e0b24404aaaec11386c84b75',
-                'Content-Type: application/json',
+                'Authorization: key ' . KHALTI_SECRET_KEY,
+                'Content-Type: application/json'
             ]
         ]);
 
         $response = curl_exec($ch);
-        $err = curl_error($ch);
         curl_close($ch);
 
-        if ($err) {
-            echo json_encode(['success' => false, 'message' => "cURL Error: $err"]);
-            return;
-        }
-
         $data = json_decode($response, true);
+        
+        switch ($data['status'] ?? '') {
+            case 'Completed':
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Payment verified successfully',
+                    'order_id' => $data['purchase_order_id'],
+                    'amount' => $data['total_amount'],
+                    'transaction_id' => $data['transaction_id']
+                ]);
+                break;
 
-        if (isset($data['status']) && $data['status'] === 'Completed') {
-            echo json_encode([
-                'success' => true,
-                'message' => 'Payment verified successfully',
-                'order_id' => $data['purchase_order_id'],
-                'amount' => $data['total_amount'],
-                'transaction_id' => $data['transaction_id']
-            ]);
-        } else {
-            echo json_encode([
-                'success' => false,
-                'message' => 'Payment not completed',
-                'status' => $data['status'] ?? 'Unknown',
-                'error_data' => $data
-            ]);
+            case 'Pending':
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Payment is Pending',
+                    'status' => $data['status'],
+                    'error_data' => $data
+                ]);
+                break;
+
+            default:
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Payment not completed',
+                    'status' => $data['status'] ?? 'Unknown',
+                    'error_data' => $data
+                ]);
         }
     }
 
-    private function checkValid($data) {
-        if ((bool)$data["success"] === false) {
-            echo json_encode(['success' => false, 'message' => json_encode($data)]);
-            return 0;
+    private function checkValid($data)
+    {
+        if (empty($data["success"])) {
+            return false;
         }
 
-        echo json_encode(['success' => false, 'message' => 'Error in checking payment validity.' . json_encode($data)]);
+        $orderTrayId = 36; // Replace with dynamic order ID retrieval
+        $verifyAmount = getTotalPriceOfOrderTray($orderTrayId) * 100;
 
-        $orderTrayId = 36;
-        $verifyAmount = getTotalPriceOfOrderTray($orderTrayId);
-
-        try {
-            return ((float)$data["amount"] == $verifyAmount) ? 1 : 0;
-        } catch (Exception $e) {
-            return 0;
-        }
+        return ((float)$data["amount"] === (float)$verifyAmount);
     }
 }
 
-// Example usage
-// $handler = new KhaltiPaymentHandler();
-// $handler->sendPaymentDetails();
-// $handler->sendOTP();
-// $handler->confirmPayment();
+$handler = new KhaltiPaymentHandler();

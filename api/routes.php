@@ -149,19 +149,25 @@
                 getTotalAmount();
                 break;
 
-            case 'sendPaymentDetails':
+            case 'getPaymentID':
                 require_once __DIR__ . '/controllers/PaymentController.php';
-                sendPaymentDetails();
+                global $handler;
+                if(!isset($handler)) {
+                    $handler = new KhaltiPaymentHandler();
+                    //echo json_encode("Handled");
+                }
+                $handler->getPaymentID();
                 break;
 
-            case 'getConfirmationToken':
-                break;
-            case 'sendOTP':
+            case 'confirmPayment':
                 require_once __DIR__ . '/controllers/PaymentController.php';
-                sendOTP();
-                break;
-
-            
+                global $handler;
+                if(!isset($handler)) {
+                    $handler = new KhaltiPaymentHandler();
+                    //echo json_encode("Handled");
+                }
+                $handler->confirmPayment();
+                break;            
             default:
                 http_response_code(404);
                 echo json_encode(['error' => 'Endpoint not found']);
