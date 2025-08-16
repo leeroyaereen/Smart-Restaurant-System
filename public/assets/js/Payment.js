@@ -15,13 +15,13 @@ async function LoadDetails() {
     let orderToPay = await fetchDataGet("/api/getOrderTray");
 
     //--------------------to be worked on later------------------------------ss
-    Object.entries(categoriesData.foodCategories).forEach(([id, category]) => {
-		let templateClone = categoryTemplate.content.cloneNode(true);
-		let foodCategory = templateClone.querySelector("#foodCategory");
-		foodCategory.dataset.id = id;
-		foodCategory.innerText = category;
-		categoryList.appendChild(foodCategory);
-	});
+    // Object.entries(categoriesData.foodCategories).forEach(([id, category]) => {
+	// 	let templateClone = categoryTemplate.content.cloneNode(true);
+	// 	let foodCategory = templateClone.querySelector("#foodCategory");
+	// 	foodCategory.dataset.id = id;
+	// 	foodCategory.innerText = category;
+	// 	categoryList.appendChild(foodCategory);
+	// });
 
     const totalAmount = await fetchDataGet("/api/getTotalPriceOfOrderTray");
     if (!totalAmount.success) {

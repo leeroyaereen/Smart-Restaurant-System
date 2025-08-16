@@ -28,7 +28,6 @@ async function fillOrders() {
     //     if (orderItem.FoodImage) {
     //         orderStatusItem.querySelector("#StatusItemImage img").src = orderItem.FoodImage;
     //     }
-
     //     document.querySelector("#OrderStatusList").appendChild(orderStatusItem);
     // });
     if(!CheckIfUserIsLoggedIn()){
@@ -106,6 +105,10 @@ async function fillOrders() {
     }
     const orderCostElement = document.querySelector("#OrderCost");
     orderCostElement.innerText = totalAmount.TotalAmount; // Example price, replace with actual
+    const payButton = document.querySelector("#PayButton");
+    payButton.addEventListener("click", () => {
+        window.location.href = "payment";
+    });
 
 }
 

@@ -17,6 +17,7 @@
         case Served = "Served";
         case Cancelled = "Cancelled";
         case Closed = "Closed";
+        case Paid = "Paid";
 
         public static function fromString(string $status): ?OrderStatus {
             return OrderStatus::tryFrom($status);

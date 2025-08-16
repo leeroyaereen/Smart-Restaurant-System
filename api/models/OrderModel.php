@@ -405,8 +405,9 @@ function getTotalPriceOfOrderTray($currentOrderTrayID){
     $sql = "SELECT SUM(fooditems.FoodPrice * orderitem.Quantity) AS 'Total Price'
             FROM orderitem
             INNER JOIN fooditems ON orderitem.FoodItem_ID = fooditems.FoodItem_ID
-            WHERE orderitem.OrderTray_ID = ".$currentOrderTrayID."
-            AND orderitem.OrderStatus != 'Cancelled'";
+            WHERE orderitem.OrderStatus != 'Cancelled'
+            OR orderitem.OrderStatus != 'Closed'
+            OR orderitem.OrderStatus != 'Paid'";
     $res = $conn->query($sql);
     if(!$res){
         return " Error Executing the query";
@@ -463,4 +464,6 @@ function getUniqueProductName($currentOrderTrayID){
     }
     return $foodNames;
 }
+
+
 ?>
