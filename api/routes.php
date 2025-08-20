@@ -167,7 +167,16 @@
                     //echo json_encode("Handled");
                 }
                 $handler->confirmPayment();
-                break;            
+                break;   
+            case 'checkPaymentSuccess':
+                require_once __DIR__ . '/controllers/PaymentController.php';
+                global $handler;
+                if(!isset($handler)) {
+                    $handler = new KhaltiPaymentHandler();
+                    //echo json_encode("Handled");
+                }
+                $handler->confirmPayment();
+                break;         
             default:
                 http_response_code(404);
                 echo json_encode(['error' => 'Endpoint not found']);

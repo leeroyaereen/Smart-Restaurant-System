@@ -33,7 +33,7 @@ $routes = [
     '/contact' => 'views/contact.php',
     '/payment' => 'views/Payment.php',
     '/review'=> 'views/Review.php',
-    '/paymentConfirm'=> 'views/PaymentConfirm.php',
+    '/paysuccess'=> 'views/PaySuccess.php',
     '/error' => 'views/404.php'
 ];
 

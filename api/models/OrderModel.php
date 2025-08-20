@@ -465,5 +465,21 @@ function getUniqueProductName($currentOrderTrayID){
     return $foodNames;
 }
 
-
+function setPaymentIDInOrderTray($currentOrderTrayID, $paymentID){
+    $conn = getConnection();
+    if(!$conn){
+        return "No Database connection";
+    }
+    $sql = "UPDATE ordertray SET Payment_ID = ? WHERE OrderTray_ID = ?";
+    $stmt = $conn->prepare($sql);
+    if(!$stmt){
+        return "Failed to prepare statement";
+    }
+    $stmt->bind_param("si", $paymentID, $currentOrderTrayID);
+    $res = $stmt->execute();
+    if(!$res){
+        return "Failed to execute query";
+    }
+    return true;
+}
 ?>

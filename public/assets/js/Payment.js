@@ -22,6 +22,7 @@ async function LoadDetails() {
 	// 	foodCategory.innerText = category;
 	// 	categoryList.appendChild(foodCategory);
 	// });
+    
 
     const totalAmount = await fetchDataGet("/api/getTotalPriceOfOrderTray");
     if (!totalAmount.success) {

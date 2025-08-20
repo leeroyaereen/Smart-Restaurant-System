@@ -14,7 +14,7 @@ class KhaltiPaymentHandler {
     private $uniqueProductId = "";
     private $uniqueUrl = "";
     private $uniqueProductName = "";
-    private $successRedirect = "https://smartserve.com/success";
+    private $successRedirect = "http://localhost/Smart-Restaurant-System/paysuccess";
     private $token = "";
     private $price = 0;
     private $mpin = "";
@@ -101,6 +101,7 @@ class KhaltiPaymentHandler {
 
         if (isset($parsed["pidx"]) && isset($parsed["payment_url"])) {
             $_SESSION['pidx'] = $parsed["pidx"];
+            setPaymentIDInOrderTray($orderTrayId, $parsed["pidx"]);
             echo json_encode([
                 "success" => true,
                 "message" => "Initiated successfully",
@@ -118,12 +119,12 @@ class KhaltiPaymentHandler {
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
             echo json_encode(['success' => false, 'message' => 'Invalid Request Method']);
-            return;
+            return false;
         }
 
         if (!isset($_GET['pidx'])) {
             echo json_encode(['success' => false, 'message' => 'Missing pidx']);
-            return;
+            return false;
         }
 
         $pidx = $_GET['pidx'];
@@ -154,6 +155,8 @@ class KhaltiPaymentHandler {
                     'amount' => $data['total_amount'],
                     'transaction_id' => $data['transaction_id']
                 ]);
+                return true;
+
                 break;
 
             case 'Pending':
@@ -163,6 +166,8 @@ class KhaltiPaymentHandler {
                     'status' => $data['status'],
                     'error_data' => $data
                 ]);
+                return false;
+
                 break;
 
             default:
@@ -172,6 +177,7 @@ class KhaltiPaymentHandler {
                     'status' => $data['status'] ?? 'Unknown',
                     'error_data' => $data
                 ]);
+                return false;
         }
     }
 
@@ -185,6 +191,24 @@ class KhaltiPaymentHandler {
         $verifyAmount = getTotalPriceOfOrderTray($orderTrayId) * 100;
 
         return ((float)$data["amount"] === (float)$verifyAmount);
+    }
+
+    // public function checkPaymentSuccess()
+    // {
+    //     if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+    //         echo json_encode(['success' => false, 'message' => 'Invalid Request Method']);
+    //         return;
+    //     }
+    //     if (!isset($_GET['pidx'])) {
+    //         echo json_encode(['success' => false, 'message' => 'Missing pidx']);
+    //         return;
+    //     }
+    //     $pidx = $_GET['pidx'];
+
+    // }
+
+    function declarePaid(){
+        if (!isset($_SESSION['currentOrderTrayID'])) {
     }
 }
 

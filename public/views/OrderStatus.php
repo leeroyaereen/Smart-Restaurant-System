@@ -120,7 +120,7 @@
 				</div>
 			</div>
 			<div id="OrderButton" class="DefaultOrderButton">
-				<button id="PayButton">
+				<button id="PayButton" action="payment" class="OrderButton">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="24"
