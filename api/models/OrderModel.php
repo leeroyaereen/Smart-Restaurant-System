@@ -402,12 +402,13 @@ function getTotalPriceOfOrderTray($currentOrderTrayID){
     if(!$conn){
         return "No Database connection";
     }
-    $sql = "SELECT SUM(fooditems.FoodPrice * orderitem.Quantity) AS 'Total Price'
-            FROM orderitem
-            INNER JOIN fooditems ON orderitem.FoodItem_ID = fooditems.FoodItem_ID
-            WHERE orderitem.OrderStatus != 'Cancelled'
-            OR orderitem.OrderStatus != 'Closed'
-            OR orderitem.OrderStatus != 'Paid'";
+    $userID = $_SESSION['User_ID'];
+   $sql = "SELECT SUM(fooditems.FoodPrice * orderitem.Quantity) AS 'Total Price'
+        FROM orderitem
+        INNER JOIN fooditems ON orderitem.FoodItem_ID = fooditems.FoodItem_ID
+        INNER JOIN ordertray ON orderitem.OrderTray_ID = ordertray.OrderTray_ID
+        WHERE orderitem.OrderStatus NOT IN ('Cancelled', 'Closed', 'Paid')
+          AND ordertray.User_ID = ".$userID;
     $res = $conn->query($sql);
     if(!$res){
         return " Error Executing the query";
@@ -425,13 +426,15 @@ function getUniqueProductId($currentOrderTrayID){
         return "No Database connection";
     }
     //////////////////////////////////////////////////////////////////////////////
-    $userID = 88;//$_SESSION['User_ID'];
-    $sql = "SELECT GROUP_CONCAT(fooditems.FoodItem_ID,'_',$currentOrderTrayID,'_',".$userID.") AS 'FoodItem_IDs'
-            FROM orderitem
-            INNER JOIN fooditems ON orderitem.FoodItem_ID = fooditems.FoodItem_ID
-            WHERE orderitem.OrderTray_ID = $currentOrderTrayID
-            AND orderitem.OrderStatus != 'Cancelled'";
-    $res = $conn->query($sql);
+    $userID = $_SESSION['User_ID'];
+    $sql = "SELECT GROUP_CONCAT(DISTINCT ordertray.OrderTray_ID) AS ActiveOrderTrayIDs
+        FROM ordertray
+        INNER JOIN orderitem ON ordertray.OrderTray_ID = orderitem.OrderTray_ID
+        WHERE orderitem.OrderStatus NOT IN ('Cancelled', 'Closed', 'Paid')AND ordertray.User_ID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $userID);
+    $stmt->execute();
+    $res = $stmt->get_result();
     if(!$res){
         return " Error Executing the query";
     }
@@ -447,13 +450,13 @@ function getUniqueProductName($currentOrderTrayID){
     if(!$conn){
         return "No Database connection";
     }
-
+    $userID = $_SESSION['User_ID'];
     $sql = "SELECT GROUP_CONCAT(fooditems.FoodName, '_', '".$currentOrderTrayID."', '_', (SELECT GROUP_CONCAT(firstName,' ',LastName) FROM user WHERE user.User_ID = ordertray.User_ID)) AS FoodNames
             FROM orderitem
             INNER JOIN fooditems ON orderitem.FoodItem_ID = fooditems.FoodItem_ID
             INNER JOIN ordertray ON orderitem.OrderTray_ID = ordertray.OrderTray_ID
             WHERE orderitem.OrderTray_ID = ".$currentOrderTrayID."
-            AND orderitem.OrderStatus != 'Cancelled'";
+            AND orderitem.OrderStatus != 'Cancelled' AND ordertray.User_ID = ".$userID;
     $res = $conn->query($sql);
     if(!$res){
         return " Error Executing the query";
@@ -465,21 +468,115 @@ function getUniqueProductName($currentOrderTrayID){
     return $foodNames;
 }
 
-function setPaymentIDInOrderTray($currentOrderTrayID, $paymentID){
+function setPaymentIDInOrderTray( $paymentID){
     $conn = getConnection();
     if(!$conn){
         return "No Database connection";
     }
-    $sql = "UPDATE ordertray SET Payment_ID = ? WHERE OrderTray_ID = ?";
+    $userID = $_SESSION['User_ID'];
+    $sql = "SELECT GROUP_CONCAT(DISTINCT ordertray.OrderTray_ID) AS ActiveOrderTrayIDs
+        FROM ordertray
+        INNER JOIN orderitem ON ordertray.OrderTray_ID = orderitem.OrderTray_ID
+        WHERE orderitem.OrderStatus NOT IN ('Cancelled', 'Closed', 'Paid')AND ordertray.User_ID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $userID);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    if(!$res){
+        return " Error Executing the query";
+    }
+    
+    $row = $res->fetch_assoc();
+    $orderTrayIDsString = $row["ActiveOrderTrayIDs"];
+
+    if($orderTrayIDsString === null) {
+        return "No Active Order Trays";
+    }
+
+    $orderTrayIDs = explode(',', $orderTrayIDsString);
+
+    $updateSql = "UPDATE ordertray SET paymentID = ? WHERE OrderTray_ID = ?";
+    $updateStmt = $conn->prepare($updateSql);
+    if(!$updateStmt){
+        return "Failed to prepare update statement";
+    }
+
+    foreach($orderTrayIDs as $trayID) {
+        $updateStmt->bind_param("si", $paymentID, $trayID);
+        $result = $updateStmt->execute();
+        if(!$result){
+            // Optionally handle error for this trayID
+            continue;
+        }
+    }
+    $updateStmt->close();
+
+    return true;
+}
+
+function setOrdersWithPaymentIDAsPaid($paymentID){
+    $conn = getConnection();
+    if(!$conn){
+        return "No Database connection";
+    }
+    $sql = "UPDATE orderitem SET OrderStatus = 'paid' WHERE OrderTray_ID IN (SELECT OrderTray_ID FROM ordertray WHERE paymentID = ?)";
     $stmt = $conn->prepare($sql);
     if(!$stmt){
         return "Failed to prepare statement";
     }
-    $stmt->bind_param("si", $paymentID, $currentOrderTrayID);
+    $stmt->bind_param("s", $paymentID);
     $res = $stmt->execute();
     if(!$res){
         return "Failed to execute query";
     }
     return true;
 }
+
+function getOrderTrayDetailForBilling(){
+     $conn = getConnection();
+    if(!$conn){
+        return "No Database connection";
+    }
+    $userID = $_SESSION['User_ID'];
+    $sql = "SELECT 
+            ordertray.OrderTray_ID, 
+            fooditems.FoodName, 
+            fooditems.FoodType, 
+            orderitem.Quantity,
+            fooditems.FoodPrice,
+            (fooditems.FoodPrice * orderitem.Quantity) AS TotalPrice
+        FROM ordertray
+        INNER JOIN orderitem ON ordertray.OrderTray_ID = orderitem.OrderTray_ID
+        INNER JOIN fooditems ON orderitem.FoodItem_ID = fooditems.FoodItem_ID
+        WHERE orderitem.OrderStatus NOT IN ('Cancelled', 'Closed', 'Paid')
+          AND ordertray.User_ID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $userID);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    if(!$res){
+        return " Error Executing the query";
+    }
+    
+    $row = $res->fetch_assoc();
+    if($res === null) {
+        return "No Active Order Trays";
+    }
+    $orderTrayDetails = [];
+    while($row = $res->fetch_assoc()) {
+        $orderTrayDetails[] = [
+            "OrderTray_ID" => $row["OrderTray_ID"],
+            "FoodName" => $row["FoodName"],
+            "FoodType" => $row["FoodType"],
+            "Quantity" => $row["Quantity"],
+            "FoodPrice" => $row["FoodPrice"],
+            "TotalPrice" => $row["TotalPrice"]
+        ];
+    }
+    if(empty($orderTrayDetails)) {
+        return "No items in the order tray";
+    }
+    return $orderTrayDetails;
+}
+
 ?>

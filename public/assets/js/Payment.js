@@ -22,7 +22,7 @@ async function LoadDetails() {
 	// 	foodCategory.innerText = category;
 	// 	categoryList.appendChild(foodCategory);
 	// });
-    
+
 
     const totalAmount = await fetchDataGet("/api/getTotalPriceOfOrderTray");
     if (!totalAmount.success) {
@@ -31,8 +31,8 @@ async function LoadDetails() {
     }
     priceAmount.innerText = totalAmount.TotalAmount; // Example price, replace with actual logic to fetch price
 
-    payButton.addEventListener("click", OnSubmit());
-    cancelButton.addEventListener("click", CancelPaymentAndReturn());
+    payButton.addEventListener("click", OnSubmit);
+    cancelButton.addEventListener("click", CancelPaymentAndReturn);
 }
 
 function CancelPaymentAndReturn(){

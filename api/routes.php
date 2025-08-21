@@ -175,8 +175,14 @@
                     $handler = new KhaltiPaymentHandler();
                     //echo json_encode("Handled");
                 }
-                $handler->confirmPayment();
-                break;         
+                if($handler->confirmPayment()){
+                    $handler->declarePaid();
+                }
+                break;    
+            case 'getOrderTray':
+                require_once __DIR__ . '/controllers/orderTrackingController.php';
+                getOrderTrayForBilling();
+                break;     
             default:
                 http_response_code(404);
                 echo json_encode(['error' => 'Endpoint not found']);

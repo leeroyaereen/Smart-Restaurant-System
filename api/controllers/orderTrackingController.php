@@ -125,4 +125,13 @@
         }
         echo json_encode(['success'=>true,'message'=>'', "TotalAmount"=>$res]);
     }
+
+    function getOrderTrayForBilling(){
+        $res = getOrderTrayDetailForBilling($_SESSION['currentOrderTrayID']);
+        if(is_string(value: $res) ){
+            echo json_encode(['success'=>false,'message'=>$res]);
+            return;
+        }
+        echo json_encode(['success'=>true,'message'=>'', "OrderTray"=>$res]);
+    }
 ?>

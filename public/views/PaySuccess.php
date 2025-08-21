@@ -12,6 +12,10 @@
         .btn-order { background: #27ae60; color: #fff; }
         .btn-exit { background: #e74c3c; color: #fff; }
     </style>
+    <script src="assets/js/config.js.php"></script>
+    <script src="assets/js/Utilities.js"></script>
+    <script src="assets/js/paysuccessValidator.js" defer></script>
+    <link rel="stylesheet" href="assets/css/PageStructure.css">
 </head>
 <body>
     <div class="container">

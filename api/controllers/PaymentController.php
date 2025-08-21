@@ -25,8 +25,8 @@ class KhaltiPaymentHandler {
             return;
         }
 
-        $orderTrayId = 36; // $_SESSION['currentOrderTrayID']
-        $phno = 9863591369; // $_SESSION['phoneNumber']
+        $orderTrayId =  $_SESSION['currentOrderTrayID'];
+        $phno = $_SESSION['phoneNumber'];
 
         $user = UserModel::getUserDetailsWithPhoneNumber($phno);
 
@@ -101,7 +101,7 @@ class KhaltiPaymentHandler {
 
         if (isset($parsed["pidx"]) && isset($parsed["payment_url"])) {
             $_SESSION['pidx'] = $parsed["pidx"];
-            setPaymentIDInOrderTray($orderTrayId, $parsed["pidx"]);
+            setPaymentIDInOrderTray( $parsed["pidx"]);
             echo json_encode([
                 "success" => true,
                 "message" => "Initiated successfully",
@@ -136,7 +136,7 @@ class KhaltiPaymentHandler {
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => $payload,
             CURLOPT_HTTPHEADER => [
-                'Authorization: key ' . KHALTI_SECRET_KEY,
+                'Authorization: key 410b2202e0b24404aaaec11386c84b75' ,
                 'Content-Type: application/json'
             ]
         ]);
@@ -151,7 +151,6 @@ class KhaltiPaymentHandler {
                 echo json_encode([
                     'success' => true,
                     'message' => 'Payment verified successfully',
-                    'order_id' => $data['purchase_order_id'],
                     'amount' => $data['total_amount'],
                     'transaction_id' => $data['transaction_id']
                 ]);
@@ -208,7 +207,26 @@ class KhaltiPaymentHandler {
     // }
 
     function declarePaid(){
-        if (!isset($_SESSION['currentOrderTrayID'])) {
+        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+            echo json_encode(['success' => false, 'message' => 'Invalid Request Method']);
+            return false;
+        }
+
+        if (!isset($_GET['pidx'])) {
+            echo json_encode(['success' => false, 'message' => 'Missing pidx']);
+            return false;
+        }
+
+        $pidx = $_GET['pidx'];
+        $res = setOrdersWithPaymentIDAsPaid($pidx);
+        if($res === true){
+            echo json_encode(['success' => true, 'message' => 'Payment confirmed and orders updated']);
+            return true;
+        }else
+        {
+            echo json_encode(['success' => false, 'message' => 'Failed to update orders', 'error' => $res]);
+            return false;
+        }
     }
 }
 
