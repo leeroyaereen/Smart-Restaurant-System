@@ -8,3 +8,7 @@
     border-radius: 6px;
     background: var(--Primary, #FE724C);
 }
+
+.hidden-template{
+    display: none;
+}

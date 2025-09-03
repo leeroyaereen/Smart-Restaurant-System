@@ -1,3 +1,10 @@
+#logoutButton{
+	position: absolute;
+	right: 0;
+	top: 0;
+	margin: 10px;
+	cursor: pointer;
+}
 #searchBoxContainer {
 	width: 100%;
 }
@@ -27,6 +34,7 @@
 }
 
 #foodCategoryList {
+	padding: 1rem 0 0 0.5rem;
 	display: flex;
 	gap: 1rem;
 	overflow-x: auto;
@@ -44,7 +52,7 @@
 	display: none;
 }
 
-#foodCategoryList > .foodCategory {
+/* #foodCategoryList > .foodCategory {
 	white-space: nowrap;
 	font-size: 0.9rem;
 	padding: 5px 13px;
@@ -54,18 +62,24 @@
 	color: #545f71;
 	font-weight: 600;
 	cursor: pointer;
-}
-#foodCategoryList > #foodCategory {
+} */
+
+#foodCategoryList #foodCategory {
 	white-space: nowrap;
 	font-size: 0.9rem;
-	padding: 5px 13px;
+	padding: 0.7rem 1.2rem;
 	border: none;
-	border-radius: 12px;
-	background-color: #ffffff;
-	color: #545f71;
+	border-radius: 9999px;
+	color: #ffffff;
 	font-weight: 600;
 	cursor: pointer;
 }
+
+#foodCategoryList #foodCategory.selectedCategory {
+	background-color: #ffffff;
+	color: #fe724c;
+}
+
 #MenuItemList{
 	display: flex;
 	flex-direction: column;

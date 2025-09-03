@@ -5,7 +5,7 @@
 }
 body {
     position: relative;
-	color: #545f71;
+	color: black;
 	padding: 0px;
 	margin: 0px;
 	width: 100%;
@@ -17,13 +17,17 @@ body {
 	min-height: 100vh;
 }
 
+.hidden{
+	display: none;
+}
+
 .Header {
 	background-color: #fe724c;
 	color: white;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	gap: 0.5rem ;
+	gap: 5px;
 	align-items: center;
 	padding: 1rem;
 }
@@ -56,24 +60,56 @@ body {
 	letter-spacing: 1px;
 }
 
-.HeaderSubTitle {
-	font-size: 0.9rem;
-}
-
 .ItemImage{
 	object-fit: cover;
 	border-radius: 5px;
 }
 
 .OrderStatusDesign{
-	font-size: 0.85rem;
+	font-size: 0.8rem;
     font-weight: 600;
-    color: #EAB344;
-    background-color: #FEF9C3;
-    width: max-content;
+    color: #dfa32c;
+    background-color: #fff9b1;
+    width: 10ch;
+	height: max-content;
     padding: 5px 10px;
-    border-radius: 10px;
+    border-radius: 15px;
+	text-align: center;
+	box-sizing: border-box;
+	overflow: hidden;
+	text-wrap: no-wrap;
 }
+
+.OrderStatus-InQueue{
+	color: #dfa32c;
+	background-color: #FEF9C3;
+}
+
+.OrderStatus-Preparing{
+	color: #1e40af;
+	background-color: #bfdbfe;
+}
+
+.OrderStatus-Ready{
+	color: #166534;
+	background-color: #bbf7d0;
+}
+
+.OrderStatus-Served {
+    color: #064e3b;
+    background-color: #a7f3d0;
+}
+
+.OrderStatus-Closed{
+	color: #4b5563;
+	background-color: #e2e8f0;
+}
+
+.OrderStatus-Cancelled {
+	color: #991b1b;
+	background-color: #f9c3c3;
+}
+
 
 .ItemFooter {
 	display: flex;
@@ -123,4 +159,9 @@ body {
 	letter-spacing: 0.5px;
 	font-weight: 500;
 	cursor: pointer;
+}
+
+.noInteractions{
+	pointer-events: none;
+    user-select: none;
 }
