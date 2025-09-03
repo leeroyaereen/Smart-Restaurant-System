@@ -6,7 +6,9 @@
         public $foodItemID;
         public $quantity;
         public OrderStatus $orderStatus = OrderStatus::InQueue;
-        public $note;        
+        public $note;     
+        public $review;
+        public $rating;   
     }
 
     namespace Src\Helpers;
