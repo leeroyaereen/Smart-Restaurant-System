@@ -56,7 +56,29 @@
         // }else{
         //     $orderTrayId = $_SESSION['currentOrderTrayID'];
         // }
-        $userID = $_SESSION['User_ID'];
+        $userID = null;
+        if (isset($_SESSION['User_ID'])) {
+            $userID = $_SESSION['User_ID'];
+        } elseif (isset($userIDFromPayload)) { // Check if payload has phone
+             $data = json_decode(file_get_contents('php://input'), true);
+             if(isset($data['phone'])){
+                 $userID = UserModel::getUserIdByPhoneNumber($data['phone']);
+             }
+        }
+        
+        // If still null, try one more time if we haven't decoded input yet
+        if(!$userID){
+             $data = json_decode(file_get_contents('php://input'), true);
+             if(isset($data['phone'])){
+                 $userID = UserModel::getUserIdByPhoneNumber($data['phone']);
+             }
+        }
+
+        if(!$userID){
+             echo json_encode(['success'=>false,'message'=>'User Not Logged In']);
+             return;
+        }
+
         $res = GetAllOrderItemDetailsForTracking($userID );
         if(is_string(value: $res) ){
             echo json_encode(['success'=>false,'message'=>$res]);
@@ -68,7 +90,21 @@
 
     function getAllUserActiveOrderStatus(){
        
-        $userID = $_SESSION['User_ID'];
+        $userID = null;
+        if (isset($_SESSION['User_ID'])) {
+            $userID = $_SESSION['User_ID'];
+        } else {
+             $data = json_decode(file_get_contents('php://input'), true);
+             if(isset($data['phone'])){
+                 $userID = UserModel::getUserIdByPhoneNumber($data['phone']);
+             }
+        }
+
+        if(!$userID){
+             echo json_encode(['success'=>false,'message'=>'User Not Logged In']);
+             return;
+        }
+
         $res = GetAllOrderDetailsForStatusOfUser($userID );
         if(is_string(value: $res) ){
             echo json_encode(['success'=>false,'message'=>$res]);
@@ -109,7 +145,21 @@
     }
     
     function getOnlyStatus(){
-        $res = getOnlyStatusData($_SESSION['User_ID']);
+        $userID = null;
+        if (isset($_SESSION['User_ID'])) {
+            $userID = $_SESSION['User_ID'];
+        } else {
+             $data = json_decode(file_get_contents('php://input'), true);
+             if(isset($data['phone'])){
+                 $userID = UserModel::getUserIdByPhoneNumber($data['phone']);
+             }
+        }
+
+        if(!$userID){
+             echo json_encode(['success'=>false,'message'=>'User Not Logged In']);
+             return;
+        }
+        $res = getOnlyStatusData($userID);
         if(is_string(value: $res) ){
             echo json_encode(['success'=>false,'message'=>$res]);
             return;
@@ -118,7 +168,34 @@
     }
 
     function getTotalAmount(){
-        $res = getTotalPriceOfOrderTray($_SESSION['currentOrderTrayID']);
+        $userID = null;
+        if (isset($_SESSION['User_ID'])) {
+            $userID = $_SESSION['User_ID'];
+        } else {
+             $data = json_decode(file_get_contents('php://input'), true);
+             if(isset($data['phone'])){
+                 $userID = UserModel::getUserIdByPhoneNumber($data['phone']);
+             }
+        }
+
+        if(!$userID){
+             echo json_encode(['success'=>false,'message'=>'User Not Logged In']);
+             return;
+        }
+        
+        $orderTrayId = null;
+        if (isset($_SESSION['currentOrderTrayID'])) {
+            $orderTrayId = $_SESSION['currentOrderTrayID'];
+        } else {
+            $orderTrayId = getActiveOrderTrayIdByUserId($userID);
+        }
+
+        if(!$orderTrayId){
+             echo json_encode(['success'=>false,'message'=>'Active Order Tray Not Found']);
+             return;
+        }
+
+        $res = getTotalPriceOfOrderTray($orderTrayId, $userID);
         if(is_string(value: $res) ){
             echo json_encode(['success'=>false,'message'=>$res]);
             return;
@@ -127,7 +204,34 @@
     }
 
     function getOrderTrayForBilling(){
-        $res = getOrderTrayDetailForBilling($_SESSION['currentOrderTrayID']);
+        $userID = null;
+        if (isset($_SESSION['User_ID'])) {
+            $userID = $_SESSION['User_ID'];
+        } else {
+             $data = json_decode(file_get_contents('php://input'), true);
+             if(isset($data['phone'])){
+                 $userID = UserModel::getUserIdByPhoneNumber($data['phone']);
+             }
+        }
+
+        if(!$userID){
+             echo json_encode(['success'=>false,'message'=>'User Not Logged In']);
+             return;
+        }
+
+        $orderTrayId = null;
+        if (isset($_SESSION['currentOrderTrayID'])) {
+            $orderTrayId = $_SESSION['currentOrderTrayID'];
+        } else {
+            $orderTrayId = getActiveOrderTrayIdByUserId($userID);
+        }
+
+        if(!$orderTrayId){
+             echo json_encode(['success'=>false,'message'=>'Active Order Tray Not Found']);
+             return;
+        }
+
+        $res = getOrderTrayDetailForBilling($orderTrayId, $userID);
         if(is_string(value: $res) ){
             echo json_encode(['success'=>false,'message'=>$res]);
             return;
