@@ -68,8 +68,17 @@
     }
 
     function isUserAdmin(){
-        if(isset($_SESSION['User_ID'])){
+        $userID = null;
+        if (isset($_SESSION['User_ID'])) {
             $userID = $_SESSION['User_ID'];
+        } else {
+             $data = json_decode(file_get_contents('php://input'), true);
+             if(isset($data['phone'])){
+                 $userID = UserModel::getUserIdByPhoneNumber($data['phone']);
+             }
+        }
+
+        if($userID){
             $result = UserModel::isUserAdmin($userID);
             if($result['success']===true){
                 echo json_encode(['success'=>true, 'message'=>'User is admin', 'isAdmin'=>$result['isAdmin']]);
@@ -90,8 +99,17 @@
     }
 
     function checkIfUserIsCustomer(){
-        if(isset($_SESSION['User_ID'])){
+        $userID = null;
+        if (isset($_SESSION['User_ID'])) {
             $userID = $_SESSION['User_ID'];
+        } else {
+             $data = json_decode(file_get_contents('php://input'), true);
+             if(isset($data['phone'])){
+                 $userID = UserModel::getUserIdByPhoneNumber($data['phone']);
+             }
+        }
+        
+        if($userID){
             $result = UserModel::isUserCustomer($userID);
             if($result['success']===true){
                 echo json_encode(['success'=>true, 'message'=>'User is customer', 'isCustomer'=>$result['isCustomer']]);

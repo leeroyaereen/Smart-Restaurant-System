@@ -15,10 +15,17 @@
             $order->rating = $data['Rating'];
             $order->review = $data['Review'];
 
-            //
-            //user is 1 for now
-            //
-            $user = 1;
+            $user = null;
+            if (isset($_SESSION['User_ID'])) {
+                $user = $_SESSION['User_ID'];
+            } elseif (isset($data['phone'])) {
+                $user = UserModel::getUserIdByPhoneNumber($data['phone']);
+            }
+
+            if (!$user) {
+                echo json_encode(['success' => false, 'message' => 'User Not Logged In']);
+                return;
+            }
 
             $res = AddReviewToOrder($order,$user);
             if($res === true){

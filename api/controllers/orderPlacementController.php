@@ -2,6 +2,7 @@
 require_once __DIR__.'/../helper/OrderItemClass.php';
 require_once __DIR__.'/../helper/OrderTrayClass.php';
 require_once __DIR__."/../models/OrderModel.php";
+require_once __DIR__."/../models/UserModel.php";
 use Src\Helpers\OrderItem;
 use Src\Helpers\OrderStatus;
 use Src\Helpers\OrderTray;
@@ -18,8 +19,19 @@ use Src\Helpers\OrderTray;
             //!!!!!!!!!!!!!!!!!!
             //Requires user authentication 
             //!!!!!!!!!!!!!!!!!!
+            $userID = null;
+            if (isset($_SESSION['User_ID'])) {
+                $userID = $_SESSION['User_ID'];
+            } elseif (isset($data['phone'])) {
+                $userID = UserModel::getUserIdByPhoneNumber($data['phone']);
+            }
 
-            $user = $_SESSION['User_ID'];
+            if (!$userID) {
+                echo json_encode(['success' => false, 'message' => 'User Not Logged In and Phone Number Not Found']);
+                return;
+            }
+
+            $user = $userID;
             $newOrderTray = new OrderTray;
             $newOrderTray->userID = $user;
             $newOrderTray->kitchenOrderTime = date("Y-m-d H:i:s");//current time stamp

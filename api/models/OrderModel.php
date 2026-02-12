@@ -397,12 +397,20 @@ function GetTotalRevenue(){
     return (Float)$totalRevenue;
 }
 
-function getTotalPriceOfOrderTray($currentOrderTrayID){
+function getTotalPriceOfOrderTray($currentOrderTrayID, $userID = null){
     $conn = getConnection();
     if(!$conn){
         return "No Database connection";
     }
-    $userID = $_SESSION['User_ID'];
+    
+    if($userID === null){
+        if(isset($_SESSION['User_ID'])){
+            $userID = $_SESSION['User_ID'];
+        } else {
+             return "User ID not provided";
+        }
+    }
+
    $sql = "SELECT SUM(fooditems.FoodPrice * orderitem.Quantity) AS 'Total Price'
         FROM orderitem
         INNER JOIN fooditems ON orderitem.FoodItem_ID = fooditems.FoodItem_ID
@@ -532,12 +540,20 @@ function setOrdersWithPaymentIDAsPaid($paymentID){
     return true;
 }
 
-function getOrderTrayDetailForBilling(){
+function getOrderTrayDetailForBilling($orderTrayID, $userID = null){
      $conn = getConnection();
     if(!$conn){
         return "No Database connection";
     }
-    $userID = $_SESSION['User_ID'];
+    
+    if($userID === null){
+        if(isset($_SESSION['User_ID'])){
+            $userID = $_SESSION['User_ID'];
+        } else {
+             return "User ID not provided";
+        }
+   }
+
     $sql = "SELECT 
             ordertray.OrderTray_ID, 
             fooditems.FoodName, 
@@ -558,8 +574,8 @@ function getOrderTrayDetailForBilling(){
         return " Error Executing the query";
     }
     
-    $row = $res->fetch_assoc();
-    if($res === null) {
+    //$row = $res->fetch_assoc(); // REMOVED as it consumes the first row!
+    if($res->num_rows === 0) { // Check num_rows instead
         return "No Active Order Trays";
     }
     $orderTrayDetails = [];
@@ -579,4 +595,29 @@ function getOrderTrayDetailForBilling(){
     return $orderTrayDetails;
 }
 
+function getActiveOrderTrayIdByUserId($userID) {
+    $conn = getConnection();
+    if (!$conn) {
+        return null;
+    }
+    // Fetch the most recent active order tray (not paid, closed, or cancelled)
+    $sql = "SELECT OrderTray_ID FROM ordertray 
+            WHERE User_ID = ? 
+            ORDER BY KitchenOrderTime DESC LIMIT 1";
+            
+     $stmt = $conn->prepare($sql);
+     if (!$stmt) {
+         return null;
+     }
+     
+     $stmt->bind_param("i", $userID);
+     $stmt->execute();
+     $res = $stmt->get_result();
+     
+     if ($res && $res->num_rows > 0) {
+         $row = $res->fetch_assoc();
+         return $row['OrderTray_ID'];
+     }
+     return null;
+}
 ?>

@@ -142,6 +142,22 @@
                 return ['success' => false, 'error' => 'User not found'];
             }
         }
+
+        public static function getUserIdByPhoneNumber($phoneNumber) {
+            $query = "SELECT User_ID FROM User WHERE PhoneNumber = ?";
+            $stmt = self::$connection->prepare($query);
+            if (!$stmt) {
+                return null;
+            }
+            $stmt->bind_param("s", $phoneNumber);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($result && $result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                return $row['User_ID'];
+            }
+            return null;
+        }
     }
     
     UserModel::Initialize();
